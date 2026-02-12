@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Laboratorio Rítmico</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        @keyframes pulse-slow { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .animate-pulse-slow { animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        body { 
+            background-color: #020617; 
+            color: #f1f5f9; 
+            font-family: system-ui, -apple-system, sans-serif; 
+            overflow: hidden; 
+            touch-action: manipulation;
+        }
+        
+        .staff-line { stroke: #000; stroke-width: 2; }
+        .grid-cell { transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1); }
+        
+        input[type=range] { -webkit-appearance: none; background: #334155; height: 12px; border-radius: 6px; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 28px; width: 28px; border-radius: 50%; background: #6366f1; cursor: pointer; border: 3px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.3); margin-top: -8px; }
+        input[type=range]::-webkit-slider-runnable-track { height: 12px; background: #334155; border-radius: 6px; }
+        
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        
+        .accent-marker { clip-path: polygon(50% 0%, 0% 100%, 100% 100%); }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef, useMemo } = React;
+
+        // --- ICONOS ---
+        const IconsSet = {
+            Play: (p) => <svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>,
+            Square: (p) => <svg {...p} viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>,
+            Music: (p) => <svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>,
+            Edit: (p) => <svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>,
+            Lock: (p) => <svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>,
+            Trash: (p) => <svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>,
+            Refresh: (p) => <svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>,
+            Grid: (p) => <svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg>,
+            Star: (p) => <svg {...p} viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>,
+            Help: (p) => <svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>,
+            X: (p) => <svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>,
+            Book: (p) => <svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>,
+            Dice: (p) => <svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><path d="M16 8h.01"/><path d="M8 8h.01"/><path d="M8 16h.01"/><path d="M16 16h.01"/><path d="M12 12h.01"/></svg>,
+            Heart: (p) => <svg {...p} viewBox="0 0 24 24" fill={p.filled ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>,
+            Upload: (p) => <svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        };
+
+        const Icon = ({ name, size = 20, className = "", ...props }) => {
+            const IconComp = IconsSet[name];
+            return IconComp ? <IconComp width={size} height={size} className={className} {...props} /> : null;
+        };
+
+        const getTempoMarking = (bpm) => {
+            const b = parseInt(bpm) || 0;
+            if (b < 40) return "Grave";
+            if (b < 60) return "Largo";
+            if (b < 66) return "Larghetto";
+            if (b < 76) return "Adagio";
+            if (b < 108) return "Andante";
+            if (b < 120) return "Moderato";
+            if (b < 168) return "Allegro";
+            if (b < 200) return "Presto";
+            return "Prestissimo";
+        };
+
+        const CLAVE_PATTERNS = {
+            'son32': { name: 'Son 3-2', indices: [0, 3, 6, 10, 12] },
+            'son23': { name: 'Son 2-3', indices: [2, 4, 8, 11, 14] },
+            'rumba32': { name: 'Rumba 3-2', indices: [0, 3, 7, 10, 12] },
+            'rumba23': { name: 'Rumba 2-3', indices: [2, 4, 8, 11, 15] },
+            'bossa': { name: 'Bossa Nova', indices: [0, 3, 6, 10, 13] }
+        };
+
+        const PRESETS = [
+            { id: 'p1', name: 'Básico: Negras', sig: '4/4', bpm: 100, data: '4,0,0,0,4,0,0,0,4,0,0,0,4,0,0,0' },
+            { id: 'p2', name: 'Síncopa Simple', sig: '4/4', bpm: 90, data: '2,4,2,2,4,2' },
+            { id: 'p3', name: 'Clave Son 3-2', sig: '4/4', bpm: 95, data: '3,3,4,2,4,2,4,2,4,2,2' },
+            { id: 'p4', name: 'Dosillos (2/2)', sig: '2/2', bpm: 80, data: '2,2,2,2,2,2,2,2' }, 
+            { id: 'p5', name: 'Vals Básico', sig: '6/8', bpm: 110, data: '2,1,1,2,2,1,1,2' }
+        ];
+
+        // --- MODALES ---
+        const ExercisesModal = ({ onClose, onLoad, onImport }) => {
+            const [tab, setTab] = useState('bank');
+            const [importText, setImportText] = useState('');
+            const [favorites, setFavorites] = useState([]);
+
+            useEffect(() => {
+                const saved = localStorage.getItem('rhythm_favs');
+                if (saved) setFavorites(JSON.parse(saved));
+            }, []);
+
+            const deleteFav = (id) => {
+                const newFavs = favorites.filter(f => f.id !== id);
+                setFavorites(newFavs);
+                localStorage.setItem('rhythm_favs', JSON.stringify(newFavs));
+            };
+
+            const handleImport = () => {
+                if (!importText) return;
+                onImport(importText);
+                onClose();
+            };
+
+            return (
+                <div className="fixed inset-0 bg-black/90 z-[60] flex items-center justify-center p-4 backdrop-blur-sm">
+                    <div className="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-sm h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+                        <div className="flex justify-between items-center p-4 border-b border-slate-800 bg-slate-900">
+                            <h2 className="text-lg font-bold text-white flex items-center gap-2"><Icon name="Book" /> Libro</h2>
+                            <button onClick={onClose} className="p-2 rounded-full hover:bg-slate-800 text-slate-400"><Icon name="X" /></button>
+                        </div>
+                        <div className="flex p-2 gap-2 bg-slate-950/50">
+                            <button onClick={() => setTab('bank')} className={`flex-1 py-3 text-xs font-black uppercase tracking-wider rounded-lg ${tab === 'bank' ? 'bg-indigo-600 text-white' : 'text-slate-500 hover:bg-slate-800'}`}>BANCO</button>
+                            <button onClick={() => setTab('favs')} className={`flex-1 py-3 text-xs font-black uppercase tracking-wider rounded-lg ${tab === 'favs' ? 'bg-indigo-600 text-white' : 'text-slate-500 hover:bg-slate-800'}`}>FAVORITOS</button>
+                            <button onClick={() => setTab('import')} className={`flex-1 py-3 text-xs font-black uppercase tracking-wider rounded-lg ${tab === 'import' ? 'bg-indigo-600 text-white' : 'text-slate-500 hover:bg-slate-800'}`}>IMPORTAR</button>
+                        </div>
+                        <div className="flex-1 overflow-y-auto p-4 text-sm text-slate-300">
+                            {tab === 'bank' && (
+                                <div className="space-y-2">
+                                    {PRESETS.map(p => (
+                                        <button key={p.id} onClick={() => { onLoad(p); onClose(); }} className="w-full p-4 bg-slate-800 active:bg-slate-700 rounded-xl text-left flex justify-between items-center border border-slate-700/50">
+                                            <div>
+                                                <div className="font-bold text-white">{p.name}</div>
+                                                <div className="text-[10px] opacity-60 font-mono mt-1">{p.sig} • {p.bpm} BPM</div>
+                                            </div>
+                                            <Icon name="Play" size={18} className="text-indigo-400" />
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+                            {tab === 'favs' && (
+                                <div className="space-y-2">
+                                    {favorites.length === 0 && <p className="text-center opacity-50 py-10">Sin favoritos.</p>}
+                                    {favorites.map(f => (
+                                        <div key={f.id} className="w-full p-3 bg-slate-800 rounded-xl flex justify-between items-center border border-slate-700/50">
+                                            <button onClick={() => { onLoad(f); onClose(); }} className="text-left flex-1 p-1">
+                                                <div className="font-bold text-white">{f.name}</div>
+                                                <div className="text-[10px] opacity-60 font-mono mt-1">{f.sig} • {f.bpm} BPM</div>
+                                            </button>
+                                            <button onClick={() => deleteFav(f.id)} className="p-3 text-slate-500 active:text-red-400"><Icon name="Trash" size={18} /></button>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                            {tab === 'import' && (
+                                <div className="space-y-4">
+                                    <p className="text-xs opacity-70">Pega aquí tu secuencia numérica (Excel).</p>
+                                    <textarea value={importText} onChange={e => setImportText(e.target.value)} className="w-full h-32 bg-slate-950 border border-slate-700 rounded-lg p-3 text-xs font-mono text-emerald-400 focus:outline-none focus:border-emerald-500" placeholder="Ej: 3, 1, 2, 2" />
+                                    <button onClick={handleImport} className="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl flex items-center justify-center gap-2"><Icon name="Upload" size={18}/> Cargar Ritmo</button>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const HelpModal = ({ onClose }) => {
+            const [tab, setTab] = useState('shortcuts');
+            const examples = [ { name: "Básico 4/4", code: "4, 4, 4, 4" }, { name: "Síncopa", code: "1, 2, 1, 4" }, { name: "Silencios", code: "2, -2, 2, 0, 0, 1" } ];
+
+            return (
+                <div className="fixed inset-0 bg-black/90 z-[60] flex items-center justify-center p-4 backdrop-blur-sm">
+                    <div className="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-sm h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+                        <div className="flex justify-between items-center p-4 border-b border-slate-800 bg-slate-900">
+                            <h2 className="text-lg font-bold text-white flex items-center gap-2"><Icon name="Help" /> Ayuda</h2>
+                            <button onClick={onClose} className="p-2 rounded-full hover:bg-slate-800 text-slate-400"><Icon name="X" /></button>
+                        </div>
+                        <div className="flex p-2 gap-2 bg-slate-950/50 overflow-x-auto">
+                            <button onClick={() => setTab('shortcuts')} className={`flex-1 py-3 px-2 text-[10px] uppercase font-bold rounded-lg whitespace-nowrap ${tab === 'shortcuts' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:bg-slate-800'}`}>ATAJOS</button>
+                            <button onClick={() => setTab('groove')} className={`flex-1 py-3 px-2 text-[10px] uppercase font-bold rounded-lg whitespace-nowrap ${tab === 'groove' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:bg-slate-800'}`}>CÓDIGO</button>
+                            <button onClick={() => setTab('tutorial')} className={`flex-1 py-3 px-2 text-[10px] uppercase font-bold rounded-lg whitespace-nowrap ${tab === 'tutorial' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:bg-slate-800'}`}>IMPORTAR</button>
+                        </div>
+                        <div className="flex-1 overflow-y-auto p-5 text-sm text-slate-300">
+                            {tab === 'shortcuts' && (
+                                <div className="space-y-3">
+                                    <div className="flex justify-between border-b border-slate-800 pb-2"><span>Play/Stop</span> <kbd className="bg-slate-800 px-2 rounded text-white text-xs font-mono py-1">Espacio</kbd></div>
+                                    <div className="flex justify-between border-b border-slate-800 pb-2"><span>Metrónomo</span> <kbd className="bg-slate-800 px-2 rounded text-white text-xs font-mono py-1">M</kbd></div>
+                                    <div className="flex justify-between border-b border-slate-800 pb-2"><span>Ligar Notas</span> <kbd className="bg-slate-800 px-2 rounded text-white text-xs font-mono py-1">L</kbd></div>
+                                    <div className="flex justify-between border-b border-slate-800 pb-2"><span>Limpiar</span> <kbd className="bg-slate-800 px-2 rounded text-white text-xs font-mono py-1">Del</kbd></div>
+                                    <div className="flex justify-between border-b border-slate-800 pb-2"><span>Ver Código</span> <kbd className="bg-slate-800 px-2 rounded text-white text-xs font-mono py-1">C</kbd></div>
+                                </div>
+                            )}
+                            {tab === 'groove' && (
+                                <div className="space-y-4 text-sm leading-relaxed">
+                                    <h3 className="text-white font-bold">El Código Rítmico</h3>
+                                    <p>Guía visual basada en el libro de Tamas Bodzsar.</p>
+                                    <ul className="list-disc pl-4 space-y-2 marker:text-indigo-500">
+                                        <li><strong className="text-white">Base:</strong> Comienza con notas en tiempos fuertes.</li>
+                                        <li><strong className="text-white">Anticipación:</strong> Mueve notas a tiempos débiles (contratiempos) para generar impulso.</li>
+                                        <li><strong className="text-white">Clave:</strong> Usa el botón <span className="text-yellow-400">★</span> para ver la Clave. Intenta que tus acentos caigan en las celdas doradas.</li>
+                                    </ul>
+                                </div>
+                            )}
+                            {tab === 'tutorial' && (
+                                <div className="space-y-4 text-xs">
+                                    <div className="bg-slate-950 p-3 rounded-lg border border-slate-800 space-y-2 font-mono">
+                                        <div className="flex justify-between"><span className="text-emerald-400 font-bold">1</span> <span>Nota</span></div>
+                                        <div className="flex justify-between"><span className="text-emerald-400 font-bold">2+</span> <span>Ligadura</span></div>
+                                        <div className="flex justify-between"><span className="text-slate-500 font-bold">0</span> <span>Silencio</span></div>
+                                        <div className="flex justify-between"><span className="text-slate-500 font-bold">-X</span> <span>Silencio Largo</span></div>
+                                    </div>
+                                    {examples.map((ex, i) => (
+                                        <div key={i} className="bg-slate-800 p-2 rounded flex justify-between">
+                                            <span className="text-slate-400 uppercase tracking-wider text-[10px]">{ex.name}</span>
+                                            <span className="font-mono text-white">{ex.code}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const App = () => {
+            const [isPlaying, setIsPlaying] = useState(false);
+            const [bpm, setBpm] = useState(100);
+            const [currentStep, setCurrentStep] = useState(-1);
+            const [metronomeOn, setMetronomeOn] = useState(true);
+            const [timeSignature, setTimeSignature] = useState('4/4'); 
+            const [showCode, setShowCode] = useState(false);
+            const [selectedClave, setSelectedClave] = useState('son32');
+            const [showHelp, setShowHelp] = useState(false);
+            const [showExercises, setShowExercises] = useState(false);
+            const [editMode, setEditMode] = useState(true);
+            const [stretchTool, setStretchTool] = useState(false); 
+
+            // CONFIGURACIÓN DE GRID
+            const getInitialGrid = (sig) => {
+                if (sig === '6/8') return Array(24).fill('rest'); 
+                return Array(16).fill('rest'); 
+            };
+            const [grid, setGrid] = useState(getInitialGrid('4/4'));
+
+            // REFS
+            const audioContextRef = useRef(null);
+            const nextNoteTimeRef = useRef(0);
+            const timerIDRef = useRef(null);
+            const stepRef = useRef(0);
+            const gridRef = useRef(grid);
+            const bpmRef = useRef(bpm);
+            const sigRef = useRef(timeSignature);
+            const metronomeRef = useRef(metronomeOn);
+            const isPlayingRef = useRef(false);
+            const togglePlayRef = useRef(null);
+
+            // SYNC REFS
+            useEffect(() => { 
+                gridRef.current = grid; bpmRef.current = bpm; 
+                sigRef.current = timeSignature; metronomeRef.current = metronomeOn;
+                isPlayingRef.current = isPlaying;
+            }, [grid, bpm, timeSignature, metronomeOn, isPlaying]);
+
+            // KEYBOARD SHORTCUTS
+            useEffect(() => {
+                const handleKeyDown = (e) => {
+                    if (e.code === 'Space') { e.preventDefault(); if (togglePlayRef.current) togglePlayRef.current(); }
+                    if (e.code === 'KeyM') setMetronomeOn(prev => !prev);
+                    if (e.code === 'KeyL') setStretchTool(prev => !prev);
+                    if (e.code === 'KeyC') setShowCode(prev => !prev);
+                    if (e.code === 'KeyH') setShowHelp(prev => !prev);
+                    if (e.code === 'Delete') { if (!showHelp && !showExercises && window.confirm("¿Limpiar todo?")) setGrid(getInitialGrid(sigRef.current)); }
+                };
+                window.addEventListener('keydown', handleKeyDown);
+                return () => window.removeEventListener('keydown', handleKeyDown);
+            }, [showHelp, showExercises]);
+
+            // PLAYBACK ENGINE
+            const playSound = (time, isAccent, duration, isMetronome = false) => {
+                const ctx = audioContextRef.current;
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                
+                if (isMetronome) {
+                    osc.type = 'sine'; 
+                    osc.frequency.setValueAtTime(isAccent ? 1200 : 800, time);
+                    gain.gain.setValueAtTime(0, time); 
+                    gain.gain.linearRampToValueAtTime(isAccent ? 0.3 : 0.1, time + 0.005);
+                    gain.gain.exponentialRampToValueAtTime(0.001, time + 0.05);
+                } else {
+                    osc.type = 'triangle'; 
+                    osc.frequency.setValueAtTime(isAccent ? 330 : 220, time); 
+                    gain.gain.setValueAtTime(0, time); 
+                    gain.gain.linearRampToValueAtTime(0.4, time + 0.01);
+                    gain.gain.exponentialRampToValueAtTime(0.001, time + duration);
+                }
+                
+                osc.connect(gain); gain.connect(ctx.destination);
+                osc.start(time); osc.stop(time + duration + 0.1);
+            };
+
+            const scheduler = () => {
+                if (!isPlayingRef.current) return;
+
+                while (nextNoteTimeRef.current < audioContextRef.current.currentTime + 0.1) {
+                    const signature = sigRef.current;
+                    const gridLen = gridRef.current.length;
+                    let stepValSeconds = 0;
+                    let shouldClick = false;
+                    
+                    const safeBpm = (typeof bpmRef.current === 'number' && bpmRef.current > 0) ? bpmRef.current : 100;
+                    const beatDur = 60 / safeBpm;
+
+                    if (signature === '4/4') {
+                        stepValSeconds = beatDur / 4; 
+                        shouldClick = stepRef.current % 4 === 0;
+                    } 
+                    else if (signature === '2/2') {
+                        stepValSeconds = beatDur / 4; 
+                        shouldClick = stepRef.current % 4 === 0;
+                    } 
+                    else if (signature === '6/8') {
+                        stepValSeconds = beatDur / 3; 
+                        shouldClick = stepRef.current % 3 === 0;
+                    }
+
+                    const time = nextNoteTimeRef.current;
+                    const step = stepRef.current;
+
+                    if (metronomeRef.current && shouldClick) {
+                        let isMeasureAccent = false;
+                        if (signature === '4/4') isMeasureAccent = step === 0;
+                        if (signature === '2/2') isMeasureAccent = step % 8 === 0;
+                        if (signature === '6/8') isMeasureAccent = step % 6 === 0;
+                        playSound(time, isMeasureAccent, 0.05, true);
+                    }
+
+                    if (gridRef.current[step] === 'note') {
+                        let durSteps = 1;
+                        for(let i = step + 1; i < gridLen; i++) {
+                            if (signature === '4/4' && i % 16 === 0 && gridRef.current[i] === 'tie') break;
+                            if (signature === '2/2' && i % 8 === 0 && gridRef.current[i] === 'tie') break; 
+                            if (signature === '6/8' && i % 6 === 0 && gridRef.current[i] === 'tie') break;
+                            if (gridRef.current[i] === 'tie') durSteps++; else break;
+                        }
+                        const durationSeconds = stepValSeconds * durSteps;
+                        playSound(time, shouldClick, durationSeconds * 0.95); 
+                    }
+
+                    setTimeout(() => { if (isPlayingRef.current) setCurrentStep(step); }, (time - audioContextRef.current.currentTime) * 1000);
+                    
+                    nextNoteTimeRef.current += stepValSeconds;
+                    stepRef.current = (stepRef.current + 1) % gridLen;
+                }
+                timerIDRef.current = setTimeout(scheduler, 25);
+            };
+
+            const stopPlayback = () => {
+                setIsPlaying(false);
+                isPlayingRef.current = false;
+                if (timerIDRef.current) clearTimeout(timerIDRef.current);
+                setCurrentStep(-1);
+            };
+
+            const togglePlay = () => {
+                if (!audioContextRef.current) audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioContextRef.current.state === 'suspended') audioContextRef.current.resume();
+                
+                if (isPlaying) { stopPlayback(); } 
+                else { 
+                    setIsPlaying(true); 
+                    isPlayingRef.current = true; 
+                    stepRef.current = 0; 
+                    nextNoteTimeRef.current = audioContextRef.current.currentTime + 0.05; 
+                    scheduler(); 
+                }
+            };
+
+            useEffect(() => { togglePlayRef.current = togglePlay; }, [togglePlay]);
+
+            // LOGIC
+            const calculateGrooveScore = () => {
+                if (timeSignature !== '4/4') return 0;
+                const claveIndices = CLAVE_PATTERNS[selectedClave].indices;
+                let totalNotes = 0;
+                let claveMatches = 0;
+                grid.forEach((cell, idx) => {
+                    if (cell === 'note') {
+                        totalNotes++;
+                        if (claveIndices.includes(idx)) claveMatches++;
+                    }
+                });
+                if (totalNotes === 0) return 0;
+                return Math.round((claveMatches / totalNotes) * 100);
+            };
+
+            const randomizeRhythm = () => {
+                const newGrid = getInitialGrid(timeSignature);
+                const len = newGrid.length;
+                
+                if (showCode && timeSignature === '4/4') {
+                    const claveIndices = CLAVE_PATTERNS[selectedClave].indices;
+                    let goodNotes = 0;
+                    claveIndices.forEach(idx => {
+                        if (Math.random() > 0.15) { 
+                            newGrid[idx] = 'note';
+                            goodNotes++;
+                            const maxDur = 4;
+                            const dur = Math.floor(Math.random() * maxDur) + 1;
+                            for (let k = 1; k < dur && (idx + k) < len; k++) {
+                                if (claveIndices.includes(idx + k)) break;
+                                newGrid[idx + k] = 'tie';
+                            }
+                        } else {
+                            newGrid[idx] = 'rest';
+                        }
+                    });
+                    const maxBad = Math.floor(goodNotes * 0.25);
+                    let currentBad = 0;
+                    for (let i = 0; i < len; i++) {
+                        if (currentBad >= maxBad) break;
+                        if (newGrid[i] === 'rest' && !claveIndices.includes(i)) {
+                            if (Math.random() < 0.1) {
+                                newGrid[i] = 'note';
+                                currentBad++;
+                                if (i+1 < len && !claveIndices.includes(i+1) && Math.random()>0.5) newGrid[i+1] = 'tie';
+                            }
+                        }
+                    }
+                    setGrid(newGrid);
+                    return;
+                }
+
+                let i = 0;
+                while (i < len) {
+                    const isRest = Math.random() < 0.3;
+                    if (isRest) { newGrid[i] = 'rest'; i++; } 
+                    else {
+                        const maxDur = Math.min(4, len - i);
+                        const dur = Math.floor(Math.random() * maxDur) + 1;
+                        newGrid[i] = 'note';
+                        for (let k = 1; k < dur; k++) { newGrid[i+k] = 'tie'; }
+                        i += dur;
+                    }
+                }
+                setGrid(newGrid);
+            };
+
+            const importRhythm = (str) => {
+                const parts = str.split(/[\s,]+/).map(s => parseInt(s)).filter(n => !isNaN(n));
+                const totalLen = timeSignature === '6/8' ? 24 : 16;
+                const newGrid = Array(totalLen).fill('rest');
+                let cursor = 0;
+                parts.forEach(val => {
+                    if (cursor >= totalLen) return;
+                    const duration = Math.abs(val);
+                    if (val === 0 || val < 0) {
+                        const restLen = val === 0 ? 1 : duration;
+                        for(let k=0; k<restLen; k++) { if(cursor+k < totalLen) newGrid[cursor+k] = 'rest'; }
+                        cursor += restLen;
+                    } else {
+                        newGrid[cursor] = 'note';
+                        for(let k=1; k<duration; k++) { if(cursor+k < totalLen) newGrid[cursor+k] = 'tie'; }
+                        cursor += duration;
+                    }
+                });
+                setGrid(newGrid);
+            };
+
+            const loadExercise = (ex) => {
+                if (ex.sig !== timeSignature) changeSignature(ex.sig);
+                if (ex.bpm) setBpm(ex.bpm);
+                if (ex.data) importRhythm(ex.data);
+            };
+
+            const saveFavorite = () => {
+                const name = prompt("Nombre:");
+                if (!name) return;
+                const newFav = { id: Date.now(), name, sig: timeSignature, bpm, data: 'CUSTOM_GRID', gridSnapshot: grid };
+                const saved = localStorage.getItem('rhythm_favs');
+                const favs = saved ? JSON.parse(saved) : [];
+                favs.push(newFav);
+                localStorage.setItem('rhythm_favs', JSON.stringify(favs));
+                alert("Guardado");
+            };
+
+            const changeSignature = (newSig) => {
+                stopPlayback();
+                setTimeSignature(newSig);
+                if (newSig === '6/8' || timeSignature === '6/8') setGrid(getInitialGrid(newSig));
+                else if (grid.length !== 16) setGrid(Array(16).fill('rest'));
+            };
+
+            const toggleSignature44_22 = () => {
+                const newSig = timeSignature === '4/4' ? '2/2' : '4/4';
+                if (timeSignature === '6/8') changeSignature('4/4'); else setTimeSignature(newSig);
+            };
+
+            const set68Signature = () => { if (timeSignature !== '6/8') changeSignature('6/8'); };
+
+            const toggleCell = (idx) => {
+                if (!editMode) return;
+                const newGrid = [...grid];
+                if (newGrid[idx] !== 'rest') {
+                    newGrid[idx] = 'rest';
+                    let j = idx + 1; while(j < grid.length && newGrid[j] === 'tie') { newGrid[j] = 'rest'; j++; }
+                } else {
+                    if (stretchTool && idx > 0 && (newGrid[idx - 1] === 'note' || newGrid[idx - 1] === 'tie')) newGrid[idx] = 'tie';
+                    else newGrid[idx] = 'note';
+                }
+                setGrid(newGrid);
+            };
+
+            // NOTACIÓN
+            const Notation = () => {
+                const noteWidth = 35; 
+                const startX = 40; 
+                const musColor = "#0f172a";
+                const totalSteps = grid.length;
+                const realWidth = startX + totalSteps * noteWidth + 50;
+
+                const renderStaff = () => {
+                    const elements = [];
+                    let beamGroupSize = 4;
+                    if (timeSignature === '6/8') beamGroupSize = 3;
+
+                    for (let i = 0; i < totalSteps; i++) {
+                        if (grid[i] === 'note' || grid[i] === 'tie') {
+                            let originIdx = i;
+                            while(originIdx > 0 && grid[originIdx] === 'tie') originIdx--;
+                            let fullSoundD = 1;
+                            for (let j = originIdx + 1; j < totalSteps; j++) { if (grid[j] === 'tie') fullSoundD++; else break; }
+                            
+                            let visualD = fullSoundD - (i - originIdx);
+                            let tiedNextNote = false;
+                            
+                            let breakPoint = 100;
+                            if (timeSignature === '4/4') breakPoint = (Math.floor(i / 4) + 1) * 4; 
+                            if (timeSignature === '2/2') breakPoint = (Math.floor(i / 4) + 1) * 4;
+                            if (timeSignature === '6/8') breakPoint = (Math.floor(i / 6) + 1) * 6;
+
+                            if (i + visualD > breakPoint) { visualD = breakPoint - i; tiedNextNote = true; }
+                            if (visualD < 1) visualD = 1;
+                            
+                            let xPos = startX + i * noteWidth;
+                            let isEndOfMeasure = false;
+                            if (timeSignature === '4/4' && (i + 1) % 16 === 0) isEndOfMeasure = true;
+                            if (timeSignature === '2/2' && (i + 1) % 8 === 0) isEndOfMeasure = true;
+                            if (timeSignature === '6/8' && (i + 1) % 6 === 0) isEndOfMeasure = true;
+                            if (isEndOfMeasure) xPos -= 5;
+
+                            elements.push({ t: 'n', d: visualD, i, x: xPos, h: currentStep === i, tiedNext: tiedNextNote });
+                            i += visualD - 1;
+                        } else if (grid[i] === 'rest') {
+                            let restDur = 1;
+                            let maxGroup = 1;
+                            if (timeSignature === '4/4') {
+                                if (i % 16 === 0) maxGroup = 16; else if (i % 8 === 0) maxGroup = 8; else if (i % 4 === 0) maxGroup = 4;
+                            } else if (timeSignature === '2/2') {
+                                if (i % 8 === 0) maxGroup = 8; else if (i % 4 === 0) maxGroup = 4;
+                            } else if (timeSignature === '6/8') {
+                                if (i % 6 === 0) maxGroup = 6;
+                            }
+
+                            for (let j = i + 1; j < Math.min(totalSteps, i + maxGroup); j++) {
+                                if (grid[j] === 'rest') restDur++; else break;
+                            }
+                            let xPos = startX + i * noteWidth;
+                            if (restDur >= 16 && timeSignature === '4/4') xPos += (noteWidth * 8) - 10;
+                            else if (restDur >= 8 && timeSignature === '2/2') xPos += (noteWidth * 4) - 10;
+                            else if (restDur >= 6 && timeSignature === '6/8') xPos += (noteWidth * 3) - 10;
+
+                            elements.push({ t: 'r', d: restDur, i, x: xPos, h: currentStep === i });
+                            i += restDur - 1;
+                        }
+                    }
+
+                    const beams = [];
+                    for (let p = 0; p < totalSteps; p += beamGroupSize) {
+                        const pEnd = p + beamGroupSize;
+                        const groupNotes = elements.filter(n => n.i >= p && n.i < pEnd && n.t === 'n');
+                        let currentBeam = [];
+                        groupNotes.forEach((n) => {
+                            let canBeam = false;
+                            if (timeSignature === '4/4' && n.d < 4) canBeam = true; 
+                            if (timeSignature === '2/2' && n.d === 1) canBeam = true; 
+                            if (timeSignature === '6/8' && n.d === 1) canBeam = true;
+                            if (canBeam) {
+                                currentBeam.push(n);
+                            } else {
+                                if (currentBeam.length > 1) beams.push({ notes: [...currentBeam] });
+                                currentBeam = []; 
+                            }
+                        });
+                        if (currentBeam.length > 1) beams.push({ notes: [...currentBeam] });
+                    }
+
+                    const barLines = [];
+                    if (timeSignature === '2/2') { barLines.push(8); } 
+                    if (timeSignature === '6/8') { for(let b=6; b<totalSteps; b+=6) barLines.push(b); }
+
+                    return (
+                        <g>
+                            <line x1="20" y1="70" x2={realWidth - 20} y2="70" className="staff-line" />
+                            {barLines.map(idx => (<line key={'bar'+idx} x1={startX + idx * noteWidth - (noteWidth/2)} y1="40" x2={startX + idx * noteWidth - (noteWidth/2)} y2="100" stroke="#000" strokeWidth="1" />))}
+                            {/* Pulse Counters */}
+                            {Array.from({length: totalSteps}).map((_, idx) => {
+                                let label = null;
+                                let isBeat = false;
+                                if (timeSignature === '4/4' && idx % 4 === 0) { label = (idx / 4) + 1; isBeat = true; }
+                                else if (timeSignature === '2/2' && idx % 4 === 0) { label = ((idx % 8) / 4) + 1; isBeat = true; }
+                                else if (timeSignature === '6/8' && idx % 3 === 0) { label = ((idx % 6) / 3) + 1; isBeat = true; }
+                                
+                                if (label) {
+                                    let isActive = false;
+                                    if (timeSignature === '4/4' && currentStep >= idx && currentStep < idx + 4) isActive = true;
+                                    else if (timeSignature === '2/2' && currentStep >= idx && currentStep < idx + 4) isActive = true;
+                                    else if (timeSignature === '6/8' && currentStep >= idx && currentStep < idx + 3) isActive = true;
+
+                                    return (
+                                        <text 
+                                            key={'lbl'+idx} 
+                                            x={startX + idx * noteWidth + 5} 
+                                            y="25" 
+                                            fontSize={isActive ? "24" : "14"} 
+                                            fill={isActive ? "#38bdf8" : "#94a3b8"} 
+                                            fontWeight={isActive ? "900" : "bold"}
+                                            style={{ 
+                                                textShadow: isActive ? "0 0 10px #38bdf8" : "none",
+                                                transition: "all 0.15s ease-out" 
+                                            }}
+                                        >
+                                            {label}
+                                        </text>
+                                    );
+                                }
+                                return null;
+                            })}
+                            <g transform="translate(10, 70)" className="font-serif font-bold text-3xl">
+                                {timeSignature === '4/4' && <text x="0" y="10">C</text>}
+                                {timeSignature === '2/2' && <g><text x="0" y="10">C</text><line x1="10" y1="-15" x2="10" y2="15" stroke="black" strokeWidth="3"/></g>}
+                                {timeSignature === '6/8' && <g><text x="5" y="-5" fontSize="20">6</text><text x="5" y="18" fontSize="20">8</text></g>}
+                            </g>
+                            {elements.map((n, idx) => {
+                                const x = n.x;
+                                const color = n.h ? "#ef4444" : musColor;
+                                let isFilled = true;
+                                if (timeSignature === '4/4' && n.d >= 8) isFilled = false;
+                                else if (timeSignature === '2/2' && n.d >= 4) isFilled = false;
+                                else if (timeSignature === '6/8' && n.d >= 4) isFilled = false;
+
+                                let isDotted = false;
+                                if (timeSignature === '4/4') isDotted = n.d === 3 || n.d === 6 || n.d === 12;
+                                if (timeSignature === '2/2') isDotted = n.d === 3 || n.d === 6; 
+                                if (timeSignature === '6/8') isDotted = (n.d % 3 === 0 && n.d > 0); 
+                                
+                                // Default Syllables
+                                let syllable = "";
+                                if (timeSignature === '4/4') {
+                                    const sub = n.i % 4;
+                                    syllable = sub === 0 ? (Math.floor(n.i/4)+1) : sub === 1 ? 'e' : sub === 2 ? '&' : 'a';
+                                } else if (timeSignature === '2/2') {
+                                    const beatInMeasure = n.i % 8;
+                                    const quarterBeat = Math.floor(beatInMeasure / 2) + 1;
+                                    const sub = beatInMeasure % 2;
+                                    syllable = sub === 0 ? quarterBeat : '&';
+                                } else { // 6/8
+                                    syllable = (n.i % 6) + 1;
+                                }
+
+                                if (n.t === 'r') {
+                                    const restColor = n.h ? "#ef4444" : "#64748b"; 
+                                    const isFullMeasure = (timeSignature === '4/4' && n.d >= 16) || (timeSignature === '2/2' && n.d >= 8) || (timeSignature === '6/8' && n.d >= 6);
+                                    return (
+                                        <g key={idx} transform={`translate(${x + 4}, 70)`}>
+                                            {n.h && <circle cx="0" cy="0" r="15" fill="rgba(239,68,68,0.2)" className="animate-pulse" />}
+                                            {isFullMeasure ? <rect x="-6" y="-10" width="12" height="6" fill={restColor} /> :
+                                            (n.d === 4 || (timeSignature === '2/2' && n.d === 2)) ? <path d="M-2,-10 L2,-6 L-2,0 L2,6 L-1,10 Q-4,12 -2,15" stroke={restColor} strokeWidth="2.5" fill="none" strokeLinecap="round" /> :
+                                            (n.d >= 8 || (timeSignature === '2/2' && n.d >= 4)) ? <rect x="-6" y="-10" width="12" height="6" fill={restColor} /> :
+                                            (timeSignature === '4/4' && n.d===1) ? <path d="M-4,-12 Q2,-12 0,-5 L-6,8 M-4,-2 Q2,-5 0,3" stroke={restColor} strokeWidth="2.5" fill="none" strokeLinecap="round"><circle cx="-4" cy="-12" r="2.5" fill={restColor} /><circle cx="-4" cy="-2" r="2.5" fill={restColor} /></path> :
+                                            <g><circle cx="-5" cy="-8" r="3.5" fill={restColor} /><path d="M-5,-8 Q2,-4 0,5 L-5,15" stroke={restColor} strokeWidth="2.5" fill="none" strokeLinecap="round" /></g>}
+                                        </g>
+                                    );
+                                }
+
+                                const beam = beams.find(b => n.i >= b.notes[0].i && n.i <= b.notes[b.notes.length-1].i);
+                                let hasStem = true;
+                                if (timeSignature === '4/4' && n.d >= 16) hasStem = false;
+                                if (timeSignature === '2/2' && n.d >= 8) hasStem = false; 
+                                if (timeSignature === '6/8' && n.d >= 6) hasStem = true;
+                                let stemHeight = beam ? 35 : 30;
+
+                                return (
+                                    <g key={idx}>
+                                        {n.h && <circle cx={x + 10} cy="70" r="22" fill="rgba(239,68,68,0.2)" className="animate-pulse" />}
+                                        <ellipse cx={x + 10} cy="70" rx="8" ry="6" fill={isFilled ? color : "white"} stroke={color} strokeWidth="2.5" transform={`rotate(-15 ${x + 10} 70)`} />
+                                        {hasStem && ( <line x1={x + 16} y1="70" x2={x + 16} y2={70 - stemHeight} stroke={color} strokeWidth="2.5" /> )}
+                                        {!beam && (
+                                            <g>
+                                                {((timeSignature === '4/4' && n.d < 4) || (timeSignature === '2/2' && n.d === 1) || (timeSignature === '6/8' && n.d === 1)) && <path d={`M${x + 16},30 Q${x + 30},40 ${x + 30},55`} fill="none" stroke={color} strokeWidth="3" strokeLinecap="round" />}
+                                                {(timeSignature === '4/4' && n.d === 1) && <path d={`M${x + 16},40 Q${x + 30},50 ${x + 30},65`} fill="none" stroke={color} strokeWidth="3" strokeLinecap="round" />}
+                                            </g>
+                                        )}
+                                        {n.tiedNext && ( <path d={`M${x + 10},80 Q${x + 10 + (n.d * noteWidth)/2},105 ${startX + (n.i + n.d) * noteWidth + 10},80`} fill="none" stroke={musColor} strokeWidth="2" strokeLinecap="round" /> )}
+                                        {isDotted && ( <circle cx={x + 27} cy="70" r="4.5" fill={color} /> )}
+                                        
+                                        <text x={x+10} y="110" fontSize="10" textAnchor="middle" fill="#64748b" fontWeight="bold" fontFamily="monospace">{syllable}</text>
+                                    </g>
+                                );
+                            })}
+                            {beams.map((b, bIdx) => {
+                                const y = 70 - 35;
+                                const notes = b.notes;
+                                const firstX = notes[0].x + 16;
+                                const lastX = notes[notes.length-1].x + 16;
+                                return (
+                                    <g key={'beam'+bIdx}>
+                                        <line x1={firstX} y1={y} x2={lastX} y2={y} stroke={musColor} strokeWidth="6" strokeLinecap="butt"/>
+                                        {(timeSignature === '4/4' && notes.some(n=>n.d===1)) && notes.map((note, nIdx) => {
+                                            if (note.d !== 1) return null;
+                                            const idx = notes.indexOf(note);
+                                            const prev = notes[idx-1];
+                                            const next = notes[idx+1];
+                                            const connectL = prev && prev.d === 1 && note.i === prev.i + prev.d;
+                                            const connectR = next && next.d === 1 && next.i === note.i + note.d;
+                                            let x1 = note.x + 16; let x2 = x1;
+                                            if (connectR) x2 = next.x + 16;
+                                            else if (!connectL) { x2 = x1 + (prev ? -8 : 8); }
+                                            if (connectR || (!connectL)) return <line key={nIdx} x1={x1} y1={y+10} x2={x2} y2={y+10} stroke={musColor} strokeWidth="4" />;
+                                            return null;
+                                        })}
+                                    </g>
+                                );
+                            })}
+                        </g>
+                    );
+                };
+
+                return (
+                    <div className="w-full bg-white rounded-3xl border-4 border-slate-300 p-4 mb-4 shadow-xl overflow-hidden">
+                        <svg viewBox={`0 0 ${realWidth} 140`} className="w-full h-auto">
+                            {renderStaff()}
+                        </svg>
+                    </div>
+                );
+            };
+
+            const renderGrid = () => {
+                let cols = 8; if (timeSignature === '6/8') cols = 6; 
+                const rhythmicCodeIndices = CLAVE_PATTERNS[selectedClave].indices;
+
+                return (
+                    <div className={`grid gap-x-1 gap-y-4`} style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}>
+                        {grid.map((type, idx) => {
+                            const isCurrent = currentStep === idx;
+                            const bg = type === 'note' ? 'bg-indigo-500 border-indigo-400' : type === 'tie' ? 'bg-indigo-900/40 border-indigo-900/50' : 'bg-slate-800/80 border-slate-700';
+                            
+                            let codeClass = "";
+                            if (showCode && timeSignature === '4/4') {
+                                if (rhythmicCodeIndices.includes(idx)) {
+                                    codeClass = "bg-yellow-500/20 border-yellow-500/50 shadow-[inset_0_0_10px_rgba(234,179,8,0.2)]";
+                                }
+                            }
+
+                            let marginRight = "";
+                            if (timeSignature === '4/4' && idx % 8 === 3) marginRight = "mr-2 md:mr-4";
+                            if (timeSignature === '2/2' && idx % 8 === 3) marginRight = "mr-3 md:mr-6"; 
+                            if (timeSignature === '6/8' && idx % 6 === 2) marginRight = "mr-2 md:mr-4"; 
+
+                            let isBeatStart = false;
+                            if (timeSignature === '4/4') isBeatStart = idx % 4 === 0;
+                            if (timeSignature === '2/2') isBeatStart = idx % 4 === 0; 
+                            if (timeSignature === '6/8') isBeatStart = idx % 3 === 0;
+
+                            let label = "";
+                            if (timeSignature === '4/4') {
+                                const sub = idx % 4;
+                                label = sub === 0 ? (Math.floor(idx/4)%4 + 1) : sub === 1 ? 'e' : sub === 2 ? '&' : 'a';
+                            } else if (timeSignature === '2/2') {
+                                const sub = idx % 4;
+                                const beat = Math.floor((idx % 8) / 4) + 1;
+                                label = sub === 0 ? beat : '&';
+                            } else { 
+                                label = (idx % 6) + 1;
+                            }
+
+                            return (
+                                <div key={idx} className={`relative group ${marginRight}`}> 
+                                    {isBeatStart && (
+                                        <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-yellow-400 accent-marker z-20 shadow-sm"></div>
+                                    )}
+                                    {showCode && timeSignature === '4/4' && rhythmicCodeIndices.includes(idx) && (
+                                        <div className="absolute -top-2 -right-1 text-yellow-400 animate-pulse z-30"><Icon name="Star" size={8} /></div>
+                                    )}
+                                    <button onClick={() => toggleCell(idx)} className={`w-full h-12 md:h-14 rounded-md border-b-4 transition-all relative overflow-hidden ${bg} ${codeClass} ${isCurrent ? 'ring-2 ring-white scale-105 z-20 brightness-125' : 'active:scale-95'}`}>
+                                        {type === 'tie' && <div className="w-1 h-1 bg-indigo-400/50 rounded-full mx-auto"></div>}
+                                        <span className="absolute bottom-0.5 right-1 text-[7px] md:text-[9px] text-slate-400 opacity-60 font-mono font-bold">{label}</span>
+                                    </button>
+                                </div>
+                            );
+                        })}
+                    </div>
+                );
+            }
+
+            return (
+                <div className="flex flex-col h-[100dvh] bg-slate-950 max-w-md mx-auto border-x border-slate-800 shadow-2xl relative overflow-hidden">
+                    {showHelp && <HelpModal onClose={() => setShowHelp(false)} />}
+                    {showExercises && <ExercisesModal onClose={() => setShowExercises(false)} onLoad={loadExercise} onImport={importRhythm} />}
+                    
+                    <header className="shrink-0 p-3 bg-slate-900 border-b border-slate-800 z-30">
+                        <div className="flex justify-between items-center mb-3">
+                            <div className="flex items-center gap-2">
+                                <div className="p-2 bg-indigo-600 rounded-xl text-white shadow-lg shadow-indigo-500/20"><Icon name="Music" size={20} /></div>
+                                <h1 className="text-lg font-black tracking-tighter text-white uppercase italic">Laboratorio Rítmico</h1>
+                            </div>
+                            <div className="flex gap-1">
+                                <button onClick={() => setShowCode(!showCode)} className={`w-9 h-9 flex items-center justify-center rounded-lg border transition-all ${showCode ? 'bg-yellow-500/20 text-yellow-400 border-yellow-500' : 'bg-slate-800 text-slate-400 border-slate-700'}`}><Icon name="Star" size={16}/></button>
+                                <button onClick={() => setEditMode(!editMode)} className={`w-9 h-9 flex items-center justify-center rounded-lg border transition-all ${editMode ? 'bg-emerald-500/20 border-emerald-500 text-emerald-400' : 'bg-slate-800 border-slate-700 text-slate-500'}`}>
+                                    <Icon name={editMode ? 'Edit' : 'Lock'} size={16} />
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div className="flex flex-wrap gap-2 pb-1">
+                            <button onClick={toggleSignature44_22} className={`px-3 py-2 rounded-lg text-[10px] font-black uppercase tracking-wider border border-slate-700 bg-slate-800 text-slate-300 whitespace-nowrap`}>
+                                {timeSignature === '4/4' ? '4/4' : '2/2'}
+                            </button>
+                            <button onClick={set68Signature} className={`px-3 py-2 rounded-lg text-[10px] font-black uppercase tracking-wider border border-slate-700 bg-slate-800 text-slate-300 whitespace-nowrap ${timeSignature === '6/8' ? 'border-orange-500 text-orange-400' : ''}`}>
+                                6/8
+                            </button>
+                            <button onClick={randomizeRhythm} className="w-9 h-9 flex items-center justify-center rounded-lg bg-slate-800 border border-slate-700 text-purple-400"><Icon name="Dice" size={16}/></button>
+                            <button onClick={() => setShowExercises(true)} className="w-9 h-9 flex items-center justify-center rounded-lg bg-slate-800 border border-slate-700 text-emerald-400"><Icon name="Book" size={16}/></button>
+                            <button onClick={() => setShowHelp(true)} className="w-9 h-9 flex items-center justify-center rounded-lg bg-slate-800 border border-slate-700 text-slate-400"><Icon name="Help" size={16}/></button>
+                        </div>
+                        
+                        {showCode && (
+                            <div className="mt-2 flex gap-1 overflow-x-auto no-scrollbar pb-1">
+                                {Object.entries(CLAVE_PATTERNS).map(([k, v]) => (
+                                    <button key={k} onClick={() => setSelectedClave(k)} className={`shrink-0 px-2 py-1 rounded text-[9px] font-bold uppercase ${selectedClave === k ? 'bg-yellow-500 text-black' : 'bg-slate-800 text-slate-400'}`}>{v.name}</button>
+                                ))}
+                            </div>
+                        )}
+                        
+                        {/* GROOVE THERMOMETER */}
+                        {showCode && timeSignature === '4/4' && (
+                            <div className="mt-2 px-1">
+                                <div className="flex justify-between items-end mb-1">
+                                    <span className="text-[9px] text-yellow-500 font-bold uppercase tracking-widest">Groove: {calculateGrooveScore()}%</span>
+                                </div>
+                                <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
+                                    <div 
+                                        className={`h-full transition-all duration-500 ease-out ${calculateGrooveScore() >= 80 ? 'bg-emerald-500' : calculateGrooveScore() >= 50 ? 'bg-yellow-500' : 'bg-red-500'}`} 
+                                        style={{ width: `${calculateGrooveScore()}%` }}
+                                    ></div>
+                                </div>
+                            </div>
+                        )}
+                    </header>
+
+                    {/* MAIN CONTENT */}
+                    <main className="flex-1 overflow-y-auto p-3 pb-32">
+                        <Notation />
+                        <div className="bg-slate-900/50 p-3 rounded-2xl border border-slate-800 mt-2">
+                            {renderGrid()}
+                        </div>
+                    </main>
+
+                    {/* FOOTER */}
+                    <footer className="absolute bottom-0 left-0 w-full p-4 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 z-40 pb-safe">
+                        <div className="flex justify-between items-end mb-1">
+                            <div className="flex flex-col">
+                                <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest">{getTempoMarking(bpm)}</span>
+                                <div className="flex items-center">
+                                    <input 
+                                        type="number" 
+                                        value={bpm} 
+                                        onChange={(e) => setBpm(e.target.value === '' ? '' : parseInt(e.target.value))}
+                                        onBlur={() => setBpm(Math.min(300, Math.max(20, parseInt(bpm) || 100)))}
+                                        className="w-12 bg-transparent text-indigo-400 font-mono font-bold text-sm focus:outline-none p-0"
+                                    />
+                                    <span className="text-[10px] text-slate-600 font-bold ml-1">BPM</span>
+                                </div>
+                            </div>
+                            <div className="flex gap-2">
+                                <button onClick={() => setMetronomeOn(!metronomeOn)} className={`text-[10px] font-bold transition-colors ${metronomeOn ? 'text-indigo-400' : 'text-slate-600'}`}>CLICK</button>
+                                <button onClick={() => setStretchTool(!stretchTool)} className={`text-[10px] font-bold transition-colors ${stretchTool ? 'text-emerald-400' : 'text-slate-600'}`}>LIGAR</button>
+                                <button onClick={() => setGrid(getInitialGrid(timeSignature))} className="text-[10px] font-bold text-red-400">CLR</button>
+                            </div>
+                        </div>
+                        
+                        <div className="flex items-center gap-4 mb-2">
+                            <input type="range" min="20" max="300" value={bpm || 20} onChange={(e) => setBpm(parseInt(e.target.value))} className="w-full accent-indigo-500 touch-none flex-1"/>
+                            <div className="flex gap-2 items-center">
+                                <button onClick={togglePlay} className={`w-12 h-12 shrink-0 rounded-2xl flex items-center justify-center shadow-2xl border-b-4 transition-all active:scale-95 active:border-b-0 translate-y-0 active:translate-y-1 ${isPlaying ? 'bg-rose-600 border-rose-800 text-white' : 'bg-indigo-600 border-indigo-800 text-white'}`}>
+                                    <Icon name={isPlaying ? "Square" : "Play"} size={20} />
+                                </button>
+                                <button onClick={saveFavorite} className="text-pink-400 active:scale-90 transition-transform p-2 bg-slate-800/50 rounded-xl"><Icon name="Heart" size={16}/></button>
+                            </div>
+                        </div>
+                        
+                        <div className="text-center pt-1 border-t border-slate-800/50 mt-1">
+                            <span className="text-[9px] text-slate-600 font-medium">Créditos a Juan Miguel Rios Redondo</span>
+                        </div>
+                    </footer>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
+
+
