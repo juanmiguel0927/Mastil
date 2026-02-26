@@ -252,7 +252,7 @@
 
                 <!-- Mástil -->
                 <div class="w-full max-w-5xl px-0 sm:px-1 flex flex-col items-center relative flex-1 min-h-[300px] overflow-hidden">
-                    <div class="w-full overflow-x-auto custom-scrollbar pb-4 h-full">
+                    <div id="fretboard-scroll-wrapper" class="w-full overflow-x-auto custom-scrollbar pb-4 h-full">
                         <div id="fretboard-container" class="wood-rosewood relative flex w-max min-w-full select-none rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.5)] border-y-4 pb-2 sm:pb-4 pt-2 overflow-hidden transition-colors duration-300 h-full min-h-[250px]">
                             <div id="string-numbers" class="flex flex-col pr-1 sm:pr-2 pl-1 sm:pl-2 min-w-[20px] sm:min-w-[30px] bg-slate-900/70 z-20 justify-around py-4"></div>
                             <div id="fretboard" class="flex flex-1 py-4 min-w-[800px]"></div>
@@ -372,6 +372,32 @@
             osc.frequency.value = freq; osc2.frequency.value = freq;
             osc.start(); osc2.start();
             osc.stop(audioCtx.currentTime + decayTime); osc2.stop(audioCtx.currentTime + decayTime);
+        }
+
+        // --- CUSTOM UI ALERTS ---
+        function showCustomAlert(msg, onConfirm, isConfirm = false) {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 z-[100] bg-slate-900/90 backdrop-blur-sm flex items-center justify-center p-4 fade-in';
+            modal.innerHTML = `
+                <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 text-center max-w-sm w-full shadow-2xl">
+                    <p class="text-white text-lg mb-6">${msg}</p>
+                    <div class="flex gap-4 justify-center">
+                        ${isConfirm ? '<button id="btn-cancel" class="flex-1 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-xl transition-colors font-bold">Cancelar</button>' : ''}
+                        <button id="btn-ok" class="flex-1 py-3 bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-bold rounded-xl transition-colors">Aceptar</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            document.getElementById('btn-ok').onclick = () => {
+                modal.remove();
+                if(onConfirm) onConfirm(true);
+            };
+            if (isConfirm) {
+                document.getElementById('btn-cancel').onclick = () => {
+                    modal.remove();
+                    if(onConfirm) onConfirm(false);
+                };
+            }
         }
 
         // --- DATA & CONSTANTS ---
@@ -532,6 +558,18 @@
             show('screen-stats', true); 
         };
         window.exitGame = () => { clearInterval(state.timer); state.isFeedbackMode = false; hideFeedback(); if(state.isGuided) goToGuidedMap(); else goToFreeSetup(); };
+
+        // --- RESET STATS INCORPORADO ---
+        window.resetStats = () => {
+            showCustomAlert('¿Seguro que quieres borrar todo tu progreso?', (confirmed) => {
+                if(confirmed) {
+                    localStorage.removeItem('fretmindDataV10');
+                    state.stats = { totalAnswers: 0, correctAnswers: 0, noteHistory: {}, posHistory: {}, guidedProgress: {} };
+                    NOTES_SHARP.forEach(n => { state.stats.noteHistory[n] = { correct: 0, wrong: 0 }; });
+                    renderStatsHTML();
+                }
+            }, true);
+        };
 
         // --- SETTINGS ---
         window.setInstrument = (val) => { 
@@ -988,8 +1026,9 @@
                                          state.stats.guidedProgress[pKey] = 3;
                                     }
                                     saveStats();
-                                    alert(`¡Test completado! Has desbloqueado hasta el Nivel ${unlocked}.`);
-                                    goToGuidedMap();
+                                    showCustomAlert(`¡Test completado! Has desbloqueado hasta el Nivel ${unlocked}.`, () => {
+                                        goToGuidedMap();
+                                    });
                                 }, 1500);
                             } else {
                                 setTimeout(finishGuidedLevel, 1500); 
@@ -1004,7 +1043,11 @@
                         if (state.guidedLives <= 0) {
                             renderFretboard(clickedPos, true); 
                             showFeedback('error', '¡Sin vidas!');
-                            setTimeout(() => { alert("Inténtalo de nuevo."); if(state.currentLvlId===999) goToGuidedMap(); else startGuidedLevel(state.currentLvlId); }, 1500); return;
+                            setTimeout(() => { 
+                                showCustomAlert("Inténtalo de nuevo.", () => {
+                                    if(state.currentLvlId===999) goToGuidedMap(); else startGuidedLevel(state.currentLvlId);
+                                });
+                            }, 1500); return;
                         }
                     }
                 } else {
@@ -1135,6 +1178,27 @@
                 el('identify-options').classList.add('hidden');
             }
             renderFretboard(null);
+            autoScrollFretboard();
+        }
+
+        function autoScrollFretboard() {
+            const wrapper = el('fretboard-scroll-wrapper');
+            if (!wrapper || !state.currentQ) return;
+            
+            let targetFret = 0;
+            if (state.mode === 'identify' || state.mode === 'interval') {
+                targetFret = state.currentQ.fret;
+            } else if (state.mode === 'find' && state.currentQ.targets && state.currentQ.targets.length > 0) {
+                targetFret = Math.min(...state.currentQ.targets.map(t => t.f));
+            }
+
+            setTimeout(() => {
+                if (targetFret <= 12) {
+                    wrapper.scrollTo({ left: 0, behavior: 'smooth' });
+                } else {
+                    wrapper.scrollTo({ left: wrapper.scrollWidth, behavior: 'smooth' });
+                }
+            }, 50);
         }
 
         function renderFretboard(clickedPos, showAllAnswers = false, studyMode = false) {
