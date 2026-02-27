@@ -57,7 +57,6 @@
 
     <!-- ================= MENÚ PRINCIPAL (HUB) ================= -->
     <div id="main-hub" class="min-h-screen flex flex-col items-center justify-center p-6 space-y-10 fade-in bg-slate-950 relative overflow-hidden">
-        <!-- Decoración de fondo -->
         <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-amber-600/10 rounded-full blur-[100px] pointer-events-none"></div>
         <div class="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-emerald-600/10 rounded-full blur-[100px] pointer-events-none"></div>
 
@@ -102,15 +101,12 @@
 
     <!-- ================= APP 1: JMR GUITAR TRAINER ================= -->
     <div id="jmr-wrapper" class="hidden min-h-screen bg-slate-950 flex-col items-center justify-center p-4 py-12 relative">
-        
-        <!-- BOTÓN VOLVER -->
         <button onclick="returnToHub()" class="absolute top-4 left-4 sm:top-6 sm:left-6 p-3 bg-slate-800 hover:bg-slate-700 rounded-full transition-colors text-slate-300 border border-slate-700 flex items-center gap-2 shadow-lg z-50 group">
             <i data-lucide="arrow-left" class="w-5 h-5 group-hover:-translate-x-1 transition-transform"></i> 
             <span class="font-bold text-xs hidden sm:inline">Suite Principal</span>
         </button>
 
         <div class="max-w-md w-full bg-slate-800 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-slate-700 overflow-hidden relative">
-            <!-- Header JMR -->
             <div class="bg-amber-600 p-6 text-center shadow-md relative">
                 <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none" style="background-image: repeating-linear-gradient(90deg, transparent, transparent 20px, rgba(0,0,0,0.5) 20px, rgba(0,0,0,0.5) 22px)"></div>
                 <button onclick="toggleHelp()" class="absolute top-4 right-4 text-amber-100 hover:text-white transition-colors p-2 rounded-full hover:bg-amber-700/50" title="Ver manual y herramientas">
@@ -126,17 +122,17 @@
                 <div class="mb-5 bg-slate-900/80 p-4 rounded-2xl border border-slate-700 shadow-md">
                     <div class="flex items-center gap-2 mb-2">
                         <i data-lucide="dumbbell" class="w-4 h-4 text-amber-500"></i>
-                        <h3 class="text-slate-200 font-bold text-sm tracking-wide">Rutinas Rápidas (5 Min)</h3>
+                        <h3 class="text-slate-200 font-bold text-sm tracking-wide">Rutinas Rápidas Lentas (8 Compases)</h3>
                     </div>
                     <select id="workout-selector" onchange="loadWorkout(this.value)" class="w-full bg-slate-700 text-amber-400 font-medium text-sm rounded-lg border border-slate-600 focus:ring-amber-500 focus:border-amber-500 p-2.5 outline-none cursor-pointer">
                         <option value="" class="text-slate-300">-- Selecciona un entrenamiento --</option>
-                        <option value="warmup" class="text-slate-300">1. Calentamiento Básico (80 BPM, i-m)</option>
-                        <option value="spider" class="text-slate-300">2. Araña Cruzada (100 BPM + Saltos)</option>
-                        <option value="indep" class="text-slate-300">3. Legato para Independencia (70 BPM)</option>
-                        <option value="shred" class="text-slate-300">4. Shred Púa Alternada (100 BPM, Semis)</option>
-                        <option value="fingerstyle" class="text-green-400 font-bold">5. Arpegios Fingerstyle (p-i-m-a)</option>
-                        <option value="virtuoso" class="text-amber-500 font-bold">6. Maestro Virtuoso (Hybrid + Desplazamiento)</option>
-                        <option value="scales" class="text-purple-400 font-bold">7. Velocidad en Escalas Reales (3NPS)</option>
+                        <option value="warmup" class="text-slate-300">1. Calentamiento Básico (40 BPM, i-m)</option>
+                        <option value="spider" class="text-slate-300">2. Araña Cruzada (50 BPM + Saltos)</option>
+                        <option value="indep" class="text-slate-300">3. Legato para Independencia (45 BPM)</option>
+                        <option value="shred" class="text-slate-300">4. Shred Púa Alternada (60 BPM, Semis)</option>
+                        <option value="fingerstyle" class="text-green-400 font-bold">5. Arpegios Fingerstyle (50 BPM)</option>
+                        <option value="virtuoso" class="text-amber-500 font-bold">6. Maestro Virtuoso (55 BPM)</option>
+                        <option value="scales" class="text-purple-400 font-bold">7. Velocidad en Escalas Reales (60 BPM)</option>
                     </select>
                     <!-- Temporizador -->
                     <div id="routine-timer-container" class="hidden justify-between items-center mt-3 bg-amber-500/10 p-3 rounded-xl border border-amber-500/30">
@@ -156,7 +152,7 @@
                     <div class="flex justify-between items-center text-[10px] sm:text-xs text-slate-300">
                         <div class="flex items-center gap-1.5" title="Tiempo total de práctica"><i data-lucide="clock" class="w-3.5 h-3.5 text-sky-400"></i> Total: <span id="stat-time" class="font-mono text-sm font-bold text-white">00:00</span></div>
                         <div class="flex items-center gap-1.5" title="Compases tocados"><i data-lucide="music" class="w-3.5 h-3.5 text-green-400"></i> <span id="stat-measures" class="font-bold text-white">0</span> comp.</div>
-                        <div class="flex items-center gap-1.5" title="Máxima velocidad alcanzada"><i data-lucide="trending-up" class="w-3.5 h-3.5 text-amber-400"></i> Max: <span id="stat-max-bpm" class="font-bold text-white">80</span></div>
+                        <div class="flex items-center gap-1.5" title="Máxima velocidad alcanzada"><i data-lucide="trending-up" class="w-3.5 h-3.5 text-amber-400"></i> Max: <span id="stat-max-bpm" class="font-bold text-white">40</span></div>
                     </div>
                     <div class="flex justify-between border-t border-slate-700/50 pt-3 relative z-10">
                         <button id="btn-save-session" onclick="saveCurrentSession()" class="text-[10px] font-bold bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 px-3 py-1.5 rounded transition-colors flex items-center gap-1.5">
@@ -168,8 +164,13 @@
                     </div>
                 </div>
 
-                <!-- Secuencia Actual JMR -->
-                <div class="mb-6 relative">
+                <!-- Secuencia Actual JMR (con overlay de countdown) -->
+                <div class="mb-6 relative" id="practice-area">
+                    <div id="countdown-overlay" class="hidden absolute inset-0 z-50 bg-slate-900/95 flex-col items-center justify-center text-8xl font-black text-amber-500 rounded-2xl backdrop-blur-md shadow-[0_0_50px_rgba(245,158,11,0.3)] transition-transform duration-100">
+                        <span id="countdown-number" class="drop-shadow-[0_0_15px_rgba(245,158,11,0.8)]">4</span>
+                        <span class="text-sm font-bold text-amber-300 tracking-widest uppercase mt-4">Siguiente Cambio...</span>
+                    </div>
+
                     <div class="flex justify-between items-center mb-4">
                         <div id="string-indicator" class="bg-amber-900/50 text-amber-300 text-xs font-bold px-3 py-1 rounded-full border border-amber-700/50">Cuerda: --</div>
                     </div>
@@ -201,12 +202,15 @@
                 </div>
 
                 <!-- Main Controls JMR -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 border-t border-slate-700/50 pt-6">
-                    <button onclick="manualGenerate()" class="w-full bg-amber-500 hover:bg-amber-400 active:bg-amber-600 text-slate-900 font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-amber-500/30 active:scale-95">
-                        <i id="generate-icon" data-lucide="refresh-cw" class="w-5 h-5"></i> Nueva Secuencia
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 border-t border-slate-700/50 pt-6">
+                    <button onclick="manualGenerate()" class="w-full bg-amber-500 hover:bg-amber-400 active:bg-amber-600 text-slate-900 font-bold py-3 px-2 rounded-xl flex items-center justify-center gap-1.5 transition-all shadow-lg hover:shadow-amber-500/30 active:scale-95 text-xs sm:text-sm">
+                        <i id="generate-icon" data-lucide="refresh-cw" class="w-4 h-4"></i> Secuencia
                     </button>
-                    <button id="btn-metronome" onclick="toggleMetronome()" class="w-full bg-slate-700 hover:bg-slate-600 active:bg-slate-500 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all border border-slate-600 shadow-lg shadow-slate-900/50">
-                        <i id="metro-icon" data-lucide="play" class="w-5 h-5"></i> <span id="metro-text">Iniciar Práctica</span>
+                    <button onclick="saveFavorite()" class="w-full bg-sky-500/20 hover:bg-sky-500/30 active:bg-sky-500/40 text-sky-400 font-bold py-3 px-2 rounded-xl flex items-center justify-center gap-1.5 transition-all border border-sky-500/50 shadow-lg text-xs sm:text-sm">
+                        <i data-lucide="star" class="w-4 h-4"></i> Favorito
+                    </button>
+                    <button id="btn-metronome" onclick="toggleMetronome()" class="w-full md:col-span-1 bg-slate-700 hover:bg-slate-600 active:bg-slate-500 text-white font-bold py-3 px-2 rounded-xl flex items-center justify-center gap-1.5 transition-all border border-slate-600 shadow-lg shadow-slate-900/50 text-xs sm:text-sm">
+                        <i id="metro-icon" data-lucide="play" class="w-4 h-4"></i> <span id="metro-text">Práctica</span>
                     </button>
                 </div>
 
@@ -248,7 +252,7 @@
                             </label>
                         </div>
                     </div>
-                    <!-- Mástil -->
+                    <!-- Mástil y Automatización -->
                     <div class="pt-4 border-t border-slate-700 space-y-4">
                         <h3 class="text-slate-400 text-xs uppercase tracking-wider font-semibold mb-3 border-b border-slate-700 pb-1"><i data-lucide="cpu" class="w-3 h-3 inline"></i> Automatización y Mástil</h3>
                         <div class="bg-slate-900/50 p-3 rounded-lg border border-slate-700 flex flex-col gap-2">
@@ -258,20 +262,31 @@
                             </div>
                             <label class="flex items-center gap-2 cursor-pointer group border-t border-slate-700/50 pt-2">
                                 <input type="checkbox" id="fret-shift" onchange="toggleFretShift()" class="w-4 h-4 rounded bg-slate-700 border-slate-600 text-amber-500 focus:ring-amber-500">
-                                <span class="text-[11px] text-amber-400 font-bold group-hover:text-amber-300 transition-colors">Avanzar +1 traste con Auto</span>
+                                <span class="text-[11px] text-amber-400 font-bold group-hover:text-amber-300 transition-colors">Avanzar +1 traste al cambiar</span>
                             </label>
                         </div>
-                        <div class="bg-slate-900/50 p-3 rounded-lg border border-slate-700">
-                            <div class="flex justify-between items-center mb-2">
+                        <div class="bg-slate-900/50 p-3 rounded-lg border border-slate-700 space-y-2">
+                            <div class="flex justify-between items-center">
                                 <label class="flex items-center gap-2 cursor-pointer group">
                                     <input type="checkbox" id="auto-play" onchange="toggleAutoPlay()" class="w-4 h-4 rounded bg-slate-700 border-slate-600 text-amber-500 focus:ring-amber-500">
-                                    <span class="text-xs text-amber-400 font-bold group-hover:text-white transition-colors">Cambio Auto (Preview)</span>
+                                    <span class="text-xs text-amber-400 font-bold group-hover:text-white transition-colors">Cambio Auto Ejercicio</span>
                                 </label>
                             </div>
-                            <div id="auto-measures-container" class="transition-opacity duration-300 opacity-40 pointer-events-none flex justify-between items-center pl-6">
+                            <div class="flex justify-between items-center border-t border-slate-700/50 pt-2">
+                                <label class="flex items-center gap-2 cursor-pointer group">
+                                    <input type="checkbox" id="auto-subdiv" onchange="toggleAutoSubdiv()" class="w-4 h-4 rounded bg-slate-700 border-slate-600 text-sky-500 focus:ring-sky-500">
+                                    <span class="text-[11px] text-sky-400 font-bold group-hover:text-white transition-colors">Ciclar Subdivisión</span>
+                                </label>
+                                <select id="auto-subdiv-range" onchange="updateSubdivRange()" class="bg-slate-700 text-sky-400 text-[10px] font-bold rounded border border-slate-600 focus:outline-none focus:border-sky-500 p-0.5 ml-2 cursor-pointer">
+                                    <option value="1-4">1x a 4x</option>
+                                    <option value="5-8">5x a 8x</option>
+                                    <option value="1-8">1x a 8x</option>
+                                </select>
+                            </div>
+                            <div id="auto-measures-container" class="opacity-40 pointer-events-none flex justify-between items-center pl-6 border-t border-slate-700/50 pt-2 mt-2">
                                 <span class="text-[10px] text-slate-400">Cada:</span>
                                 <div class="flex items-center gap-1 text-xs">
-                                    <input type="number" id="measures-input" min="1" value="1" oninput="updateMeasures(this.value)" class="w-12 bg-slate-700 text-amber-400 text-center text-xs font-bold rounded border border-slate-600 focus:outline-none focus:border-amber-500 py-1">
+                                    <input type="number" id="measures-input" min="1" value="8" oninput="updateMeasures(this.value)" class="w-12 bg-slate-700 text-amber-400 text-center text-xs font-bold rounded border border-slate-600 focus:outline-none focus:border-amber-500 py-1">
                                     <span class="text-slate-400">compases</span>
                                 </div>
                             </div>
@@ -296,9 +311,9 @@
                             <div>
                                 <div class="flex justify-between items-center mb-1">
                                     <span class="text-[10px] text-slate-300 flex items-center gap-1"><i data-lucide="activity" class="w-3 h-3"></i> BPM</span>
-                                    <span id="bpm-display" class="text-xs font-bold text-amber-400">80</span>
+                                    <span id="bpm-display" class="text-xs font-bold text-amber-400">40</span>
                                 </div>
-                                <input type="range" id="bpm-slider" min="40" max="240" value="80" oninput="updateBPM(this.value)" class="w-full h-2 bg-slate-600 rounded-lg appearance-none cursor-pointer accent-amber-500">
+                                <input type="range" id="bpm-slider" min="40" max="240" value="40" oninput="updateBPM(this.value)" class="w-full h-2 bg-slate-600 rounded-lg appearance-none cursor-pointer accent-amber-500">
                             </div>
                             <div>
                                 <div class="flex justify-between items-center mb-1">
@@ -331,6 +346,10 @@
                                 <button id="btn-sub-2" onclick="setSubdivision(2)" class="flex-1 py-1 rounded text-[9px] font-bold transition-all bg-slate-700 text-slate-400 border border-slate-600 hover:bg-slate-600 shadow-sm">2x<br><span class="font-normal opacity-70">Corcheas</span></button>
                                 <button id="btn-sub-3" onclick="setSubdivision(3)" class="flex-1 py-1 rounded text-[9px] font-bold transition-all bg-slate-700 text-slate-400 border border-slate-600 hover:bg-slate-600 shadow-sm">3x<br><span class="font-normal opacity-70">Tresillos</span></button>
                                 <button id="btn-sub-4" onclick="setSubdivision(4)" class="flex-1 py-1 rounded text-[9px] font-bold transition-all bg-slate-700 text-slate-400 border border-slate-600 hover:bg-slate-600 shadow-sm">4x<br><span class="font-normal opacity-70">Semis</span></button>
+                                <button id="btn-sub-5" onclick="setSubdivision(5)" class="flex-1 py-1 rounded text-[9px] font-bold transition-all bg-slate-700 text-slate-400 border border-slate-600 hover:bg-slate-600 shadow-sm">5x<br><span class="font-normal opacity-70">Quintillos</span></button>
+                                <button id="btn-sub-6" onclick="setSubdivision(6)" class="flex-1 py-1 rounded text-[9px] font-bold transition-all bg-slate-700 text-slate-400 border border-slate-600 hover:bg-slate-600 shadow-sm">6x<br><span class="font-normal opacity-70">Seiscillos</span></button>
+                                <button id="btn-sub-7" onclick="setSubdivision(7)" class="flex-1 py-1 rounded text-[9px] font-bold transition-all bg-slate-700 text-slate-400 border border-slate-600 hover:bg-slate-600 shadow-sm">7x<br><span class="font-normal opacity-70">Septillos</span></button>
+                                <button id="btn-sub-8" onclick="setSubdivision(8)" class="flex-1 py-1 rounded text-[9px] font-bold transition-all bg-slate-700 text-slate-400 border border-slate-600 hover:bg-slate-600 shadow-sm">8x<br><span class="font-normal opacity-70">Fusas</span></button>
                             </div>
                         </div>
                     </div>
@@ -346,8 +365,6 @@
             
             <!-- FRETMIND: PANTALLA HOME -->
             <div id="screen-home" class="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 space-y-8 fade-in overflow-y-auto custom-scrollbar relative">
-                
-                <!-- BOTÓN VOLVER (FRETMIND) -->
                 <button onclick="returnToHub()" class="absolute top-4 left-4 p-3 bg-slate-800 hover:bg-slate-700 rounded-full transition-colors text-slate-300 border border-slate-700 flex items-center gap-2 shadow-lg z-50 group">
                     <i data-lucide="arrow-left" class="w-5 h-5 group-hover:-translate-x-1 transition-transform"></i> 
                     <span class="font-bold text-xs hidden sm:inline">Suite Principal</span>
@@ -591,8 +608,6 @@
         </div>
     </div>
 
-
-    <!-- ================= MODALES AUXILIARES ================= -->
     <!-- Modal Ayuda JMR -->
     <div id="help-modal" class="hidden fixed inset-0 bg-slate-950/90 z-[200] items-center justify-center p-4 backdrop-blur-md">
         <div class="bg-slate-800 rounded-2xl border border-slate-600 p-6 max-w-md w-full shadow-2xl modal-enter relative max-h-[85vh] flex flex-col">
@@ -604,39 +619,22 @@
                 <h2 class="text-xl font-bold text-slate-100">Manual de Herramientas</h2>
             </div>
             <div class="overflow-y-auto pr-2 space-y-5 text-xs text-slate-300">
-                <!-- Técnicas de Mano Derecha -->
                 <div>
                     <h3 class="font-bold text-amber-500 mb-1.5 uppercase tracking-wider">Técnicas de Mano Derecha</h3>
                     <ul class="space-y-2">
                         <li><span class="text-green-400 font-bold">Dedos Libres:</span> Alternancia estricta de dedos, ideal para técnica clásica, bajo o arpegios (fingerstyle).</li>
                         <li><span class="text-amber-400 font-bold">Púa Alternada (↓↑):</span> Ataque forzado Abajo/Arriba rígidamente.</li>
                         <li><span class="text-sky-400 font-bold">Legato:</span> Solo atacas al cambiar de cuerda. Luego usas <span class="font-bold text-white">H</span> o <span class="font-bold text-white">P</span>.</li>
-                        <li><span class="text-blue-400 font-bold">Solo Legato:</span> Técnica de virtuosismo 100% mano izquierda.</li>
                         <li><span class="text-purple-400 font-bold">Hybrid Picking:</span> Púa para graves, dedos para agudos.</li>
                     </ul>
                 </div>
-                <!-- Matemáticas -->
                 <div>
-                    <h3 class="font-bold text-amber-500 mb-1.5 uppercase tracking-wider">Posibilidades del Algoritmo</h3>
-                    <p class="text-[10px] text-slate-400 mb-2">Basado en no repetir el mismo dedo consecutivamente.</p>
-                    <div class="grid grid-cols-2 gap-2 text-center">
-                        <div class="bg-slate-700/50 p-2 rounded-lg border border-slate-600">
-                            <span class="block text-amber-400 font-bold mb-1 border-b border-slate-600/50 pb-1">Modo Normal</span>
-                            <ul class="space-y-0.5 text-slate-300">
-                                <li>3 Notas: <span class="text-white font-mono font-bold">36</span></li>
-                                <li>4 Notas: <span class="text-white font-mono font-bold">108</span></li>
-                                <li>5 Notas: <span class="text-white font-mono font-bold">324</span></li>
-                            </ul>
-                        </div>
-                        <div class="bg-slate-700/50 p-2 rounded-lg border border-slate-600">
-                            <span class="block text-sky-400 font-bold mb-1 border-b border-slate-600/50 pb-1">Vincular 2 y 3</span>
-                            <ul class="space-y-0.5 text-slate-300">
-                                <li>3 Notas: <span class="text-white font-mono font-bold">22</span></li>
-                                <li>4 Notas: <span class="text-white font-mono font-bold">46</span></li>
-                                <li>5 Notas: <span class="text-white font-mono font-bold">94</span></li>
-                            </ul>
-                        </div>
-                    </div>
+                    <h3 class="font-bold text-amber-500 mb-1.5 uppercase tracking-wider">Automatización Avanzada</h3>
+                    <p class="text-[10px] text-slate-400 mb-2">Utiliza estas herramientas de forma conjunta para el mayor rendimiento.</p>
+                    <ul class="space-y-2">
+                        <li><span class="text-white font-bold">Cambio Auto Ejercicio:</span> Pasa de forma aleatoria a otro ejercicio distinto cuando termina el ciclo de compases que has fijado.</li>
+                        <li><span class="text-sky-400 font-bold">Ciclar Subdivisión:</span> El ejercicio se mantiene, pero la velocidad rítmica aumenta en el rango seleccionado. Luego vuelve a comenzar. Puedes combinarlo con el Auto Ejercicio.</li>
+                    </ul>
                 </div>
             </div>
             <button onclick="toggleHelp()" class="w-full bg-slate-700 hover:bg-slate-600 text-white font-medium py-3 px-4 rounded-xl transition-colors shrink-0 mt-4">Cerrar Manual</button>
@@ -660,10 +658,7 @@
         </div>
     </div>
 
-
-    <!-- ================= JAVASCRIPT GLOBAL & NAVIGATION ================= -->
     <script>
-        // Utilidad global para notificaciones (Toasts)
         const showToastGlobal = function(msg, type = 'success') {
             const container = document.getElementById('toast-container');
             const color = type === 'success' ? 'bg-emerald-600' : 'bg-red-600';
@@ -680,41 +675,23 @@
         }
 
         function returnToHub() {
-            // Ocultar apps
-            document.getElementById('jmr-wrapper').classList.add('hidden');
-            document.getElementById('jmr-wrapper').classList.remove('flex');
-            document.getElementById('fm-wrapper').classList.add('hidden');
-            document.getElementById('fm-wrapper').classList.remove('flex');
-            
-            // Mostrar Hub
-            document.getElementById('main-hub').classList.remove('hidden');
-            document.getElementById('main-hub').classList.add('flex');
-            
-            // Detener metrónomo de JMR si está activo
-            if (typeof isMetronomeOn !== 'undefined' && isMetronomeOn) {
-                toggleMetronome(); 
-            }
-            // Detener juego de Fretmind
-            if (typeof exitGame === 'function') {
-                exitGame(); 
-            }
+            document.getElementById('jmr-wrapper').classList.add('hidden'); document.getElementById('jmr-wrapper').classList.remove('flex');
+            document.getElementById('fm-wrapper').classList.add('hidden'); document.getElementById('fm-wrapper').classList.remove('flex');
+            document.getElementById('main-hub').classList.remove('hidden'); document.getElementById('main-hub').classList.add('flex');
+            if (typeof isMetronomeOn !== 'undefined' && isMetronomeOn) { toggleMetronome(); }
+            if (typeof exitGame === 'function') { exitGame(); }
         }
 
         function launchJMR() {
-            document.getElementById('main-hub').classList.add('hidden');
-            document.getElementById('main-hub').classList.remove('flex');
-            document.getElementById('jmr-wrapper').classList.remove('hidden');
-            document.getElementById('jmr-wrapper').classList.add('flex');
+            document.getElementById('main-hub').classList.add('hidden'); document.getElementById('main-hub').classList.remove('flex');
+            document.getElementById('jmr-wrapper').classList.remove('hidden'); document.getElementById('jmr-wrapper').classList.add('flex');
             lucide.createIcons();
         }
 
         function launchFretmind() {
-            document.getElementById('main-hub').classList.add('hidden');
-            document.getElementById('main-hub').classList.remove('flex');
-            document.getElementById('fm-wrapper').classList.remove('hidden');
-            document.getElementById('fm-wrapper').classList.add('flex');
-            goToHome(); 
-            lucide.createIcons();
+            document.getElementById('main-hub').classList.add('hidden'); document.getElementById('main-hub').classList.remove('flex');
+            document.getElementById('fm-wrapper').classList.remove('hidden'); document.getElementById('fm-wrapper').classList.add('flex');
+            goToHome(); lucide.createIcons();
         }
     </script>
 
@@ -727,16 +704,48 @@
         let currentComboArr = [], currentFretsArr = [], currentStringsArr = [], currentStringGlobal = ""; 
         let nextComboArr = [], nextFretsArr = [], nextStringsArr = [], nextStringGlobal = "";
 
-        let isHardMode = false, isAutoMode = false, isLinked23 = false, isStringSkipping = false, isScalesMode = false;
+        let isHardMode = false, isAutoMode = false, isAutoSubdiv = false, isLinked23 = false, isStringSkipping = false, isScalesMode = false;
+        let subdivCycleMin = 1, subdivCycleMax = 4;
         let rightHandTech = 'normal'; 
         let isFretShiftOn = false, currentBaseFret = 1, nextBaseFret = 1;
         let playSubdivisionsSound = false;
         
-        let audioCtx, isMetronomeOn = false, bpm = 80, metronomeVolume = 0.5, beatsPerMeasure = 4, subdivision = 1; 
-        let measuresToChange = 1, currentMeasureCount = 1, totalMeasuresElapsed = 0; 
+        let audioCtx, isMetronomeOn = false, bpm = 40, metronomeVolume = 0.5, beatsPerMeasure = 4, subdivision = 1; 
+        let measuresToChange = 8, currentMeasureCount = 1, schedMeasureCount = 1, totalMeasuresElapsed = 0; 
         let nextNoteTime = 0.0, currentTick = 0, scheduleAheadTime = 0.1, timerID, visualQueue = [], animationFrameId;
 
-        let sessionSeconds = 0, totalMeasuresSession = 0, maxBpmSession = 80, statsIntervalID = null, currentNoteIndex = 0, routineTimeRemaining = null; 
+        // Transitions
+        let isTransitioning = false, transitionBeatsLeft = 0;
+
+        let sessionSeconds = 0, totalMeasuresSession = 0, maxBpmSession = 40, statsIntervalID = null, currentNoteIndex = 0, routineTimeRemaining = null; 
+
+        function saveFavorite() {
+            const name = prompt("Dale un nombre a este ejercicio favorito:", "Mi Ejercicio");
+            if (!name) return;
+            const favs = JSON.parse(localStorage.getItem('jmr_favorites') || '[]');
+            favs.push({ name: name, combo: currentComboArr, frets: currentFretsArr, strings: currentStringsArr, globalString: currentStringGlobal, baseFret: currentBaseFret, rightHandTech: rightHandTech });
+            localStorage.setItem('jmr_favorites', JSON.stringify(favs));
+            loadFavoritesToSelect();
+            showToastGlobal("¡Ejercicio guardado en favoritos!", "success");
+        }
+
+        function loadFavoritesToSelect() {
+            const selector = document.getElementById('workout-selector');
+            const existingOptGroup = document.getElementById('fav-optgroup');
+            if (existingOptGroup) existingOptGroup.remove();
+
+            const favs = JSON.parse(localStorage.getItem('jmr_favorites') || '[]');
+            if (favs.length > 0) {
+                const optGroup = document.createElement('optgroup');
+                optGroup.id = 'fav-optgroup'; optGroup.label = '⭐ Mis Favoritos'; optGroup.className = 'text-sky-300 font-bold';
+                favs.forEach((fav, index) => {
+                    const opt = document.createElement('option');
+                    opt.value = `fav_${index}`; opt.className = 'text-sky-200'; opt.innerText = `⭐ ${fav.name}`;
+                    optGroup.appendChild(opt);
+                });
+                selector.appendChild(optGroup);
+            }
+        }
 
         function loadLocalStats() {
             const data = localStorage.getItem('guitar_sessions');
@@ -748,16 +757,14 @@
         function renderStatsModalData(sessions) {
             const list = document.getElementById('stats-list');
             if (!sessions || sessions.length === 0) {
-                list.innerHTML = '<div class="text-center text-slate-500 py-10">Aún no hay sesiones guardadas en el navegador.</div>';
+                list.innerHTML = '<div class="text-center text-slate-500 py-10">Aún no hay sesiones guardadas.</div>';
                 return;
             }
             list.innerHTML = sessions.map(s => {
                 const d = new Date(s.date);
                 const dateStr = d.toLocaleDateString('es-ES', { month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit' });
-                const mins = Math.floor(s.durationSeconds / 60);
-                const secs = s.durationSeconds % 60;
-                return `
-                <div class="bg-slate-700/50 p-3 rounded-lg border border-slate-600 flex justify-between items-center mb-2">
+                const mins = Math.floor(s.durationSeconds / 60); const secs = s.durationSeconds % 60;
+                return `<div class="bg-slate-700/50 p-3 rounded-lg border border-slate-600 flex justify-between items-center mb-2">
                     <div><p class="font-bold text-sky-300 text-sm">${dateStr}</p><p class="text-[10px] text-slate-400 mt-0.5">Rutina: ${s.routine.toUpperCase()}</p></div>
                     <div class="text-right"><p class="text-white font-mono"><i data-lucide="activity" class="w-3 h-3 inline text-amber-500 pb-0.5"></i> ${s.maxBpm} BPM</p><p class="text-slate-400 text-[10px] mt-0.5">${s.measures} comp. | ${mins}m ${secs}s</p></div>
                 </div>`;
@@ -767,12 +774,8 @@
 
         function toggleStatsModal() {
             const modal = document.getElementById('stats-modal');
-            if (modal.classList.contains('hidden')) {
-                loadLocalStats();
-                modal.classList.remove('hidden'); modal.classList.add('flex');
-            } else {
-                modal.classList.add('hidden'); modal.classList.remove('flex');
-            }
+            if (modal.classList.contains('hidden')) { loadLocalStats(); modal.classList.remove('hidden'); modal.classList.add('flex'); } 
+            else { modal.classList.add('hidden'); modal.classList.remove('flex'); }
         }
 
         function saveCurrentSession() {
@@ -784,67 +787,37 @@
                     id: Date.now().toString(), durationSeconds: sessionSeconds, measures: totalMeasuresSession, maxBpm: maxBpmSession,
                     routine: routineSelect.value ? routineText : 'Práctica Libre', date: new Date().toISOString()
                 };
-                const data = localStorage.getItem('guitar_sessions');
-                let sessions = data ? JSON.parse(data) : [];
-                sessions.push(newSession);
-                localStorage.setItem('guitar_sessions', JSON.stringify(sessions));
-                showToastGlobal("¡Sesión guardada localmente con éxito!", "success");
-            } catch(e) { showToastGlobal("Error al guardar la sesión.", "error"); }
+                const data = localStorage.getItem('guitar_sessions'); let sessions = data ? JSON.parse(data) : [];
+                sessions.push(newSession); localStorage.setItem('guitar_sessions', JSON.stringify(sessions));
+                showToastGlobal("¡Sesión guardada con éxito!", "success");
+            } catch(e) { showToastGlobal("Error al guardar.", "error"); }
         }
 
         function createSingleComboData() {
             const fingers = [1, 2, 3, 4];
-            let newCombo = [];
-            let newFrets = [];
-            let isValid = false;
+            let newCombo = [], newFrets = [], isValid = false;
             while (!isValid) {
-                newCombo = [];
-                newFrets = [];
+                newCombo = []; newFrets = [];
                 if (isScalesMode) {
-                    const scalePatterns = [
-                        { frets: [1, 3, 5], fingers: [1, 2, 4] },
-                        { frets: [1, 3, 4], fingers: [1, 3, 4] },
-                        { frets: [1, 2, 5], fingers: [1, 2, 4] },
-                        { frets: [1, 2, 4], fingers: [1, 2, 4] },
-                        { frets: [1, 4, 5], fingers: [1, 3, 4] }
-                    ];
+                    const scalePatterns = [ { frets: [1, 3, 5], fingers: [1, 2, 4] }, { frets: [1, 3, 4], fingers: [1, 3, 4] }, { frets: [1, 2, 5], fingers: [1, 2, 4] }, { frets: [1, 2, 4], fingers: [1, 2, 4] }, { frets: [1, 4, 5], fingers: [1, 3, 4] } ];
                     const pattern = scalePatterns[Math.floor(Math.random() * scalePatterns.length)];
                     for (let i = 0; i < comboLength; i++) {
-                        if (i === 0) {
-                            const r = Math.floor(Math.random() * 3);
-                            newCombo.push(pattern.fingers[r]);
-                            newFrets.push(pattern.frets[r]);
-                        } else {
-                            const prevFinger = newCombo[i - 1];
-                            const available = [0, 1, 2].filter(idx => pattern.fingers[idx] !== prevFinger);
-                            const r = available[Math.floor(Math.random() * available.length)];
-                            newCombo.push(pattern.fingers[r]);
-                            newFrets.push(pattern.frets[r]);
-                        }
+                        if (i === 0) { const r = Math.floor(Math.random() * 3); newCombo.push(pattern.fingers[r]); newFrets.push(pattern.frets[r]); } 
+                        else { const prevFinger = newCombo[i - 1]; const available = [0, 1, 2].filter(idx => pattern.fingers[idx] !== prevFinger); const r = available[Math.floor(Math.random() * available.length)]; newCombo.push(pattern.fingers[r]); newFrets.push(pattern.frets[r]); }
                     }
                     isValid = true; 
                 } else {
                     let currentFingersPool = [...fingers];
                     if (isLinked23) currentFingersPool = currentFingersPool.filter(f => f !== (Math.random() < 0.5 ? 2 : 3));
                     for (let i = 0; i < comboLength; i++) {
-                        if (i === 0) {
-                            const f = currentFingersPool[Math.floor(Math.random() * currentFingersPool.length)];
-                            newCombo.push(f);
-                            newFrets.push(f);
-                        } else {
-                            const previousFinger = newCombo[i - 1];
-                            let availableFingers = currentFingersPool.filter(f => f !== previousFinger);
-                            const f = availableFingers[Math.floor(Math.random() * availableFingers.length)];
-                            newCombo.push(f);
-                            newFrets.push(f);
-                        }
+                        if (i === 0) { const f = currentFingersPool[Math.floor(Math.random() * currentFingersPool.length)]; newCombo.push(f); newFrets.push(f); } 
+                        else { const prevFinger = newCombo[i - 1]; let availableFingers = currentFingersPool.filter(f => f !== prevFinger); const f = availableFingers[Math.floor(Math.random() * availableFingers.length)]; newCombo.push(f); newFrets.push(f); }
                     }
                     isValid = isHardMode ? !isSequential(newCombo) : true;
                 }
             }
 
-            let newStrings = [];
-            let prevString = -1;
+            let newStrings = [], prevString = -1;
             const globalStrIdx = Math.floor(Math.random() * 6); 
             for(let i = 0; i < comboLength; i++) {
                 if (isStringSkipping) {
@@ -896,7 +869,7 @@
         }
 
         function manualGenerate() {
-            if (isMetronomeOn) { currentTick = 0; currentMeasureCount = 1; currentNoteIndex = 0; visualQueue = []; }
+            if (isMetronomeOn) { currentTick = 0; currentMeasureCount = 1; schedMeasureCount = 1; currentNoteIndex = 0; visualQueue = []; isTransitioning = false; }
             currentBaseFret = parseInt(document.getElementById('base-fret-input').value) || 1;
             nextBaseFret = currentBaseFret + (isFretShiftOn ? 1 : 0);
             const currentData = createSingleComboData();
@@ -972,41 +945,31 @@
 
         function renderJMRFretboard() {
             const container = document.getElementById('jmr-fretboard-container');
-            const totalFrets = isScalesMode ? 5 : 4;
-            const fretWidth = 100 / totalFrets;
+            const totalFrets = isScalesMode ? 5 : 4; const fretWidth = 100 / totalFrets;
 
             document.getElementById('fretboard-title').innerText = `Diapasón (Trastes ${currentBaseFret}-${currentBaseFret + totalFrets - 1})`;
             let html = `<div class="relative w-full h-[140px] bg-[#3e2723] rounded-lg border-2 border-[#1a100b] shadow-inner mb-2 overflow-hidden">`;
             if (currentBaseFret === 1) html += `<div class="absolute top-0 bottom-0 w-2 bg-slate-300 z-0" style="left: 0%; box-shadow: 2px 0 5px rgba(0,0,0,0.5)"></div>`;
             
             for(let i=1; i<=totalFrets; i++) html += `<div class="absolute top-0 bottom-0 w-1 fret-wire z-0" style="left: ${i * fretWidth}%"></div>`;
-            
-            for(let stringIdx=0; stringIdx<6; stringIdx++) {
-                const thickness = 1 + (stringIdx * 0.5); const topPos = 10 + (stringIdx * 16); 
-                html += `<div class="absolute left-0 right-0 string-line z-10" style="height: ${thickness}px; top: ${topPos}%;"></div>`;
-            }
+            for(let stringIdx=0; stringIdx<6; stringIdx++) { const thickness = 1 + (stringIdx * 0.5); const topPos = 10 + (stringIdx * 16); html += `<div class="absolute left-0 right-0 string-line z-10" style="height: ${thickness}px; top: ${topPos}%;"></div>`; }
 
             currentStringsArr.forEach((strNum, noteIdx) => {
-                const finger = currentComboArr[noteIdx];
-                const fretOffset = currentFretsArr[noteIdx];
-                const leftPos = (fretOffset * fretWidth) - (fretWidth / 2); 
-                const topPos = 10 + (strNum * 16);
+                const finger = currentComboArr[noteIdx]; const fretOffset = currentFretsArr[noteIdx];
+                const leftPos = (fretOffset * fretWidth) - (fretWidth / 2); const topPos = 10 + (strNum * 16);
                 html += `<div id="jmr-fret-dot-${noteIdx}" class="jmr-fret-dot absolute w-7 h-7 rounded-full bg-slate-800 border-2 border-amber-500 flex items-center justify-center shadow-[0_4px_10px_rgba(0,0,0,0.8)] z-20 transform -translate-x-1/2 -translate-y-1/2 transition-all duration-100 opacity-40" style="left: ${leftPos}%; top: ${topPos}%;">
                     <span class="text-[12px] font-bold text-amber-400 drop-shadow-md">${finger}</span></div>`;
             });
 
             html += `</div><div class="flex text-[10px] text-slate-500 font-medium px-0 pt-1">`;
-            for(let i=1; i<=totalFrets; i++) {
-                html += `<div class="flex-1 text-center leading-tight">Traste ${currentBaseFret+i-1}</div>`;
-            }
-            html += `</div>`;
-            container.innerHTML = html;
+            for(let i=1; i<=totalFrets; i++) html += `<div class="flex-1 text-center leading-tight">Traste ${currentBaseFret+i-1}</div>`;
+            html += `</div>`; container.innerHTML = html;
         }
 
         function updateCountdownDisplay() {
             const countSpan = document.getElementById('next-countdown');
             if (!countSpan) return;
-            if (!isAutoMode) { countSpan.innerText = ""; return; }
+            if (!isAutoMode && !isAutoSubdiv) { countSpan.innerText = ""; return; }
             countSpan.innerText = `(EN ${measuresToChange - currentMeasureCount + 1} COMPASES)`;
         }
 
@@ -1031,7 +994,26 @@
 
         function nextNote() {
             nextNoteTime += (60.0 / bpm) / subdivision; currentTick++;
-            if (currentTick >= beatsPerMeasure * subdivision) currentTick = 0;
+            if (currentTick >= beatsPerMeasure * subdivision) {
+                currentTick = 0;
+                if (!isTransitioning) {
+                    schedMeasureCount++;
+                    if (schedMeasureCount > measuresToChange) {
+                        if (isAutoSubdiv) {
+                            let nextSub = subdivision + 1;
+                            if (nextSub > subdivCycleMax || nextSub < subdivCycleMin) {
+                                nextSub = subdivCycleMin;
+                                if (isAutoMode) { isTransitioning = true; transitionBeatsLeft = beatsPerMeasure; } 
+                                else { schedMeasureCount = 1; }
+                            } else { schedMeasureCount = 1; }
+                            subdivision = nextSub;
+                            visualQueue.push({ type: 'updateSub', value: subdivision, time: nextNoteTime });
+                        } else if (isAutoMode) {
+                            isTransitioning = true; transitionBeatsLeft = beatsPerMeasure;
+                        } else { schedMeasureCount = 1; }
+                    }
+                }
+            }
         }
 
         function playClick(time, type) {
@@ -1046,10 +1028,24 @@
         }
 
         function scheduleNote(tickNumber, time) {
-            const isDownbeat = (tickNumber === 0); const isBeat = (tickNumber % subdivision === 0);
-            visualQueue.push({ noteIndex: currentNoteIndex, time: time, isDownbeat: isDownbeat, isBeat: isBeat });
-            currentNoteIndex = (currentNoteIndex + 1) % comboLength;
-            if (isBeat) playClick(time, isDownbeat ? 0 : 1); else if (playSubdivisionsSound) playClick(time, 2);
+            const isBeat = (tickNumber % subdivision === 0);
+
+            if (isTransitioning) {
+                if (isBeat) {
+                    visualQueue.push({ type: 'countdown', value: transitionBeatsLeft, time: time });
+                    playClick(time, 0); 
+                    transitionBeatsLeft--;
+                    if (transitionBeatsLeft <= 0) {
+                        isTransitioning = false; schedMeasureCount = 1;
+                        visualQueue.push({ type: 'shiftCombo', time: time + ((60.0/bpm)/subdivision) });
+                    }
+                }
+            } else {
+                const isDownbeat = (tickNumber === 0);
+                visualQueue.push({ type: 'note', noteIndex: currentNoteIndex, time: time, isDownbeat: isDownbeat, isBeat: isBeat });
+                currentNoteIndex = (currentNoteIndex + 1) % comboLength;
+                if (isBeat) playClick(time, isDownbeat ? 0 : 1); else if (playSubdivisionsSound) playClick(time, 2);
+            }
         }
 
         function scheduler() {
@@ -1061,11 +1057,33 @@
             if (!isMetronomeOn) return;
             let currentTime = audioCtx.currentTime;
             while (visualQueue.length && visualQueue[0].time <= currentTime) {
-                let note = visualQueue.splice(0, 1)[0];
-                updateVisualHighlights(note.noteIndex);
-                if (note.isDownbeat) {
-                    totalMeasuresElapsed++; totalMeasuresSession++; updateStatsDisplay();
-                    if (isAutoMode) { currentMeasureCount++; if (currentMeasureCount > measuresToChange) { shiftToNextCombo(); currentMeasureCount = 1; } updateCountdownDisplay(); }
+                let event = visualQueue.splice(0, 1)[0];
+                
+                if (event.type === 'updateSub') {
+                    setSubdivisionUI(event.value);
+                } else if (event.type === 'countdown') {
+                    const overlay = document.getElementById('countdown-overlay');
+                    document.getElementById('countdown-number').innerText = event.value;
+                    overlay.classList.remove('hidden'); overlay.classList.add('flex', 'scale-105');
+                    setTimeout(() => overlay.classList.remove('scale-105'), 100);
+                } else if (event.type === 'shiftCombo') {
+                    const overlay = document.getElementById('countdown-overlay');
+                    overlay.classList.add('hidden'); overlay.classList.remove('flex');
+                    shiftToNextCombo();
+                    currentMeasureCount = 1; updateCountdownDisplay();
+                } else if (event.type === 'note') {
+                    document.getElementById('countdown-overlay').classList.add('hidden');
+                    document.getElementById('countdown-overlay').classList.remove('flex');
+                    updateVisualHighlights(event.noteIndex);
+                    if (event.isBeat) {
+                        const display = document.getElementById('combo-display');
+                        if(display) { display.classList.add('scale-[1.02]', 'brightness-125'); setTimeout(() => display.classList.remove('scale-[1.02]', 'brightness-125'), 100); }
+                    }
+                    if (event.isDownbeat) {
+                        totalMeasuresElapsed++; totalMeasuresSession++; updateStatsDisplay();
+                        currentMeasureCount++; if (currentMeasureCount > measuresToChange) currentMeasureCount = measuresToChange;
+                        updateCountdownDisplay();
+                    }
                 }
             }
             animationFrameId = requestAnimationFrame(drawLoop);
@@ -1077,7 +1095,8 @@
             const btn = document.getElementById('btn-metronome'), icon = document.getElementById('metro-icon'), text = document.getElementById('metro-text');
             if (isMetronomeOn) {
                 if (audioCtx.state === 'suspended') audioCtx.resume();
-                currentTick = 0; currentMeasureCount = 1; totalMeasuresElapsed = 0; currentNoteIndex = 0; visualQueue = []; nextNoteTime = audioCtx.currentTime + 0.05;
+                currentTick = 0; currentMeasureCount = 1; schedMeasureCount = 1; totalMeasuresElapsed = 0; currentNoteIndex = 0; visualQueue = []; isTransitioning = false;
+                nextNoteTime = audioCtx.currentTime + 0.05;
                 updateCountdownDisplay(); scheduler(); drawLoop(); 
                 if(!statsIntervalID) {
                     statsIntervalID = setInterval(() => {
@@ -1098,10 +1117,22 @@
                 icon.setAttribute('data-lucide', 'square'); text.innerText = 'Detener Práctica';
             } else {
                 clearTimeout(timerID); cancelAnimationFrame(animationFrameId); clearInterval(statsIntervalID); statsIntervalID = null; currentNoteIndex = 0; updateVisualHighlights(0);
+                document.getElementById('countdown-overlay').classList.add('hidden'); document.getElementById('countdown-overlay').classList.remove('flex');
                 btn.classList.replace('bg-red-500/20', 'bg-slate-700'); btn.classList.replace('text-red-400', 'text-white'); btn.classList.replace('border-red-500/50', 'border-slate-600'); btn.classList.replace('hover:bg-red-500/30', 'hover:bg-slate-600');
-                icon.setAttribute('data-lucide', 'play'); text.innerText = 'Iniciar Práctica';
+                icon.setAttribute('data-lucide', 'play'); text.innerText = 'Práctica';
             }
             lucide.createIcons();
+        }
+
+        function updateSubdivRange() {
+            const range = document.getElementById('auto-subdiv-range').value;
+            if (range === '1-4') { subdivCycleMin = 1; subdivCycleMax = 4; }
+            else if (range === '5-8') { subdivCycleMin = 5; subdivCycleMax = 8; }
+            else if (range === '1-8') { subdivCycleMin = 1; subdivCycleMax = 8; }
+            
+            if (isAutoSubdiv && (subdivision < subdivCycleMin || subdivision > subdivCycleMax)) {
+                setSubdivision(subdivCycleMin);
+            }
         }
 
         function loadWorkout(type) {
@@ -1109,29 +1140,54 @@
             const timerText = document.getElementById('routine-timer-text');
             if (!type) { routineTimeRemaining = null; timerContainer.classList.add('hidden'); timerContainer.classList.remove('flex'); return; }
 
-            document.getElementById('hard-mode').checked = false; document.getElementById('string-skip').checked = false; document.getElementById('linked-23').checked = false; document.getElementById('auto-play').checked = false; document.getElementById('fret-shift').checked = false; document.getElementById('subdivision-sound').checked = false; document.getElementById('scales-mode').checked = false; document.getElementById('right-hand-tech').value = 'normal';
+            if (type.startsWith('fav_')) {
+                const idx = parseInt(type.split('_')[1]);
+                const favs = JSON.parse(localStorage.getItem('jmr_favorites') || '[]');
+                const fav = favs[idx];
+                if (fav) {
+                    routineTimeRemaining = null; timerContainer.classList.add('hidden'); timerContainer.classList.remove('flex');
+                    currentComboArr = fav.combo; currentFretsArr = fav.frets; currentStringsArr = fav.strings; currentStringGlobal = fav.globalString; currentBaseFret = fav.baseFret;
+                    document.getElementById('right-hand-tech').value = fav.rightHandTech || 'normal'; comboLength = fav.combo.length;
+                    const nextData = createSingleComboData();
+                    nextComboArr = nextData.combo; nextFretsArr = nextData.frets; nextStringsArr = nextData.strings; nextStringGlobal = nextData.globalString;
+                    changeTech(); updateBaseFret(); return;
+                }
+            }
 
-            if (type === 'warmup') { updateBPM(80); setLength(4); setSubdivision(1); document.getElementById('auto-play').checked = true; updateMeasures(4); } 
-            else if (type === 'spider') { updateBPM(100); setLength(4); setSubdivision(2); document.getElementById('string-skip').checked = true; document.getElementById('auto-play').checked = true; updateMeasures(2); } 
-            else if (type === 'indep') { updateBPM(70); setLength(4); setSubdivision(3); document.getElementById('linked-23').checked = true; document.getElementById('hard-mode').checked = true; document.getElementById('right-hand-tech').value = 'legato'; document.getElementById('auto-play').checked = true; updateMeasures(4); } 
-            else if (type === 'shred') { updateBPM(100); setLength(4); setSubdivision(4); document.getElementById('right-hand-tech').value = 'alternate'; document.getElementById('string-skip').checked = true; document.getElementById('auto-play').checked = true; updateMeasures(2); } 
-            else if (type === 'fingerstyle') { updateBPM(75); setLength(4); setSubdivision(4); document.getElementById('right-hand-tech').value = 'pima'; document.getElementById('string-skip').checked = true; document.getElementById('auto-play').checked = true; updateMeasures(2); } 
-            else if (type === 'virtuoso') { updateBPM(85); setLength(5); setSubdivision(4); document.getElementById('right-hand-tech').value = 'hybrid'; document.getElementById('string-skip').checked = true; document.getElementById('auto-play').checked = true; document.getElementById('fret-shift').checked = true; updateMeasures(2); document.getElementById('base-fret-input').value = 1; } 
-            else if (type === 'scales') { updateBPM(110); document.getElementById('scales-mode').checked = true; setSubdivision(3); setLength(3); document.getElementById('right-hand-tech').value = 'legato_finger'; document.getElementById('string-skip').checked = true; document.getElementById('auto-play').checked = true; updateMeasures(2); }
+            document.getElementById('hard-mode').checked = false; document.getElementById('string-skip').checked = false; document.getElementById('linked-23').checked = false; document.getElementById('auto-play').checked = false; document.getElementById('auto-subdiv').checked = false; document.getElementById('fret-shift').checked = false; document.getElementById('subdivision-sound').checked = false; document.getElementById('scales-mode').checked = false; document.getElementById('right-hand-tech').value = 'normal';
+
+            if (type === 'warmup') { updateBPM(40); setLength(4); setSubdivision(1); document.getElementById('auto-play').checked = true; updateMeasures(8); } 
+            else if (type === 'spider') { updateBPM(50); setLength(4); setSubdivision(2); document.getElementById('string-skip').checked = true; document.getElementById('auto-play').checked = true; updateMeasures(8); } 
+            else if (type === 'indep') { updateBPM(45); setLength(4); setSubdivision(3); document.getElementById('linked-23').checked = true; document.getElementById('hard-mode').checked = true; document.getElementById('right-hand-tech').value = 'legato'; document.getElementById('auto-play').checked = true; updateMeasures(8); } 
+            else if (type === 'shred') { updateBPM(60); setLength(4); setSubdivision(4); document.getElementById('right-hand-tech').value = 'alternate'; document.getElementById('string-skip').checked = true; document.getElementById('auto-play').checked = true; updateMeasures(8); } 
+            else if (type === 'fingerstyle') { updateBPM(50); setLength(4); setSubdivision(4); document.getElementById('right-hand-tech').value = 'pima'; document.getElementById('string-skip').checked = true; document.getElementById('auto-play').checked = true; updateMeasures(8); } 
+            else if (type === 'virtuoso') { updateBPM(55); setLength(5); setSubdivision(4); document.getElementById('right-hand-tech').value = 'hybrid'; document.getElementById('string-skip').checked = true; document.getElementById('auto-play').checked = true; document.getElementById('fret-shift').checked = true; updateMeasures(8); document.getElementById('base-fret-input').value = 1; } 
+            else if (type === 'scales') { updateBPM(60); document.getElementById('scales-mode').checked = true; setSubdivision(3); setLength(3); document.getElementById('right-hand-tech').value = 'legato_finger'; document.getElementById('string-skip').checked = true; document.getElementById('auto-play').checked = true; updateMeasures(8); }
 
             routineTimeRemaining = 300; timerText.innerText = "05:00"; timerText.classList.replace('text-green-400', 'text-amber-400');
             timerContainer.classList.remove('hidden'); timerContainer.classList.add('flex');
-            toggleMode(); toggleAutoPlay(); toggleFretShift(); toggleSubdivisionSound();
+            toggleMode(); toggleAutoPlay(); toggleAutoSubdiv(); toggleFretShift(); toggleSubdivisionSound();
         }
 
         function updateBaseFret() { const val = parseInt(document.getElementById('base-fret-input').value); if (val > 0 && val < 20) { currentBaseFret = val; manualGenerate(); } }
         function toggleFretShift() { isFretShiftOn = document.getElementById('fret-shift').checked; manualGenerate(); }
         function updateBPM(val) { bpm = val; document.getElementById('bpm-display').innerText = val; document.getElementById('bpm-slider').value = val; if (val > maxBpmSession) maxBpmSession = val; updateStatsDisplay(); }
         function updateVolume(val) { metronomeVolume = val / 100; document.getElementById('vol-display').innerText = `${val}%`; }
-        function setBeats(b) { beatsPerMeasure = b; [2, 3, 4, 5].forEach(val => { const btn = document.getElementById(`btn-beat-${val}`); if(btn) btn.className = val === beatsPerMeasure ? 'flex-1 py-1 rounded text-xs font-medium transition-all bg-amber-500/20 text-amber-400 border border-amber-500/50' : 'flex-1 py-1 rounded text-xs font-medium transition-all bg-slate-700 text-slate-400 border border-slate-600 hover:bg-slate-600'; }); if (isMetronomeOn) { currentTick = 0; currentMeasureCount = 1; updateCountdownDisplay(); } }
+        function setBeats(b) { beatsPerMeasure = b; [2, 3, 4, 5].forEach(val => { const btn = document.getElementById(`btn-beat-${val}`); if(btn) btn.className = val === beatsPerMeasure ? 'flex-1 py-1 rounded text-xs font-medium transition-all bg-amber-500/20 text-amber-400 border border-amber-500/50' : 'flex-1 py-1 rounded text-xs font-medium transition-all bg-slate-700 text-slate-400 border border-slate-600 hover:bg-slate-600'; }); if (isMetronomeOn) { currentTick = 0; currentMeasureCount = 1; schedMeasureCount = 1; updateCountdownDisplay(); } }
         function toggleSubdivisionSound() { playSubdivisionsSound = document.getElementById('subdivision-sound').checked; }
-        function setSubdivision(val) { subdivision = val; for(let s = 1; s <= 4; s++) { const btn = document.getElementById(`btn-sub-${s}`); if(btn) btn.className = s === subdivision ? 'flex-1 py-1 rounded text-[9px] font-bold transition-all bg-amber-500/20 text-amber-400 border border-amber-500/50 shadow-sm' : 'flex-1 py-1 rounded text-[9px] font-bold transition-all bg-slate-700 text-slate-400 border border-slate-600 hover:bg-slate-600 shadow-sm'; } if (isMetronomeOn) { currentTick = 0; currentMeasureCount = 1; currentNoteIndex = 0; visualQueue = []; updateCountdownDisplay(); } }
-        function updateMeasures(val) { let num = parseInt(val); if (isNaN(num) || num < 1) num = 1; measuresToChange = num; document.getElementById('measures-input').value = num; currentMeasureCount = 1; updateCountdownDisplay(); }
+        
+        function setSubdivisionUI(val) {
+            for(let s = 1; s <= 8; s++) { 
+                const btn = document.getElementById(`btn-sub-${s}`); 
+                if(btn) { btn.className = s === val ? 'flex-1 py-1 rounded text-[9px] font-bold transition-all bg-amber-500/20 text-amber-400 border border-amber-500/50 shadow-sm' : 'flex-1 py-1 rounded text-[9px] font-bold transition-all bg-slate-700 text-slate-400 border border-slate-600 hover:bg-slate-600 shadow-sm'; }
+            } 
+        }
+        function setSubdivision(val) { 
+            subdivision = val; setSubdivisionUI(val);
+            if (isMetronomeOn) { currentTick = 0; currentMeasureCount = 1; schedMeasureCount = 1; currentNoteIndex = 0; visualQueue = []; isTransitioning = false; updateCountdownDisplay(); } 
+        }
+
+        function updateMeasures(val) { let num = parseInt(val); if (isNaN(num) || num < 1) num = 1; measuresToChange = num; document.getElementById('measures-input').value = num; currentMeasureCount = 1; schedMeasureCount = 1; updateCountdownDisplay(); }
         
         function changeTech() { 
             rightHandTech = document.getElementById('right-hand-tech').value; 
@@ -1150,7 +1206,8 @@
         }
 
         function toggleMode() { isHardMode = document.getElementById('hard-mode').checked; isLinked23 = document.getElementById('linked-23').checked; isStringSkipping = document.getElementById('string-skip').checked; isScalesMode = document.getElementById('scales-mode').checked; rightHandTech = document.getElementById('right-hand-tech').value; if (isScalesMode) { document.getElementById('linked-23').disabled = true; document.getElementById('hard-mode').disabled = true; } else { document.getElementById('linked-23').disabled = false; document.getElementById('hard-mode').disabled = false; } manualGenerate(); }
-        function toggleAutoPlay() { isAutoMode = document.getElementById('auto-play').checked; const container = document.getElementById('auto-measures-container'), previewBox = document.getElementById('next-combo-preview'); if (isAutoMode) { container.classList.remove('opacity-40', 'pointer-events-none'); previewBox.classList.remove('hidden'); previewBox.classList.add('flex'); currentMeasureCount = 1; updateCountdownDisplay(); } else { container.classList.add('opacity-40', 'pointer-events-none'); previewBox.classList.add('hidden'); previewBox.classList.remove('flex'); } manualGenerate(); }
+        function toggleAutoPlay() { isAutoMode = document.getElementById('auto-play').checked; const container = document.getElementById('auto-measures-container'), previewBox = document.getElementById('next-combo-preview'); if (isAutoMode || isAutoSubdiv) { container.classList.remove('opacity-40', 'pointer-events-none'); currentMeasureCount = 1; schedMeasureCount = 1; updateCountdownDisplay(); } else { container.classList.add('opacity-40', 'pointer-events-none'); } if (isAutoMode) { previewBox.classList.remove('hidden'); previewBox.classList.add('flex'); } else { previewBox.classList.add('hidden'); previewBox.classList.remove('flex'); } manualGenerate(); }
+        function toggleAutoSubdiv() { isAutoSubdiv = document.getElementById('auto-subdiv').checked; updateSubdivRange(); toggleAutoPlay(); }
         function isSequential(combo) { let asc = true, desc = true; for(let i=1; i<combo.length; i++) { if(combo[i] !== combo[i-1] + 1) asc = false; if(combo[i] !== combo[i-1] - 1) desc = false; } return asc || desc; }
         function setLength(len) { comboLength = len; [3, 4, 5].forEach(l => { const btn = document.getElementById(`btn-len-${l}`); if (btn) { btn.className = l === comboLength ? 'py-2 px-3 rounded-lg font-medium transition-all bg-amber-500/20 text-amber-400 border border-amber-500/50' : 'py-2 px-3 rounded-lg font-medium transition-all bg-slate-700 text-slate-400 border border-slate-600 hover:bg-slate-600'; } }); manualGenerate(); }
         function toggleHelp() { const modal = document.getElementById('help-modal'); if (modal.classList.contains('hidden')) { modal.classList.remove('hidden'); modal.classList.add('flex'); } else { modal.classList.add('hidden'); modal.classList.remove('flex'); } }
@@ -1428,10 +1485,10 @@
         }
 
         window.onload = () => {
-            manualGenerate(); 
+            manualGenerate(); loadFavoritesToSelect();
             loadStats(); renderMenuSelectors(); setInstrument('guitar');
             lucide.createIcons();
         };
     </script>
 </body>
-</html>
+                                                                                                                                     </html>
