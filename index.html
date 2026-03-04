@@ -1294,8 +1294,19 @@
                 });
                 levels.push({ id: id++, title: `EXAMEN RANGO 0-${range}`, desc: `Todas las cuerdas mezcladas hasta el traste ${range}.`, mode: 'identify', str: 'all', minF: 0, maxF: range, time: 15, total: 12 });
             });
-            const intervals = [ {semis: 0, name: 'Unísono'}, {semis: 12, name: 'Octava'}, {semis: 5, name: '4ta Justa'}, {semis: 7, name: '5ta Justa'} ];
-            intervals.forEach(iv => { levels.push({ id: id++, title: `Intervalo: ${iv.name}`, desc: "Aprende la forma geométrica.", mode: 'interval', intervalSemis: iv.semis, str: 'all', minF: 0, maxF: 12, time: 0, total: 8 }); });
+            
+            // Intervalos
+            const intervals = [
+                {semis: 0, name: 'Unísono'}, {semis: 1, name: '2da Menor'}, {semis: 2, name: '2da Mayor'},
+                {semis: 3, name: '3ra Menor'}, {semis: 4, name: '3ra Mayor'}, {semis: 5, name: '4ta Justa'},
+                {semis: 6, name: 'Tritono'}, {semis: 7, name: '5ta Justa'}, {semis: 8, name: '6ta Menor'},
+                {semis: 9, name: '6ta Mayor'}, {semis: 10, name: '7ma Menor'}, {semis: 11, name: '7ma Mayor'},
+                {semis: 12, name: 'Octava'}
+            ];
+            intervals.forEach(iv => { levels.push({ id: id++, title: `Intervalo: ${iv.name}`, desc: "Encuentra la forma geométrica en el mástil.", mode: 'interval', intervalSemis: iv.semis, str: 'all', minF: 0, maxF: 12, time: 0, total: 8 }); });
+
+            // Examen Final
+            levels.push({ id: id++, title: `EXAMEN FINAL MAESTRO`, desc: `Dominio absoluto. Diapasón completo de 24 trastes.`, mode: 'identify', str: 'all', minF: 0, maxF: 24, time: 10, total: 20 });
             return levels;
         }
 
@@ -1305,7 +1316,8 @@
             instrument: 'guitar', handedness: 'right', wood: 'rosewood', maxFret: 5, timeLimit: 0, mode: 'identify', score: 0, streak: 0, 
             isGuided: false, currentLvlId: null, guidedLives: 3, guidedCorrect: 0, guidedTotal: 0, isStudyMode: false, 
             currentQ: null, lastQSignature: null, pendingRetry: null, timer: null, timeLeft: 0, isFeedbackMode: false, isHintVisible: true, 
-            stats: { totalAnswers: 0, correctAnswers: 0, noteHistory: {}, posHistory: {}, guidedProgress: {} }
+            sessionStartTime: 0, sessionCorrect: 0, sessionTotal: 0,
+            stats: { totalAnswers: 0, correctAnswers: 0, noteHistory: {}, posHistory: {}, guidedProgress: {}, sessions: [] }
         };
 
         const fmel = id => document.getElementById(id);
@@ -1315,7 +1327,13 @@
         function loadStats() {
             const saved = localStorage.getItem('fretmindDataV10');
             if (saved) {
-                try { const parsed = JSON.parse(saved); if(parsed.noteHistory) fmState.stats = parsed; if(!fmState.stats.guidedProgress) fmState.stats.guidedProgress = {}; } catch(e) {}
+                try { 
+                    const parsed = JSON.parse(saved); 
+                    if(parsed.noteHistory) fmState.stats = parsed; 
+                    if(!fmState.stats.guidedProgress) fmState.stats.guidedProgress = {}; 
+                    if(!fmState.stats.posHistory) fmState.stats.posHistory = {};
+                    if(!fmState.stats.sessions) fmState.stats.sessions = [];
+                } catch(e) {}
             }
             NOTES_SHARP.forEach(n => { if(!fmState.stats.noteHistory[n]) fmState.stats.noteHistory[n] = { correct: 0, wrong: 0 }; });
         }
@@ -1351,8 +1369,27 @@
         window.goToFreeSetup = () => { fmhide('screen-home'); fmhide('screen-guided'); fmhide('screen-game'); fmhide('screen-stats'); renderMenuSelectors(); fmshow('screen-free-setup', true); };
         window.goToGuidedMap = () => { fmhide('screen-home'); fmhide('screen-game'); fmhide('screen-free-setup'); fmhide('screen-stats'); fmhide('modal-level-end'); renderGuidedMap(); fmshow('screen-guided', true); };
         window.showStats = () => { fmhide('screen-home'); fmhide('screen-free-setup'); fmhide('screen-guided'); fmhide('screen-game'); renderStatsHTML(); fmshow('screen-stats', true); };
-        window.exitGame = () => { clearInterval(fmState.timer); fmState.isFeedbackMode = false; hideFeedback(); if(fmState.isGuided) goToGuidedMap(); else goToFreeSetup(); };
-        window.resetStats = () => { showCustomAlert('¿Seguro que quieres borrar todo tu progreso?', (confirmed) => { if(confirmed) { localStorage.removeItem('fretmindDataV10'); fmState.stats = { totalAnswers: 0, correctAnswers: 0, noteHistory: {}, posHistory: {}, guidedProgress: {} }; NOTES_SHARP.forEach(n => { fmState.stats.noteHistory[n] = { correct: 0, wrong: 0 }; }); renderStatsHTML(); } }, true); };
+        
+        function saveFMSession() {
+            if (fmState.sessionTotal === 0) return; 
+            const durationSecs = Math.floor((Date.now() - fmState.sessionStartTime) / 1000);
+            if (durationSecs < 2) return; 
+            
+            let title = fmState.isGuided ? (fmState.currentLvlId === 'nivelacion' ? 'Examen de Nivelación' : `Nivel Guiado ${fmState.currentLvlId}`) : `Modo Libre (${fmState.mode === 'identify' ? 'Identificar' : (fmState.mode === 'find' ? 'Encontrar' : 'Intervalos')})`;
+
+            fmState.stats.sessions.unshift({
+                date: new Date().toISOString(), title: title, duration: durationSecs, correct: fmState.sessionCorrect, total: fmState.sessionTotal
+            });
+            if (fmState.stats.sessions.length > 50) fmState.stats.sessions.pop();
+            saveStats(); fmState.sessionTotal = 0; 
+        }
+
+        window.exitGame = () => { 
+            clearInterval(fmState.timer); fmState.isFeedbackMode = false; hideFeedback(); 
+            saveFMSession();
+            if(fmState.isGuided) goToGuidedMap(); else goToFreeSetup(); 
+        };
+        window.resetStats = () => { showCustomAlert('¿Seguro que quieres borrar todo tu progreso?', (confirmed) => { if(confirmed) { localStorage.removeItem('fretmindDataV10'); fmState.stats = { totalAnswers: 0, correctAnswers: 0, noteHistory: {}, posHistory: {}, guidedProgress: {}, sessions: [] }; NOTES_SHARP.forEach(n => { fmState.stats.noteHistory[n] = { correct: 0, wrong: 0 }; }); renderStatsHTML(); } }, true); };
 
         window.setInstrument = (val) => { fmState.instrument = val; fmel('btn-inst-guitar').className = `flex-1 py-1.5 rounded-md text-xs font-bold transition-all ${val==='guitar'?'bg-blue-500 text-white shadow-lg':'text-slate-500 hover:text-slate-300'}`; fmel('btn-inst-bass').className = `flex-1 py-1.5 rounded-md text-xs font-bold transition-all ${val==='bass'?'bg-blue-500 text-white shadow-lg':'text-slate-500 hover:text-slate-300'}`; if(!fmel('screen-guided').classList.contains('hidden')) renderGuidedMap(); };
         window.setHandedness = (val) => { fmState.handedness = val; fmel('btn-hand-right').className = `flex-1 py-1.5 rounded-md text-xs font-bold transition-all ${val==='right'?'bg-purple-500 text-white shadow-lg':'text-slate-500 hover:text-slate-300'}`; fmel('btn-hand-left').className = `flex-1 py-1.5 rounded-md text-xs font-bold transition-all ${val==='left'?'bg-purple-500 text-white shadow-lg':'text-slate-500 hover:text-slate-300'}`; };
@@ -1373,9 +1410,24 @@
             lucide.createIcons();
         }
 
+        window.startPlacementTest = () => {
+            fmState.isGuided = true; fmState.isStudyMode = false; fmState.currentLvlId = 'nivelacion';
+            fmState.mode = 'identify'; fmState.guidedLives = 3; fmState.guidedCorrect = 0; fmState.guidedTotal = 15; fmState.timeLimit = 10;
+            initFMAudio(); setupGameScreen(); fmState.currentQ = null; renderGameUI(); nextQuestion();
+        };
+
         function renderGuidedMap() {
             const container = fmel('guided-map-container');
-            let html = `<div class="w-full bg-slate-800 rounded-xl p-4 flex flex-col gap-4 mb-8 border border-slate-700"><div class="flex gap-2"><button onclick="setInstrument('guitar')" class="flex-1 py-2 text-sm font-bold rounded-lg ${fmState.instrument==='guitar'?'bg-emerald-500 text-slate-900':'text-slate-600 hover:text-white bg-slate-900'}">Guitarra</button><button onclick="setInstrument('bass')" class="flex-1 py-2 text-sm font-bold rounded-lg ${fmState.instrument==='bass'?'bg-emerald-500 text-slate-900':'text-slate-600 hover:text-white bg-slate-900'}">Bajo</button></div></div>`;
+            let html = `<div class="w-full bg-slate-800 rounded-xl p-4 flex flex-col gap-4 mb-6 border border-slate-700"><div class="flex gap-2"><button onclick="setInstrument('guitar')" class="flex-1 py-2 text-sm font-bold rounded-lg ${fmState.instrument==='guitar'?'bg-emerald-500 text-slate-900':'text-slate-600 hover:text-white bg-slate-900'}">Guitarra</button><button onclick="setInstrument('bass')" class="flex-1 py-2 text-sm font-bold rounded-lg ${fmState.instrument==='bass'?'bg-emerald-500 text-slate-900':'text-slate-600 hover:text-white bg-slate-900'}">Bajo</button></div></div>`;
+            
+            // Botón de Nivelación
+            html += `<div class="mb-10 w-full flex justify-center">
+                        <button onclick="startPlacementTest()" class="group relative flex items-center justify-center gap-3 w-full py-4 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-900 font-bold rounded-2xl shadow-[0_0_20px_rgba(245,158,11,0.3)] hover:shadow-[0_0_30px_rgba(245,158,11,0.5)] transition-all transform hover:scale-[1.02] border border-amber-300/50">
+                            <div class="bg-white/20 p-2 rounded-full"><i data-lucide="zap" class="w-5 h-5 text-slate-900"></i></div>
+                            <span class="text-base sm:text-lg">Examen de Nivelación</span>
+                        </button>
+                     </div>`;
+
             let isNextUnlocked = true; 
             GUIDED_LEVELS.forEach((lvl, index) => {
                 const progKey = `${fmState.instrument}_${lvl.id}`; const stars = fmState.stats.guidedProgress[progKey] || 0; const isLocked = !isNextUnlocked;
@@ -1403,6 +1455,9 @@
         function setupGameScreen() {
             fmhide('screen-home'); fmhide('screen-free-setup'); fmhide('screen-guided'); fmhide('modal-level-end');
             hideFeedback();
+            fmState.sessionStartTime = Date.now();
+            fmState.sessionCorrect = 0;
+            fmState.sessionTotal = 0;
             if(fmState.isGuided) { fmhide('free-stats'); fmshow('guided-progress'); fmshow('guided-lives', true); renderLives(); updateProgressUI(); } 
             else { fmshow('free-stats', true); fmhide('guided-progress'); fmhide('guided-lives'); fmel('streak-text').innerText = '0'; fmel('total-q-text').innerText = 'Total: 0'; }
             const fContainer = fmel('fretboard-container');
@@ -1417,14 +1472,18 @@
         function nextQuestion() {
             fmState.isFeedbackMode = false; hideFeedback();
             const instLen = INSTRUMENTS[fmState.instrument].strings.length; const isFlatsRound = Math.random() > 0.5;
-            let q = { found: [], targets: [] };
+            let q = { found: [], targets: [], roots: [] };
             
             let minF = 0, maxF = fmState.maxFret;
             let validStr = Array.from({length: instLen}, (_,i)=>i);
             
             if (fmState.isGuided) {
-                const lvl = GUIDED_LEVELS.find(l => l.id === fmState.currentLvlId); minF = lvl.minF; maxF = lvl.maxF;
-                if (lvl.str.startsWith('single_')) validStr = [parseInt(lvl.str.split('_')[1])];
+                if (fmState.currentLvlId === 'nivelacion') {
+                    minF = 0; maxF = 12;
+                } else {
+                    const lvl = GUIDED_LEVELS.find(l => l.id === fmState.currentLvlId); minF = lvl.minF; maxF = lvl.maxF;
+                    if (lvl.str.startsWith('single_')) validStr = [parseInt(lvl.str.split('_')[1])];
+                }
             }
 
             const validPos = [];
@@ -1437,8 +1496,30 @@
                 q.targets = [{s: q.string, f: q.fret}]; let opts = [q.targetNote]; const pool = isFlatsRound ? NOTES_FLAT : NOTES_SHARP;
                 while (opts.length < 4) { const r = pool[Math.floor(Math.random() * pool.length)]; if (!opts.includes(r)) opts.push(r); }
                 opts.sort(() => Math.random() - 0.5); q.options = opts;
-            } else if (fmState.mode === 'find' || fmState.mode === 'interval') {
+            } else if (fmState.mode === 'find') {
                 for(let ts of validStr) { for(let tf=minF; tf<=maxF; tf++) { if (getNoteAtParams(ts, tf, isFlatsRound) === q.targetNote) { q.targets.push({s: ts, f: tf}); } } }
+            } else if (fmState.mode === 'interval') {
+                q.roots = [{s: q.string, f: q.fret}];
+                let semis = 0;
+                if (fmState.isGuided) {
+                    const lvl = GUIDED_LEVELS.find(l => l.id === fmState.currentLvlId);
+                    semis = lvl.intervalSemis;
+                } else {
+                    semis = Math.floor(Math.random() * 12) + 1;
+                }
+                q.intervalSemis = semis;
+                const rootAbs = INSTRUMENTS[fmState.instrument].offsets[q.string] + q.fret;
+                const targetAbs = rootAbs + semis;
+                const targetNoteStr = (isFlatsRound ? NOTES_FLAT : NOTES_SHARP)[targetAbs % 12];
+                q.targetNoteName = targetNoteStr;
+
+                for(let ts of validStr) {
+                    for(let tf = minF; tf <= maxF; tf++) {
+                        if (getNoteAtParams(ts, tf, isFlatsRound) === targetNoteStr) {
+                            q.targets.push({s: ts, f: tf});
+                        }
+                    }
+                }
             }
 
             fmState.currentQ = q; renderGameUI(); startTimer();
@@ -1460,11 +1541,34 @@
 
         function processAnswer(ans, isTimeout = false) {
             const q = fmState.currentQ; let isCorrectHit = false;
+            let ansString = 0, ansFret = 0;
+
             if (!isTimeout) {
-                if (ans.type === 'identify') isCorrectHit = ans.val === q.targetNote;
-                else isCorrectHit = q.targets.some(t => t.s === ans.string && t.f === ans.fret);
+                if (ans.type === 'identify') {
+                    isCorrectHit = ans.val === q.targetNote;
+                    if (isCorrectHit) playNote(q.string, q.fret);
+                    ansString = q.string; ansFret = q.fret;
+                }
+                else {
+                    isCorrectHit = q.targets.some(t => t.s === ans.string && t.f === ans.fret);
+                    ansString = ans.string; ansFret = ans.fret;
+                }
+            } else {
+                ansString = q.string; ansFret = q.fret;
             }
             
+            // TRACK STATS
+            fmState.stats.totalAnswers++; fmState.sessionTotal++;
+            const posKey = `${fmState.instrument}_${ansString}_${ansFret}`;
+            if (!fmState.stats.posHistory[posKey]) fmState.stats.posHistory[posKey] = { correct: 0, wrong: 0 };
+
+            if (isCorrectHit) {
+                fmState.stats.correctAnswers++; fmState.sessionCorrect++; fmState.stats.posHistory[posKey].correct++;
+            } else {
+                fmState.stats.posHistory[posKey].wrong++;
+            }
+            saveStats();
+
             if (isCorrectHit && fmState.mode !== 'identify') {
                 const alreadyFound = q.found.some(t => t.s === ans.string && t.f === ans.fret); if (alreadyFound) return; 
                 q.found.push({s: ans.string, f: ans.fret}); playNote(ans.string, ans.fret);
@@ -1476,7 +1580,7 @@
                 if (fmState.isGuided) {
                     if (isCorrectHit) { fmState.guidedCorrect++; updateProgressUI(); } 
                     else fmState.guidedLives--; renderLives();
-                    if (fmState.guidedLives <= 0) { setTimeout(() => { showCustomAlert("Fin de juego.", goToGuidedMap); }, 1000); return; }
+                    if (fmState.guidedLives <= 0) { setTimeout(() => { saveFMSession(); showCustomAlert("Fin de juego.", goToGuidedMap); }, 1000); return; }
                     if (fmState.guidedCorrect >= fmState.guidedTotal) { setTimeout(finishGuidedLevel, 1000); return; }
                 }
                 showFeedback(isCorrectHit ? 'success' : 'error', isCorrectHit ? '¡Bien!' : 'Incorrecto');
@@ -1485,8 +1589,34 @@
         }
 
         function finishGuidedLevel() {
-            let stars = fmState.guidedLives; const pKey = `${fmState.instrument}_${fmState.currentLvlId}`;
+            saveFMSession();
+            let stars = fmState.guidedLives;
+            if (stars < 1) stars = 1;
+
+            let starsHtml = '';
+            for(let i=0; i<3; i++) starsHtml += `<i data-lucide="star" class="w-8 h-8 ${i < stars ? 'text-amber-400 fill-amber-400' : 'text-slate-600'}"></i>`;
+            fmel('modal-stars').innerHTML = starsHtml;
+            lucide.createIcons();
+
+            if (fmState.currentLvlId === 'nivelacion') {
+                GUIDED_LEVELS.forEach(l => {
+                    if (!l.title.includes('Intervalo') && !l.title.includes('EXAMEN FINAL')) {
+                        const pKey = `${fmState.instrument}_${l.id}`;
+                        if (!fmState.stats.guidedProgress[pKey]) fmState.stats.guidedProgress[pKey] = 3;
+                    }
+                });
+                saveStats();
+                fmel('modal-title').innerText = "¡Nivelación Superada!";
+                fmel('modal-desc').innerText = "Has desbloqueado las fases de intervalos.";
+                fmshow('modal-level-end', true);
+                return;
+            }
+
+            const pKey = `${fmState.instrument}_${fmState.currentLvlId}`;
             if (stars > (fmState.stats.guidedProgress[pKey] || 0)) { fmState.stats.guidedProgress[pKey] = stars; saveStats(); }
+
+            fmel('modal-title').innerText = "¡Nivel Completado!";
+            fmel('modal-desc').innerText = "Has dominado esta zona.";
             fmshow('modal-level-end', true);
         }
 
@@ -1496,45 +1626,223 @@
         }
         function hideFeedback() { fmhide('feedback-panel'); }
 
+        function scrollToCurrentQuestion() {
+            const q = fmState.currentQ;
+            if (!q) return;
+            let targetFret = q.fret;
+            if (fmState.mode === 'find' || fmState.mode === 'interval') {
+                if (q.targets && q.targets.length > 0) targetFret = q.targets[0].f;
+                if (fmState.mode === 'interval' && q.roots && q.roots.length > 0) targetFret = q.roots[0].f;
+            }
+            const fretEl = fmel(`fm-fret-col-${targetFret}`);
+            const scrollWrapper = fmel('fretboard-scroll-wrapper');
+            if (fretEl && scrollWrapper) {
+                const targetPos = fretEl.offsetLeft - (scrollWrapper.clientWidth / 2) + (fretEl.clientWidth / 2);
+                scrollWrapper.scrollTo({ left: targetPos, behavior: 'smooth' });
+            }
+        }
+
         function renderGameUI() {
             const q = fmState.currentQ;
             if (fmState.mode === 'identify') {
-                fmel('question-header').innerHTML = `<h2 class="text-xl font-bold">¿Qué nota es?</h2>`;
-                fmel('identify-options').innerHTML = q.options.map(note => `<button onclick="answerIdentify('${note}')" class="bg-slate-700 py-3 rounded-xl font-bold">${note}</button>`).join('');
+                fmel('question-header').innerHTML = `<h2 class="text-xl sm:text-2xl font-bold">¿Qué nota es la <span class="text-emerald-400">cuerda ${q.string + 1}</span> en el <span class="text-amber-400">traste ${q.fret}</span>?</h2>`;
+                fmel('identify-options').innerHTML = q.options.map(note => `<button onclick="answerIdentify('${note}')" class="bg-slate-700 hover:bg-slate-600 active:scale-95 transition-all py-3 rounded-xl font-bold shadow-md border border-slate-600">${note}</button>`).join('');
                 fmshow('identify-options', true);
-            } else {
-                fmel('question-header').innerHTML = `<h2 class="text-xl font-bold">Encuentra <span class="text-amber-400">${q.targetNote}</span></h2>`;
+            } else if (fmState.mode === 'interval') {
+                fmel('question-header').innerHTML = `<h2 class="text-lg sm:text-xl font-bold">Encuentra la <span class="text-blue-400">${INTERVAL_NAMES[q.intervalSemis]}</span> de <span class="text-amber-400">${q.targetNote}</span></h2>`;
                 fmshow('find-instruction');
+                fmel('find-instruction').innerText = "Busca TODAS las posiciones de ese intervalo.";
+            } else {
+                fmel('question-header').innerHTML = `<h2 class="text-xl sm:text-2xl font-bold">Encuentra <span class="text-amber-400">${q.targetNote}</span></h2>`;
+                fmshow('find-instruction');
+                fmel('find-instruction').innerText = "Debes tocar TODAS las ubicaciones de la nota.";
             }
             renderFMFretboard();
+            setTimeout(scrollToCurrentQuestion, 50);
         }
 
         function renderFMFretboard() {
             const instStrings = INSTRUMENTS[fmState.instrument].strings;
-            let boardLength = fmState.maxFret; if(fmState.isGuided) boardLength = GUIDED_LEVELS.find(l=>l.id===fmState.currentLvlId).maxF;
+            let boardLength = fmState.maxFret; 
+            if (fmState.isGuided) {
+                if (fmState.currentLvlId === 'nivelacion') boardLength = 12;
+                else boardLength = GUIDED_LEVELS.find(l=>l.id===fmState.currentLvlId).maxF;
+            }
             
-            fmel('fretboard').innerHTML = Array.from({length: boardLength + 1}).map((_, f) => {
-                let col = `<div class="flex-1 flex flex-col justify-around min-w-[60px] relative border-r border-slate-700/50">`;
+            let startFret = 0;
+            let endFret = 12;
+            if (boardLength > 12) {
+                startFret = 1;
+                endFret = 24;
+            }
+            
+            fmel('fretboard').innerHTML = Array.from({length: endFret - startFret + 1}).map((_, i) => {
+                let f = startFret + i;
+                // Generador visual del diapasón: Cejilla (0) y traste normal
+                let fretBg = '';
+                if (f === 0) fretBg = 'border-r-[6px] border-slate-300 bg-slate-800/80';
+                else fretBg = 'border-r-4 border-[#64748b] bg-transparent'; 
+
+                // Inlays (Marcadores)
+                let inlayHtml = '';
+                if ([3, 5, 7, 9, 15, 17, 19, 21].includes(f)) {
+                    inlayHtml = `<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-slate-200/20 pointer-events-none"></div>`;
+                } else if (f === 12 || f === 24) {
+                    inlayHtml = `<div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-slate-200/20 pointer-events-none"></div>
+                                 <div class="absolute top-2/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-slate-200/20 pointer-events-none"></div>`;
+                }
+
+                let col = `<div id="fm-fret-col-${f}" class="flex-1 flex flex-col justify-around min-w-[50px] sm:min-w-[65px] relative ${fretBg}">${inlayHtml}`;
+                
                 col += instStrings.map((_, s) => {
-                    const q = fmState.currentQ; const isTarget = q && q.targets.some(t => t.s === s && t.f === f);
-                    const isFound = q && q.found.some(t => t.s === s && t.f === f);
-                    let content = '';
-                    if (fmState.isStudyMode || isFound) content = getNoteAtParams(s, f, q?.useFlats);
-                    else if (fmState.mode === 'identify' && q.string === s && q.fret === f) content = '?';
+                    const q = fmState.currentQ; 
+                    const isTarget = q && q.targets && q.targets.some(t => t.s === s && t.f === f);
+                    const isFound = q && q.found && q.found.some(t => t.s === s && t.f === f);
+                    const isRoot = q && q.roots && q.roots.some(t => t.s === s && t.f === f);
                     
-                    const dotClass = content ? 'bg-amber-500 text-slate-900 scale-110 opacity-100' : 'opacity-0';
-                    return `<div onclick="answerFind(${s}, ${f})" class="h-10 flex items-center justify-center relative cursor-pointer">
-                        <div class="absolute w-full h-[1px] bg-slate-400"></div>
-                        <div class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs z-10 transition-all ${dotClass}">${content}</div>
+                    let content = '';
+                    let dotClass = 'opacity-0 hover:opacity-30 bg-slate-400';
+
+                    if (isRoot) {
+                        content = getNoteAtParams(s, f, q?.useFlats);
+                        dotClass = 'bg-blue-500 text-white scale-110 opacity-100 shadow-[0_0_10px_rgba(59,130,246,0.6)]';
+                    } else if (fmState.isStudyMode || isFound) {
+                        content = getNoteAtParams(s, f, q?.useFlats);
+                        dotClass = 'bg-amber-500 text-slate-900 scale-110 opacity-100 shadow-[0_0_10px_rgba(245,158,11,0.6)]';
+                    } else if (fmState.mode === 'identify' && q && q.string === s && q.fret === f) {
+                        content = '?';
+                        dotClass = 'bg-amber-500 text-slate-900 scale-110 opacity-100 shadow-[0_0_10px_rgba(245,158,11,0.6)] animate-pulse';
+                    }
+                    
+                    const thickness = 1 + (s * 0.4);
+                    return `<div onclick="answerFind(${s}, ${f})" class="h-8 sm:h-10 flex items-center justify-center relative cursor-pointer group">
+                        <div class="absolute w-full bg-slate-400/80 z-0 shadow-sm" style="height: ${thickness}px;"></div>
+                        <div class="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center font-bold text-[10px] sm:text-xs z-10 transition-all ${dotClass} ${!content && 'group-hover:opacity-30'}">${content}</div>
                     </div>`;
                 }).join('');
-                col += `<div class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] text-slate-500">${f}</div></div>`;
+                col += `<div class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] sm:text-xs text-slate-400 font-bold">${f}</div></div>`;
                 return col;
             }).join('');
         }
 
         function renderStatsHTML() {
-            fmel('stats-global-container').innerHTML = `<div class="bg-slate-800 p-6 rounded-2xl border border-slate-700"><h3 class="font-bold">Total respuestas: ${fmState.stats.totalAnswers}</h3></div>`;
+            // --- Global Summary ---
+            const total = fmState.stats.totalAnswers || 0;
+            const correct = fmState.stats.correctAnswers || 0;
+            const acc = total > 0 ? Math.round((correct / total) * 100) : 0;
+            let totalTimeSecs = 0;
+            if(fmState.stats.sessions) {
+                totalTimeSecs = fmState.stats.sessions.reduce((acc, s) => acc + s.duration, 0);
+            }
+            const hrs = Math.floor(totalTimeSecs / 3600);
+            const mins = Math.floor((totalTimeSecs % 3600) / 60);
+
+            fmel('stats-global-container').innerHTML = `
+                <div class="grid grid-cols-3 gap-2 sm:gap-4">
+                    <div class="bg-slate-800 p-3 sm:p-4 rounded-xl border border-slate-700 text-center shadow-lg">
+                        <div class="text-slate-400 text-[10px] sm:text-xs font-bold mb-1">PRECISIÓN GLOBAL</div>
+                        <div class="text-xl sm:text-2xl font-bold ${acc > 80 ? 'text-emerald-400' : (acc > 50 ? 'text-amber-400' : 'text-red-400')}">${acc}%</div>
+                    </div>
+                    <div class="bg-slate-800 p-3 sm:p-4 rounded-xl border border-slate-700 text-center shadow-lg">
+                        <div class="text-slate-400 text-[10px] sm:text-xs font-bold mb-1">RESPUESTAS</div>
+                        <div class="text-xl sm:text-2xl font-bold text-sky-400">${total}</div>
+                    </div>
+                    <div class="bg-slate-800 p-3 sm:p-4 rounded-xl border border-slate-700 text-center shadow-lg">
+                        <div class="text-slate-400 text-[10px] sm:text-xs font-bold mb-1">TIEMPO TOTAL</div>
+                        <div class="text-xl sm:text-2xl font-bold text-purple-400">${hrs}h ${mins}m</div>
+                    </div>
+                </div>
+            `;
+
+            // --- Heatmap ---
+            const instStrings = INSTRUMENTS[fmState.instrument].strings;
+            const maxF = 24; 
+            
+            let stringsHtml = '';
+            instStrings.forEach((strName) => {
+                stringsHtml += `<div class="h-6 sm:h-8 flex items-center justify-center text-[10px] sm:text-xs font-bold text-slate-400">${strName}</div>`;
+            });
+            fmel('heatmap-strings').innerHTML = stringsHtml;
+
+            let boardHtml = Array.from({length: maxF + 1}).map((_, f) => {
+                let fretBg = f === 0 ? 'border-r-[4px] border-slate-400 bg-slate-800/50' : 'border-r-2 border-[#64748b]';
+                
+                let inlayHtml = '';
+                if ([3, 5, 7, 9, 15, 17, 19, 21].includes(f)) inlayHtml = `<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-slate-200/10 pointer-events-none"></div>`;
+                else if (f === 12 || f === 24) inlayHtml = `<div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-slate-200/10 pointer-events-none"></div><div class="absolute top-2/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-slate-200/10 pointer-events-none"></div>`;
+
+                let col = `<div class="flex-1 flex flex-col justify-around min-w-[25px] sm:min-w-[35px] relative ${fretBg}">${inlayHtml}`;
+                
+                col += instStrings.map((_, s) => {
+                    const posKey = `${fmState.instrument}_${s}_${f}`;
+                    const posData = fmState.stats.posHistory ? fmState.stats.posHistory[posKey] : null;
+                    let dotClass = 'opacity-0';
+                    let tooltip = '';
+                    
+                    if (posData && (posData.correct > 0 || posData.wrong > 0)) {
+                        const pTotal = posData.correct + posData.wrong;
+                        const pAcc = posData.correct / pTotal;
+                        
+                        if (pAcc >= 0.8) dotClass = 'bg-emerald-500 opacity-80 shadow-[0_0_8px_rgba(16,185,129,0.5)]';
+                        else if (pAcc >= 0.5) dotClass = 'bg-amber-500 opacity-80 shadow-[0_0_8px_rgba(245,158,11,0.5)]';
+                        else dotClass = 'bg-red-500 opacity-90 scale-110 shadow-[0_0_8px_rgba(239,68,68,0.8)] z-10';
+                        
+                        tooltip = `Traste ${f}: ${Math.round(pAcc*100)}% (${posData.correct}/${pTotal})`;
+                    }
+                    
+                    return `<div class="h-6 sm:h-8 flex items-center justify-center relative group" title="${tooltip}">
+                        <div class="absolute w-full h-[1px] bg-slate-500/50 z-0"></div>
+                        <div class="w-3 h-3 sm:w-4 sm:h-4 rounded-full z-10 transition-all ${dotClass}"></div>
+                    </div>`;
+                }).join('');
+                col += `<div class="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[8px] sm:text-[10px] font-bold text-slate-500">${f}</div></div>`;
+                return col;
+            }).join('');
+            
+            fmel('heatmap-board').innerHTML = boardHtml;
+
+            // --- Sessions List ---
+            const sessionsContainer = fmel('stats-lists-container');
+            if (!fmState.stats.sessions || fmState.stats.sessions.length === 0) {
+                sessionsContainer.innerHTML = '<div class="text-center text-slate-500 py-8 bg-slate-800 rounded-xl border border-slate-700 shadow-inner">No hay historial de sesiones todavía. Empieza a jugar para registrar tu progreso.</div>';
+            } else {
+                let sHtml = '<h3 class="font-bold text-lg text-white mb-4 flex items-center"><i data-lucide="history" class="w-5 h-5 mr-2 text-sky-400"></i> Historial de Sesiones</h3><div class="space-y-3">';
+                fmState.stats.sessions.forEach(s => {
+                    const d = new Date(s.date);
+                    const dateStr = d.toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' });
+                    const timeStr = d.toLocaleTimeString('es-ES', { hour: '2-digit', minute:'2-digit' });
+                    const m = Math.floor(s.duration / 60).toString().padStart(2, '0'); 
+                    const sec = (s.duration % 60).toString().padStart(2, '0');
+                    const sAcc = s.total > 0 ? Math.round((s.correct / s.total) * 100) : 0;
+                    
+                    sHtml += `
+                    <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-md hover:border-slate-500 transition-colors">
+                        <div>
+                            <div class="font-bold text-white text-sm md:text-base">${s.title}</div>
+                            <div class="text-[10px] md:text-xs text-slate-400 mt-1 flex items-center"><i data-lucide="calendar" class="w-3 h-3 mr-1"></i> ${dateStr} a las ${timeStr}</div>
+                        </div>
+                        <div class="flex items-center gap-3 sm:gap-6 bg-slate-900/80 p-2 sm:p-3 rounded-lg border border-slate-700/50">
+                            <div class="text-center">
+                                <div class="text-[9px] sm:text-[10px] text-slate-500 font-bold mb-0.5">TIEMPO</div>
+                                <div class="text-xs sm:text-sm font-mono text-purple-300 font-medium">${m}:${sec}</div>
+                            </div>
+                            <div class="w-px h-6 bg-slate-700"></div>
+                            <div class="text-center">
+                                <div class="text-[9px] sm:text-[10px] text-slate-500 font-bold mb-0.5">ACIERTOS</div>
+                                <div class="text-xs sm:text-sm font-mono text-sky-300 font-medium">${s.correct}/${s.total}</div>
+                            </div>
+                            <div class="w-px h-6 bg-slate-700"></div>
+                            <div class="text-center">
+                                <div class="text-[9px] sm:text-[10px] text-slate-500 font-bold mb-0.5">PRECISIÓN</div>
+                                <div class="text-sm sm:text-base font-bold ${sAcc >= 80 ? 'text-emerald-400' : (sAcc >= 50 ? 'text-amber-400' : 'text-red-400')}">${sAcc}%</div>
+                            </div>
+                        </div>
+                    </div>`;
+                });
+                sHtml += '</div>';
+                sessionsContainer.innerHTML = sHtml;
+                if (window.lucide) lucide.createIcons();
+            }
         }
 
         window.onload = () => {
