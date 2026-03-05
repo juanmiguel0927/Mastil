@@ -134,6 +134,16 @@
                         <option value="virtuoso" class="text-amber-500 font-bold">6. Maestro Virtuoso (55 BPM)</option>
                         <option value="scales" class="text-purple-400 font-bold">7. Velocidad en Escalas Reales (60 BPM)</option>
                     </select>
+
+                    <!-- Lista exclusiva de Favoritos -->
+                    <div class="flex items-center gap-2 mb-2 mt-4 border-t border-slate-700/50 pt-4">
+                        <i data-lucide="star" class="w-4 h-4 text-sky-400"></i>
+                        <h3 class="text-slate-200 font-bold text-sm tracking-wide">Mis Favoritos Guardados</h3>
+                    </div>
+                    <select id="favorites-selector" onchange="loadFavoriteRoutine(this.value)" class="w-full bg-slate-700 text-sky-400 font-medium text-sm rounded-lg border border-slate-600 focus:ring-sky-500 focus:border-sky-500 p-2.5 outline-none cursor-pointer">
+                        <option value="" class="text-slate-400">-- Aún no tienes favoritos --</option>
+                    </select>
+
                     <!-- Temporizador -->
                     <div id="routine-timer-container" class="hidden justify-between items-center mt-3 bg-amber-500/10 p-3 rounded-xl border border-amber-500/30">
                         <div class="flex items-center gap-2">
@@ -546,7 +556,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="w-full max-w-md mt-2 sm:mt-6 h-[120px] flex items-center justify-center px-4 relative z-40">
+                    <div class="w-full max-w-md mt-2 sm:mt-6 min-h-[120px] flex flex-col items-center justify-center px-4 relative z-40 gap-2">
                         <div id="feedback-panel" class="hidden absolute inset-0 z-50 text-center p-3 sm:p-4 rounded-xl w-full border slide-up shadow-lg flex flex-col items-center justify-center backdrop-blur bg-opacity-95">
                             <h3 id="feedback-text" class="text-lg sm:text-xl font-bold"></h3>
                             <p id="feedback-subtext" class="text-sm mt-1 opacity-80 hidden"></p>
@@ -556,15 +566,20 @@
                             Debes tocar todas las ubicaciones de la nota.
                         </div>
                         <div id="instruction-panel" class="hidden flex-col items-center text-slate-300 text-xs sm:text-sm bg-slate-800 p-3 sm:p-4 rounded-xl border border-slate-700 w-full relative z-10 transition-colors duration-300 shadow-lg">
-                            <div class="flex w-full justify-between items-center mb-1 border-b border-slate-700 pb-1">
-                                <span id="instruction-title" class="font-bold text-emerald-400">Ayuda</span>
-                                <button onclick="toggleHint()" class="p-1 hover:bg-slate-700 rounded transition-colors" title="Mostrar/Ocultar Pista">
-                                    <i id="hint-icon" data-lucide="eye" class="w-4 h-4 text-slate-400 hover:text-white"></i>
-                                </button>
+                            <div class="flex w-full justify-between items-center mb-1 border-b border-slate-700 pb-2">
+                                <span id="instruction-title" class="font-bold text-emerald-400 flex items-center gap-1.5"><i data-lucide="map" class="w-4 h-4"></i> Pista de Geometría</span>
+                                <div class="flex items-center gap-3">
+                                    <label class="flex items-center gap-1.5 cursor-pointer group" title="Mostrar pista automáticamente en cada pregunta">
+                                        <input type="checkbox" id="always-hint-checkbox" onchange="toggleAlwaysHint()" class="w-3.5 h-3.5 rounded bg-slate-900 border-slate-600 text-emerald-500 focus:ring-emerald-500">
+                                        <span class="text-[10px] sm:text-xs text-slate-400 group-hover:text-slate-200 transition-colors">Siempre ver</span>
+                                    </label>
+                                    <button onclick="toggleHint()" class="p-1.5 hover:bg-slate-700 rounded-lg transition-colors bg-slate-900 border border-slate-600" title="Mostrar/Ocultar Pista">
+                                        <i id="hint-icon" data-lucide="eye" class="w-4 h-4 text-emerald-400"></i>
+                                    </button>
+                                </div>
                             </div>
-                            <div id="hint-content" class="w-full text-center mt-1">
-                                <div id="instruction-text" class="whitespace-pre-wrap"></div>
-                                <div class="mt-2 text-[10px] text-slate-500 pt-1 border-t border-slate-700/50">C = Cuerda</div>
+                            <div id="hint-content" class="w-full text-center mt-2">
+                                <div id="instruction-text" class="whitespace-pre-wrap font-medium text-slate-200"></div>
                             </div>
                         </div>
                     </div>
@@ -776,27 +791,28 @@
             const name = prompt("Dale un nombre a este ejercicio favorito:", "Mi Ejercicio");
             if (!name) return;
             const favs = JSON.parse(localStorage.getItem('jmr_favorites') || '[]');
-            favs.push({ name: name, combo: currentComboArr, frets: currentFretsArr, strings: currentStringsArr, globalString: currentStringGlobal, baseFret: currentBaseFret, rightHandTech: rightHandTech });
+            favs.push({ name: name, combo: [...currentComboArr], frets: [...currentFretsArr], strings: [...currentStringsArr], globalString: currentStringGlobal, baseFret: currentBaseFret, rightHandTech: rightHandTech });
             localStorage.setItem('jmr_favorites', JSON.stringify(favs));
             loadFavoritesToSelect();
             showToastGlobal("¡Ejercicio guardado en favoritos!", "success");
         }
 
         function loadFavoritesToSelect() {
-            const selector = document.getElementById('workout-selector');
-            const existingOptGroup = document.getElementById('fav-optgroup');
-            if (existingOptGroup) existingOptGroup.remove();
+            const selector = document.getElementById('favorites-selector');
+            if (!selector) return;
 
             const favs = JSON.parse(localStorage.getItem('jmr_favorites') || '[]');
             if (favs.length > 0) {
-                const optGroup = document.createElement('optgroup');
-                optGroup.id = 'fav-optgroup'; optGroup.label = '⭐ Mis Favoritos'; optGroup.className = 'text-sky-300 font-bold';
+                selector.innerHTML = '<option value="" class="text-slate-400">-- Selecciona un favorito --</option>';
                 favs.forEach((fav, index) => {
                     const opt = document.createElement('option');
-                    opt.value = `fav_${index}`; opt.className = 'text-sky-200'; opt.innerText = `⭐ ${fav.name}`;
-                    optGroup.appendChild(opt);
+                    opt.value = `fav_${index}`; 
+                    opt.className = 'text-sky-300 font-bold'; 
+                    opt.innerText = `⭐ ${fav.name}`;
+                    selector.appendChild(opt);
                 });
-                selector.appendChild(optGroup);
+            } else {
+                selector.innerHTML = '<option value="" class="text-slate-400">-- Aún no tienes favoritos --</option>';
             }
         }
 
@@ -922,6 +938,14 @@
         }
 
         function manualGenerate() {
+            document.getElementById('workout-selector').value = "";
+            const favSelector = document.getElementById('favorites-selector');
+            if (favSelector) favSelector.value = "";
+            
+            const timerContainer = document.getElementById('routine-timer-container');
+            if (timerContainer) { timerContainer.classList.add('hidden'); timerContainer.classList.remove('flex'); }
+            routineTimeRemaining = null;
+            
             if (isMetronomeOn) { currentTick = 0; currentMeasureCount = 1; schedMeasureCount = 1; currentNoteIndex = 0; visualQueue = []; isTransitioning = false; }
             currentBaseFret = parseInt(document.getElementById('base-fret-input').value) || 1;
             nextBaseFret = currentBaseFret + (isFretShiftOn ? 1 : 0);
@@ -1188,24 +1212,44 @@
             }
         }
 
+        function loadFavoriteRoutine(type) {
+            if (!type) return;
+            document.getElementById('workout-selector').value = ""; // Deselecciona la rutina rápida
+            
+            const timerContainer = document.getElementById('routine-timer-container');
+            const idx = parseInt(type.split('_')[1]);
+            const favs = JSON.parse(localStorage.getItem('jmr_favorites') || '[]');
+            const fav = favs[idx];
+            
+            if (fav) {
+                routineTimeRemaining = null; 
+                if (timerContainer) {
+                    timerContainer.classList.add('hidden'); 
+                    timerContainer.classList.remove('flex');
+                }
+                
+                currentComboArr = [...fav.combo]; currentFretsArr = [...fav.frets]; currentStringsArr = [...fav.strings]; currentStringGlobal = fav.globalString; currentBaseFret = fav.baseFret;
+                document.getElementById('right-hand-tech').value = fav.rightHandTech || 'normal'; comboLength = fav.combo.length;
+                document.getElementById('base-fret-input').value = currentBaseFret;
+                
+                // Desactivar el generador automático para no perder el favorito
+                document.getElementById('auto-play').checked = false; isAutoMode = false;
+                document.getElementById('auto-measures-container').classList.add('opacity-40', 'pointer-events-none');
+                document.getElementById('next-combo-preview').classList.add('hidden'); document.getElementById('next-combo-preview').classList.remove('flex');
+                
+                const nextData = createSingleComboData();
+                nextComboArr = nextData.combo; nextFretsArr = nextData.frets; nextStringsArr = nextData.strings; nextStringGlobal = nextData.globalString;
+                changeTech(); 
+            }
+        }
+
         function loadWorkout(type) {
+            const favSelector = document.getElementById('favorites-selector');
+            if (favSelector) favSelector.value = ""; // Deselecciona el favorito
+            
             const timerContainer = document.getElementById('routine-timer-container');
             const timerText = document.getElementById('routine-timer-text');
             if (!type) { routineTimeRemaining = null; timerContainer.classList.add('hidden'); timerContainer.classList.remove('flex'); return; }
-
-            if (type.startsWith('fav_')) {
-                const idx = parseInt(type.split('_')[1]);
-                const favs = JSON.parse(localStorage.getItem('jmr_favorites') || '[]');
-                const fav = favs[idx];
-                if (fav) {
-                    routineTimeRemaining = null; timerContainer.classList.add('hidden'); timerContainer.classList.remove('flex');
-                    currentComboArr = fav.combo; currentFretsArr = fav.frets; currentStringsArr = fav.strings; currentStringGlobal = fav.globalString; currentBaseFret = fav.baseFret;
-                    document.getElementById('right-hand-tech').value = fav.rightHandTech || 'normal'; comboLength = fav.combo.length;
-                    const nextData = createSingleComboData();
-                    nextComboArr = nextData.combo; nextFretsArr = nextData.frets; nextStringsArr = nextData.strings; nextStringGlobal = nextData.globalString;
-                    changeTech(); updateBaseFret(); return;
-                }
-            }
 
             document.getElementById('hard-mode').checked = false; document.getElementById('string-skip').checked = false; document.getElementById('linked-23').checked = false; document.getElementById('auto-play').checked = false; document.getElementById('auto-subdiv').checked = false; document.getElementById('fret-shift').checked = false; document.getElementById('subdivision-sound').checked = false; document.getElementById('scales-mode').checked = false; document.getElementById('right-hand-tech').value = 'normal';
 
@@ -1222,7 +1266,18 @@
             toggleMode(); toggleAutoPlay(); toggleAutoSubdiv(); toggleFretShift(); toggleSubdivisionSound();
         }
 
-        function updateBaseFret() { const val = parseInt(document.getElementById('base-fret-input').value); if (val > 0 && val < 20) { currentBaseFret = val; manualGenerate(); } }
+        function updateBaseFret() { 
+            const val = parseInt(document.getElementById('base-fret-input').value); 
+            if (val > 0 && val < 20) { 
+                currentBaseFret = val; 
+                const favVal = document.getElementById('favorites-selector') ? document.getElementById('favorites-selector').value : "";
+                if (favVal && favVal.startsWith('fav_')) {
+                    applyRenderView(false);
+                } else {
+                    manualGenerate(); 
+                }
+            } 
+        }
         function toggleFretShift() { isFretShiftOn = document.getElementById('fret-shift').checked; manualGenerate(); }
         function updateBPM(val) { bpm = val; document.getElementById('bpm-display').innerText = val; document.getElementById('bpm-slider').value = val; if (val > maxBpmSession) maxBpmSession = val; updateStatsDisplay(); }
         function updateVolume(val) { metronomeVolume = val / 100; document.getElementById('vol-display').innerText = `${val}%`; }
@@ -1315,8 +1370,8 @@
         let fmState = {
             instrument: 'guitar', handedness: 'right', wood: 'rosewood', maxFret: 5, timeLimit: 0, mode: 'identify', score: 0, streak: 0, 
             isGuided: false, currentLvlId: null, guidedLives: 3, guidedCorrect: 0, guidedTotal: 0, isStudyMode: false, 
-            currentQ: null, lastQSignature: null, pendingRetry: null, timer: null, timeLeft: 0, isFeedbackMode: false, isHintVisible: true, 
-            sessionStartTime: 0, sessionCorrect: 0, sessionTotal: 0,
+            currentQ: null, lastQSignature: null, pendingRetry: null, timer: null, timeLeft: 0, isFeedbackMode: false, isHintVisible: false, alwaysShowHint: false,
+            sessionStartTime: 0, sessionCorrect: 0, sessionTotal: 0, revealAnswer: false,
             stats: { totalAnswers: 0, correctAnswers: 0, noteHistory: {}, posHistory: {}, guidedProgress: {}, sessions: [] }
         };
 
@@ -1402,11 +1457,28 @@
         window.setMaxFret = (v) => { fmState.maxFret = v; renderMenuSelectors(); };
         window.setTimeLimit = (v) => { fmState.timeLimit = v; renderMenuSelectors(); };
         window.toggleHint = () => { fmState.isHintVisible = !fmState.isHintVisible; updateHintVisibility(); };
+        window.toggleAlwaysHint = () => { 
+            const cb = fmel('always-hint-checkbox'); 
+            if (cb) { 
+                fmState.alwaysShowHint = cb.checked; 
+                if (fmState.alwaysShowHint) fmState.isHintVisible = true; 
+                updateHintVisibility(); 
+            } 
+        };
 
         function updateHintVisibility() {
             const content = fmel('hint-content'); const icon = fmel('hint-icon');
-            if (fmState.isHintVisible) { content.classList.remove('hidden'); icon.innerHTML = '<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>'; icon.classList.replace('text-slate-500', 'text-white'); } 
-            else { content.classList.add('hidden'); icon.innerHTML = '<path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/>'; icon.classList.replace('text-white', 'text-slate-500'); }
+            if (fmState.isHintVisible) { 
+                content.classList.remove('hidden'); 
+                icon.setAttribute('data-lucide', 'eye');
+                icon.classList.remove('text-slate-500');
+                icon.classList.add('text-emerald-400');
+            } else { 
+                content.classList.add('hidden'); 
+                icon.setAttribute('data-lucide', 'eye-off');
+                icon.classList.remove('text-emerald-400');
+                icon.classList.add('text-slate-500');
+            }
             lucide.createIcons();
         }
 
@@ -1447,6 +1519,7 @@
             fmState.isGuided = true; fmState.isStudyMode = true; fmState.currentLvlId = id; fmState.mode = lvl.mode; fmState.guidedLives = 3; fmState.guidedCorrect = 0; fmState.guidedTotal = lvl.total; fmState.timeLimit = lvl.time;
             initFMAudio(); setupGameScreen(); 
             fmel('study-panel-hint').innerHTML = "Observa el mástil. Las notas se muestran para que las memorices antes de empezar.";
+            fmshow('study-panel', true);
             fmState.currentQ = null; renderGameUI();
         };
 
@@ -1458,6 +1531,8 @@
             fmState.sessionStartTime = Date.now();
             fmState.sessionCorrect = 0;
             fmState.sessionTotal = 0;
+            fmState.isHintVisible = fmState.alwaysShowHint;
+            if(fmel('always-hint-checkbox')) fmel('always-hint-checkbox').checked = fmState.alwaysShowHint;
             if(fmState.isGuided) { fmhide('free-stats'); fmshow('guided-progress'); fmshow('guided-lives', true); renderLives(); updateProgressUI(); } 
             else { fmshow('free-stats', true); fmhide('guided-progress'); fmhide('guided-lives'); fmel('streak-text').innerText = '0'; fmel('total-q-text').innerText = 'Total: 0'; }
             const fContainer = fmel('fretboard-container');
@@ -1470,7 +1545,8 @@
         function getNoteAtParams(strIdx, fretNum, useFlats) { const arr = useFlats ? NOTES_FLAT : NOTES_SHARP; const noteIndex = (INSTRUMENTS[fmState.instrument].offsets[strIdx] + fretNum) % 12; return arr[noteIndex]; }
 
         function nextQuestion() {
-            fmState.isFeedbackMode = false; hideFeedback();
+            fmState.isFeedbackMode = false; hideFeedback(); fmState.revealAnswer = false;
+            fmState.isHintVisible = fmState.alwaysShowHint; // Resetea la vista a la preferencia en cada pregunta
             const instLen = INSTRUMENTS[fmState.instrument].strings.length; const isFlatsRound = Math.random() > 0.5;
             let q = { found: [], targets: [], roots: [] };
             
@@ -1488,38 +1564,66 @@
 
             const validPos = [];
             validStr.forEach(s => { for (let f = minF; f <= maxF; f++) { validPos.push({ string: s, fret: f }); } });
-            const basePos = validPos[Math.floor(Math.random() * validPos.length)];
             
-            q.string = basePos.string; q.fret = basePos.fret; q.targetNote = getNoteAtParams(q.string, q.fret, isFlatsRound); q.useFlats = isFlatsRound;
+            let targetFound = false;
+            let maxAttempts = 200; // Evita bloqueos si la configuración manual hace imposible encontrar un intervalo
             
-            if (fmState.mode === 'identify') {
-                q.targets = [{s: q.string, f: q.fret}]; let opts = [q.targetNote]; const pool = isFlatsRound ? NOTES_FLAT : NOTES_SHARP;
-                while (opts.length < 4) { const r = pool[Math.floor(Math.random() * pool.length)]; if (!opts.includes(r)) opts.push(r); }
-                opts.sort(() => Math.random() - 0.5); q.options = opts;
-            } else if (fmState.mode === 'find') {
-                for(let ts of validStr) { for(let tf=minF; tf<=maxF; tf++) { if (getNoteAtParams(ts, tf, isFlatsRound) === q.targetNote) { q.targets.push({s: ts, f: tf}); } } }
-            } else if (fmState.mode === 'interval') {
-                q.roots = [{s: q.string, f: q.fret}];
-                let semis = 0;
-                if (fmState.isGuided) {
-                    const lvl = GUIDED_LEVELS.find(l => l.id === fmState.currentLvlId);
-                    semis = lvl.intervalSemis;
-                } else {
-                    semis = Math.floor(Math.random() * 12) + 1;
-                }
-                q.intervalSemis = semis;
-                const rootAbs = INSTRUMENTS[fmState.instrument].offsets[q.string] + q.fret;
-                const targetAbs = rootAbs + semis;
-                const targetNoteStr = (isFlatsRound ? NOTES_FLAT : NOTES_SHARP)[targetAbs % 12];
-                q.targetNoteName = targetNoteStr;
+            while (!targetFound && maxAttempts > 0) {
+                maxAttempts--;
+                q = { found: [], targets: [], roots: [] };
+                const basePos = validPos[Math.floor(Math.random() * validPos.length)];
+                
+                q.string = basePos.string; q.fret = basePos.fret; q.targetNote = getNoteAtParams(q.string, q.fret, isFlatsRound); q.useFlats = isFlatsRound;
+                
+                if (fmState.mode === 'identify') {
+                    q.targets = [{s: q.string, f: q.fret}]; let opts = [q.targetNote]; const pool = isFlatsRound ? NOTES_FLAT : NOTES_SHARP;
+                    while (opts.length < 4) { const r = pool[Math.floor(Math.random() * pool.length)]; if (!opts.includes(r)) opts.push(r); }
+                    opts.sort(() => Math.random() - 0.5); q.options = opts;
+                    targetFound = true;
+                } else if (fmState.mode === 'find') {
+                    for(let ts of validStr) { for(let tf=minF; tf<=maxF; tf++) { if (getNoteAtParams(ts, tf, isFlatsRound) === q.targetNote) { q.targets.push({s: ts, f: tf}); } } }
+                    targetFound = q.targets.length > 0;
+                } else if (fmState.mode === 'interval') {
+                    q.roots = [{s: q.string, f: q.fret}];
+                    let semis = 0;
+                    if (fmState.isGuided) {
+                        const lvl = GUIDED_LEVELS.find(l => l.id === fmState.currentLvlId);
+                        semis = lvl.intervalSemis;
+                    } else {
+                        semis = Math.floor(Math.random() * 12) + 1;
+                    }
+                    
+                    // Definir dirección aleatoria (1 para ascendente, -1 para descendente)
+                    let direction = 1;
+                    if (semis !== 0) direction = Math.random() > 0.5 ? 1 : -1;
+                    
+                    q.intervalSemis = semis;
+                    q.direction = direction;
+                    
+                    // Cálculo de PITCH ABSOLUTO para exigir el intervalo exacto (no cualquier octava)
+                    const rootAbs = INSTRUMENTS[fmState.instrument].offsets[q.string] + q.fret;
+                    const targetAbs = rootAbs + (semis * direction);
+                    
+                    // Evitar números negativos en el módulo 12
+                    const targetNoteStr = (isFlatsRound ? NOTES_FLAT : NOTES_SHARP)[((targetAbs % 12) + 12) % 12];
+                    q.targetNoteName = targetNoteStr;
 
-                for(let ts of validStr) {
-                    for(let tf = minF; tf <= maxF; tf++) {
-                        if (getNoteAtParams(ts, tf, isFlatsRound) === targetNoteStr) {
-                            q.targets.push({s: ts, f: tf});
+                    for(let ts of validStr) {
+                        for(let tf = minF; tf <= maxF; tf++) {
+                            const checkAbs = INSTRUMENTS[fmState.instrument].offsets[ts] + tf;
+                            if (checkAbs === targetAbs) { // Solo permite notas con la altura tonal exacta
+                                q.targets.push({s: ts, f: tf});
+                            }
                         }
                     }
+                    targetFound = q.targets.length > 0;
                 }
+            }
+            
+            // Red de seguridad si la geometría del intervalo no cabe en el rango escogido por el usuario
+            if (!targetFound) {
+                q.targets = [q.roots[0] || {s: q.string, f: q.fret}];
+                if (fmState.mode === 'interval') { q.intervalSemis = 0; q.direction = 1; }
             }
 
             fmState.currentQ = q; renderGameUI(); startTimer();
@@ -1572,11 +1676,31 @@
             if (isCorrectHit && fmState.mode !== 'identify') {
                 const alreadyFound = q.found.some(t => t.s === ans.string && t.f === ans.fret); if (alreadyFound) return; 
                 q.found.push({s: ans.string, f: ans.fret}); playNote(ans.string, ans.fret);
+                renderFMFretboard(); // Actualizar inmediatamente para pintar la nota encontrada
             }
 
             const isFullyFinished = isTimeout || !isCorrectHit || (fmState.mode === 'identify' ? isCorrectHit : q.found.length === q.targets.length);
             if (isFullyFinished) {
                 fmState.isFeedbackMode = true; clearInterval(fmState.timer);
+                fmState.revealAnswer = true;
+                renderFMFretboard(); // Re-renderizar para revelar respuestas o notas faltantes
+
+                // Resaltar botones de opción en modo identificar
+                if (fmState.mode === 'identify' && !isTimeout && ans.type === 'identify') {
+                    const btns = fmel('identify-options').querySelectorAll('button');
+                    btns.forEach(b => {
+                        if (b.innerText === q.targetNote) {
+                            b.classList.replace('bg-slate-700', 'bg-emerald-600');
+                            b.classList.replace('hover:bg-slate-600', 'hover:bg-emerald-500');
+                            b.classList.add('scale-105', 'shadow-[0_0_15px_rgba(16,185,129,0.5)]', 'text-white');
+                        } else if (b.innerText === ans.val && !isCorrectHit) {
+                            b.classList.replace('bg-slate-700', 'bg-red-600');
+                            b.classList.replace('hover:bg-slate-600', 'hover:bg-red-500');
+                            b.classList.add('text-white');
+                        }
+                    });
+                }
+
                 if (fmState.isGuided) {
                     if (isCorrectHit) { fmState.guidedCorrect++; updateProgressUI(); } 
                     else fmState.guidedLives--; renderLives();
@@ -1642,23 +1766,93 @@
             }
         }
 
+        function getIntervalHintText(semis, direction, startStringIdx, startFret) {
+            if (semis === 0) return "Ruta: Misma cuerda ➔ Mismo traste";
+
+            const isGuitar = fmState.instrument === 'guitar';
+            const strNames = isGuitar ? 
+                ['1ra Cuerda (E aguda)', '2da Cuerda (B)', '3ra Cuerda (G)', '4ta Cuerda (D)', '5ta Cuerda (A)', '6ta Cuerda (E grave)'] : 
+                ['1ra Cuerda (G)', '2da Cuerda (D)', '3ra Cuerda (A)', '4ta Cuerda (E grave)'];
+
+            const startAbs = INSTRUMENTS[fmState.instrument].offsets[startStringIdx] + startFret;
+            const targetAbs = startAbs + (semis * direction);
+
+            let bestTarget = null;
+            let minScore = 9999;
+
+            // Buscar la cuerda óptima que no requiera un traste negativo
+            for (let s = 0; s < strNames.length; s++) {
+                let f = targetAbs - INSTRUMENTS[fmState.instrument].offsets[s];
+                if (f >= 0 && f <= 24) { 
+                    let fretDist = Math.abs(f - startFret);
+                    let strDist = Math.abs(s - startStringIdx);
+                    // Puntuación: prioriza la menor distancia de trastes, desempata con menor salto de cuerdas
+                    let score = (fretDist * 10) + strDist; 
+                    if (score < minScore) {
+                        minScore = score;
+                        bestTarget = { s: s, f: f };
+                    }
+                }
+            }
+
+            // Fallback por seguridad
+            if (!bestTarget) bestTarget = { s: startStringIdx, f: startFret + (semis * direction) };
+
+            const targetStringIdx = bestTarget.s;
+            const targetFret = bestTarget.f;
+            const fretDiff = targetFret - startFret;
+            const strCross = Math.abs(startStringIdx - targetStringIdx);
+
+            const startName = strNames[startStringIdx];
+            const targetName = strNames[targetStringIdx];
+
+            let dirWord = direction === 1 ? "Ascendente" : "Descendente";
+            let moveText = "";
+            
+            if (strCross === 0) {
+                moveText = `Mantente en la ${startName}`;
+            } else {
+                let jumpDir = targetStringIdx < startStringIdx ? "hacia abajo (suelo)" : "hacia arriba (techo)";
+                moveText = `Ve a la ${targetName}\n   (${strCross} cuerda(s) ${jumpDir})`;
+            }
+
+            let fretText = fretDiff === 0 ? "Mismo traste" : (fretDiff > 0 ? `Avanza +${fretDiff} traste(s)` : `Retrocede ${Math.abs(fretDiff)} traste(s)`);
+            
+            return `📍 Ruta Exacta ${dirWord}:\n1. ${moveText}\n2. Desplazamiento: ${fretText} (al traste ${targetFret})`;
+        }
+
         function renderGameUI() {
             const q = fmState.currentQ;
-            if (fmState.mode === 'identify') {
+            if (!q) {
+                fmel('question-header').innerHTML = `<h2 class="text-xl sm:text-2xl font-bold text-blue-400">Fase de Estudio</h2>`;
+                fmhide('identify-options');
+                fmhide('find-instruction');
+                fmhide('instruction-panel');
+            } else if (fmState.mode === 'identify') {
                 fmel('question-header').innerHTML = `<h2 class="text-xl sm:text-2xl font-bold">¿Qué nota es la <span class="text-emerald-400">cuerda ${q.string + 1}</span> en el <span class="text-amber-400">traste ${q.fret}</span>?</h2>`;
                 fmel('identify-options').innerHTML = q.options.map(note => `<button onclick="answerIdentify('${note}')" class="bg-slate-700 hover:bg-slate-600 active:scale-95 transition-all py-3 rounded-xl font-bold shadow-md border border-slate-600">${note}</button>`).join('');
                 fmshow('identify-options', true);
+                fmhide('find-instruction');
+                fmhide('instruction-panel');
             } else if (fmState.mode === 'interval') {
-                fmel('question-header').innerHTML = `<h2 class="text-lg sm:text-xl font-bold">Encuentra la <span class="text-blue-400">${INTERVAL_NAMES[q.intervalSemis]}</span> de <span class="text-amber-400">${q.targetNote}</span></h2>`;
-                fmshow('find-instruction');
-                fmel('find-instruction').innerText = "Busca TODAS las posiciones de ese intervalo.";
+                let dirText = "";
+                if (q.intervalSemis !== 0) dirText = q.direction === 1 ? " Ascendente" : " Descendente";
+                fmel('question-header').innerHTML = `<h2 class="text-lg sm:text-xl font-bold">Encuentra la <span class="text-blue-400">${INTERVAL_NAMES[q.intervalSemis]}${dirText}</span> de <span class="text-amber-400">${q.targetNote}</span></h2>`;
+                fmhide('identify-options');
+                fmhide('find-instruction');
+                fmshow('instruction-panel', true);
+                fmel('instruction-text').innerText = getIntervalHintText(q.intervalSemis, q.direction, q.string, q.fret);
+                updateHintVisibility();
             } else {
                 fmel('question-header').innerHTML = `<h2 class="text-xl sm:text-2xl font-bold">Encuentra <span class="text-amber-400">${q.targetNote}</span></h2>`;
+                fmhide('identify-options');
                 fmshow('find-instruction');
                 fmel('find-instruction').innerText = "Debes tocar TODAS las ubicaciones de la nota.";
+                fmhide('instruction-panel');
             }
             renderFMFretboard();
             setTimeout(scrollToCurrentQuestion, 50);
+            if (window.lucide) lucide.createIcons();
         }
 
         function renderFMFretboard() {
@@ -1706,12 +1900,26 @@
                     if (isRoot) {
                         content = getNoteAtParams(s, f, q?.useFlats);
                         dotClass = 'bg-blue-500 text-white scale-110 opacity-100 shadow-[0_0_10px_rgba(59,130,246,0.6)]';
-                    } else if (fmState.isStudyMode || isFound) {
+                    } else if (fmState.isStudyMode) {
                         content = getNoteAtParams(s, f, q?.useFlats);
                         dotClass = 'bg-amber-500 text-slate-900 scale-110 opacity-100 shadow-[0_0_10px_rgba(245,158,11,0.6)]';
+                    } else if (isFound) {
+                        content = getNoteAtParams(s, f, q?.useFlats);
+                        dotClass = 'bg-emerald-500 text-slate-900 scale-110 opacity-100 shadow-[0_0_10px_rgba(16,185,129,0.6)] font-extrabold'; // Marca verde las notas encontradas
                     } else if (fmState.mode === 'identify' && q && q.string === s && q.fret === f) {
-                        content = '?';
-                        dotClass = 'bg-amber-500 text-slate-900 scale-110 opacity-100 shadow-[0_0_10px_rgba(245,158,11,0.6)] animate-pulse';
+                        if (fmState.revealAnswer) {
+                            content = getNoteAtParams(s, f, q?.useFlats);
+                            dotClass = 'bg-emerald-500 text-slate-900 scale-125 opacity-100 shadow-[0_0_15px_rgba(16,185,129,0.8)] transition-all duration-300 font-extrabold';
+                        } else {
+                            content = '?';
+                            dotClass = 'bg-amber-500 text-slate-900 scale-110 opacity-100 shadow-[0_0_10px_rgba(245,158,11,0.6)] animate-pulse';
+                        }
+                    }
+                    
+                    // Mostrar las notas que faltaron en rojo si se equivocó en modo Encontrar/Intervalo
+                    if (fmState.revealAnswer && isTarget && !isFound && fmState.mode !== 'identify') {
+                        content = getNoteAtParams(s, f, q?.useFlats);
+                        dotClass = 'bg-red-500 text-white scale-110 opacity-100 shadow-[0_0_10px_rgba(239,68,68,0.6)]';
                     }
                     
                     const thickness = 1 + (s * 0.4);
