@@ -90,6 +90,16 @@
                 <h3 class="font-bold text-xl sm:text-2xl text-white mb-2">Fretmind</h3>
                 <p class="text-slate-400 text-xs sm:text-sm">Entrena tu mente. Memoriza el diapasón, domina los intervalos y ubica notas al instante como un maestro.</p>
             </button>
+
+            <!-- App 3: LabChord Guitar -->
+            <button onclick="launchLabChord()" class="group relative flex flex-col items-center p-8 bg-slate-800 hover:bg-slate-700 rounded-3xl transition-all border border-slate-700 hover:border-purple-500/50 shadow-xl overflow-hidden text-center transform hover:-translate-y-1 md:col-span-2 max-w-md mx-auto w-full">
+                <div class="absolute inset-0 bg-gradient-to-br from-purple-600/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div class="bg-gradient-to-br from-purple-500 to-fuchsia-600 p-4 rounded-full mb-4 text-white shadow-[0_0_20px_rgba(168,85,247,0.4)] group-hover:scale-110 transition-transform">
+                    <i data-lucide="flask-conical" class="w-10 h-10"></i>
+                </div>
+                <h3 class="font-bold text-xl sm:text-2xl text-white mb-2">LabChord Guitar</h3>
+                <p class="text-slate-400 text-xs sm:text-sm">El laboratorio definitivo. Explora, construye y visualiza cualquier acorde y su estructura en el diapasón.</p>
+            </button>
         </div>
 
         <div class="mt-auto text-center text-slate-500 text-[10px] sm:text-xs tracking-wider opacity-80 z-10 pt-10">
@@ -98,6 +108,17 @@
         </div>
     </div>
 
+    <!-- ================= APP 3: LABCHORD GUITAR ================= -->
+    <div id="labchord-wrapper" class="hidden h-screen bg-slate-950 flex-col w-full relative">
+        <div class="h-16 bg-slate-900 flex items-center px-4 border-b border-slate-800 shrink-0 shadow-md relative z-10">
+            <button onclick="returnToHub()" class="p-2 bg-slate-800 hover:bg-slate-700 rounded-full transition-colors text-slate-300 border border-slate-700 flex items-center gap-2 shadow-lg group">
+                <i data-lucide="arrow-left" class="w-5 h-5 group-hover:-translate-x-1 transition-transform"></i> 
+                <span class="font-bold text-xs hidden sm:inline">Suite Principal</span>
+            </button>
+            <div class="flex-1 text-center font-bold text-purple-400 text-lg sm:text-xl mr-10 sm:mr-32">LabChord Guitar</div>
+        </div>
+        <iframe src="https://juanmiguel0927.github.io/LabChordGuitar/" class="w-full flex-1 border-0 bg-slate-950"></iframe>
+    </div>
 
     <!-- ================= APP 1: JMR GUITAR TRAINER ================= -->
     <div id="jmr-wrapper" class="hidden min-h-screen bg-slate-950 flex-col items-center justify-center p-4 py-12 relative">
@@ -745,6 +766,7 @@
         function returnToHub() {
             document.getElementById('jmr-wrapper').classList.add('hidden'); document.getElementById('jmr-wrapper').classList.remove('flex');
             document.getElementById('fm-wrapper').classList.add('hidden'); document.getElementById('fm-wrapper').classList.remove('flex');
+            document.getElementById('labchord-wrapper').classList.add('hidden'); document.getElementById('labchord-wrapper').classList.remove('flex');
             document.getElementById('main-hub').classList.remove('hidden'); document.getElementById('main-hub').classList.add('flex');
             if (typeof isMetronomeOn !== 'undefined' && isMetronomeOn) { toggleMetronome(); }
             if (typeof exitGame === 'function') { exitGame(); }
@@ -760,6 +782,12 @@
             document.getElementById('main-hub').classList.add('hidden'); document.getElementById('main-hub').classList.remove('flex');
             document.getElementById('fm-wrapper').classList.remove('hidden'); document.getElementById('fm-wrapper').classList.add('flex');
             goToHome(); lucide.createIcons();
+        }
+
+        function launchLabChord() {
+            document.getElementById('main-hub').classList.add('hidden'); document.getElementById('main-hub').classList.remove('flex');
+            document.getElementById('labchord-wrapper').classList.remove('hidden'); document.getElementById('labchord-wrapper').classList.add('flex');
+            lucide.createIcons();
         }
     </script>
 
