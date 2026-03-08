@@ -540,7 +540,7 @@
                         <h2 id="modal-title" class="text-3xl font-extrabold mb-4 text-white">¡Nivel Completado!</h2>
                         <div id="modal-stars" class="flex justify-center gap-3 mb-6"></div>
                         <p id="modal-desc" class="text-slate-400 mb-8">Has dominado esta zona.</p>
-                        <button onclick="goToGuidedMap()" class="w-full py-4 bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-bold rounded-xl transition-colors shadow-lg">Continuar</button>
+                        <button onclick="goToGuidedMap()" class="w-full py-4 bg-emerald-50 hover:bg-emerald-400 text-slate-900 font-bold rounded-xl transition-colors shadow-lg">Continuar</button>
                     </div>
                 </div>
                 
@@ -706,27 +706,27 @@
                 <!-- Sección 5: Matemáticas del Algoritmo -->
                 <div class="border-t border-slate-700 pt-4">
                     <h3 class="font-bold text-emerald-400 mb-2 uppercase tracking-wider flex items-center gap-2"><i data-lucide="calculator" class="w-4 h-4"></i> Las Matemáticas Infinitas del Motor</h3>
-                    <p class="mb-3 text-[10px] text-slate-400">El algoritmo de JMR está diseñado bajo la premisa biomecánica de <strong>no repetir el mismo dedo ni la misma cuerda de forma consecutiva</strong>. Esta restricción algorítmica genera un universo de posibilidades casi inagotable para tu memoria muscular:</p>
+                    <p class="mb-3 text-[10px] text-slate-400">El algoritmo de JMR está diseñado bajo la premisa biomecánica de <strong>no repetir el mismo dedo ni la misma cuerda de forma consecutiva</strong>, y a su vez exige que <strong>el primer y último dedo de la secuencia no coincidan</strong> para lograr un bucle de práctica perfecto. Esta restricción algorítmica genera un universo de posibilidades inagotable:</p>
                     
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-center">
                         <div class="bg-slate-800 p-3 rounded-lg border border-slate-600 shadow-inner">
                             <span class="block text-amber-400 font-bold mb-2 border-b border-slate-600/50 pb-1 text-sm">Práctica en 1 Sola Cuerda</span>
                             <ul class="space-y-1 text-slate-300 text-xs text-left px-2">
-                                <li class="flex justify-between">Secuencia de 3 Notas: <span class="text-white font-mono font-bold">36 rutinas</span></li>
-                                <li class="flex justify-between">Secuencia de 4 Notas: <span class="text-white font-mono font-bold">108 rutinas</span></li>
-                                <li class="flex justify-between text-emerald-300">Secuencia de 5 Notas: <span class="text-emerald-400 font-mono font-bold">324 rutinas</span></li>
+                                <li class="flex justify-between">Secuencia de 3 Notas: <span class="text-white font-mono font-bold">24 rutinas</span></li>
+                                <li class="flex justify-between">Secuencia de 4 Notas: <span class="text-white font-mono font-bold">84 rutinas</span></li>
+                                <li class="flex justify-between text-emerald-300">Secuencia de 5 Notas: <span class="text-emerald-400 font-mono font-bold">240 rutinas</span></li>
                             </ul>
                         </div>
                         <div class="bg-slate-900 p-3 rounded-lg border border-amber-500/30 shadow-[0_0_15px_rgba(245,158,11,0.1)]">
                             <span class="block text-amber-500 font-black mb-2 border-b border-amber-500/30 pb-1 text-sm">Activando "Salto de Cuerdas"</span>
                             <ul class="space-y-1 text-slate-300 text-xs text-left px-2">
-                                <li class="flex justify-between">Secuencia de 3 Notas: <span class="text-white font-mono font-bold">5,400 rutinas</span></li>
-                                <li class="flex justify-between">Secuencia de 4 Notas: <span class="text-white font-mono font-bold">81,000 rutinas</span></li>
-                                <li class="flex justify-between text-amber-300">Secuencia de 5 Notas: <span class="text-amber-500 font-mono font-bold text-sm">1,215,000 rutinas</span></li>
+                                <li class="flex justify-between">Secuencia de 3 Notas: <span class="text-white font-mono font-bold">3,600 rutinas</span></li>
+                                <li class="flex justify-between">Secuencia de 4 Notas: <span class="text-white font-mono font-bold">63,000 rutinas</span></li>
+                                <li class="flex justify-between text-amber-300">Secuencia de 5 Notas: <span class="text-amber-500 font-mono font-bold text-sm">900,000 rutinas</span></li>
                             </ul>
                         </div>
                     </div>
-                    <p class="mt-3 text-[10px] text-slate-500 italic text-center">* Si además enciendes el modo "Vinculado 2 y 3" (limitación tendinosa anatómica real), las matemáticas se adaptan para generar 180,000 variantes estrictas de 5 notas con salto, forzando independencia pura.</p>
+                    <p class="mt-3 text-[10px] text-slate-500 italic text-center">* Si además enciendes el modo "Vinculado 2 y 3" (limitación tendinosa anatómica real), las matemáticas se adaptan para generar 112,500 variantes estrictas de 5 notas con salto, forzando independencia pura.</p>
                 </div>
 
             </div>
@@ -935,6 +935,13 @@
                         else { const prevFinger = newCombo[i - 1]; let availableFingers = currentFingersPool.filter(f => f !== prevFinger); const f = availableFingers[Math.floor(Math.random() * availableFingers.length)]; newCombo.push(f); newFrets.push(f); }
                     }
                     isValid = isHardMode ? !isSequential(newCombo) : true;
+                }
+                
+                // Nueva regla: el primer y último dedo no pueden ser el mismo
+                if (isValid && comboLength > 1) {
+                    if (newCombo[0] === newCombo[newCombo.length - 1]) {
+                        isValid = false;
+                    }
                 }
             }
 
@@ -1323,9 +1330,12 @@
             else if (type === 'virtuoso') { updateBPM(55); setLength(5); setSubdivision(4); document.getElementById('right-hand-tech').value = 'hybrid'; document.getElementById('string-skip').checked = true; document.getElementById('auto-play').checked = true; document.getElementById('fret-shift').checked = true; updateMeasures(8); document.getElementById('base-fret-input').value = 1; } 
             else if (type === 'scales') { updateBPM(60); document.getElementById('scales-mode').checked = true; setSubdivision(3); setLength(3); document.getElementById('right-hand-tech').value = 'legato_finger'; document.getElementById('string-skip').checked = true; document.getElementById('auto-play').checked = true; updateMeasures(8); }
 
+            toggleMode(); toggleAutoPlay(); toggleAutoSubdiv(); toggleFretShift(); toggleSubdivisionSound();
+            
+            // Fix: Asegurar que el selector retenga el valor visual y se mantenga el temporizador tras la generación
+            document.getElementById('workout-selector').value = type;
             routineTimeRemaining = 300; timerText.innerText = "05:00"; timerText.classList.replace('text-green-400', 'text-amber-400');
             timerContainer.classList.remove('hidden'); timerContainer.classList.add('flex');
-            toggleMode(); toggleAutoPlay(); toggleAutoSubdiv(); toggleFretShift(); toggleSubdivisionSound();
         }
 
         function updateBaseFret() { 
@@ -1369,7 +1379,7 @@
                 else if (rightHandTech === 'alternate') desc.innerText = "Púa (Alternate): Ataque forzado Abajo/Arriba (↓↑) rígidamente.";
                 else if (rightHandTech === 'legato') desc.innerText = "Legato: Atacas con púa (↓) al cambiar de cuerda, luego usas H o P.";
                 else if (rightHandTech === 'legato_finger') desc.innerText = "Legato: Atacas con dedos (i/m) al cambiar de cuerda, luego usas H o P.";
-                else if (rightHandTech === 'legato_only') desc.innerText = "Solo Legato: 100% mano izquierda. Hammer-ons (H) y Pull-offs (P) sin púa.";
+                else if (rightHandTech === 'legato_only') desc.innerText = "Solo Legato: 100% mano Izquierda. Hammer-ons (H) y Pull-offs (P) sin púa.";
                 else if (rightHandTech === 'hybrid') desc.innerText = "Hybrid Picking: Púa (↓) para graves, dedos (m/a) para saltos agudos.";
             }
             applyRenderView(false); 
