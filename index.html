@@ -8,6 +8,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Librerías PimaLab -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     
     <style>
         /* ESTILOS COMPARTIDOS Y JMR */
@@ -49,6 +52,13 @@
         .level-node.locked { filter: grayscale(100%); opacity: 0.5; cursor: not-allowed; }
         .level-line { width: 4px; background: #334155; margin: 0 auto; height: 30px; }
         .level-line.active { background: #34d399; }
+
+        /* ESTILOS PIMALAB ANIMACIONES */
+        .pima-char-anim {
+            opacity: 0; transform: translateY(10px);
+            animation: pimaPopIn 0.3s ease-out forwards;
+        }
+        @keyframes pimaPopIn { to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -92,13 +102,23 @@
             </button>
 
             <!-- App 3: LabChord Guitar -->
-            <button onclick="launchLabChord()" class="group relative flex flex-col items-center p-8 bg-slate-800 hover:bg-slate-700 rounded-3xl transition-all border border-slate-700 hover:border-purple-500/50 shadow-xl overflow-hidden text-center transform hover:-translate-y-1 md:col-span-2 max-w-md mx-auto w-full">
+            <button onclick="launchLabChord()" class="group relative flex flex-col items-center p-8 bg-slate-800 hover:bg-slate-700 rounded-3xl transition-all border border-slate-700 hover:border-purple-500/50 shadow-xl overflow-hidden text-center transform hover:-translate-y-1">
                 <div class="absolute inset-0 bg-gradient-to-br from-purple-600/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 <div class="bg-gradient-to-br from-purple-500 to-fuchsia-600 p-4 rounded-full mb-4 text-white shadow-[0_0_20px_rgba(168,85,247,0.4)] group-hover:scale-110 transition-transform">
                     <i data-lucide="flask-conical" class="w-10 h-10"></i>
                 </div>
                 <h3 class="font-bold text-xl sm:text-2xl text-white mb-2">LabChord Guitar</h3>
                 <p class="text-slate-400 text-xs sm:text-sm">El laboratorio definitivo. Explora, construye y visualiza cualquier acorde y su estructura en el diapasón.</p>
+            </button>
+
+            <!-- App 4: PimaLab -->
+            <button onclick="launchPimaLab()" class="group relative flex flex-col items-center p-8 bg-slate-800 hover:bg-slate-700 rounded-3xl transition-all border border-slate-700 hover:border-rose-500/50 shadow-xl overflow-hidden text-center transform hover:-translate-y-1">
+                <div class="absolute inset-0 bg-gradient-to-br from-rose-600/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div class="bg-gradient-to-br from-rose-500 to-red-600 p-4 rounded-full mb-4 text-white shadow-[0_0_20px_rgba(244,63,94,0.4)] group-hover:scale-110 transition-transform">
+                    <i data-lucide="activity" class="w-10 h-10"></i>
+                </div>
+                <h3 class="font-bold text-xl sm:text-2xl text-white mb-2">PimaLab Analizador</h3>
+                <p class="text-slate-400 text-xs sm:text-sm">Analizador biomecánico. Topografía del movimiento eficiente, acordes y cálculo de tensión en la mano derecha.</p>
             </button>
         </div>
 
@@ -119,6 +139,176 @@
         </div>
         <iframe src="https://juanmiguel0927.github.io/LabChordGuitar/" class="w-full flex-1 border-0 bg-slate-950"></iframe>
     </div>
+
+    <!-- ================= APP 4: PIMALAB ================= -->
+    <div id="pimalab-wrapper" class="hidden min-h-screen bg-slate-950 flex-col items-center p-4 sm:p-8 relative custom-scrollbar overflow-y-auto">
+        <div class="w-full max-w-7xl mx-auto flex flex-col gap-6 pt-12 sm:pt-4">
+            
+            <div class="flex flex-col sm:flex-row justify-between items-center bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-lg mb-2 relative z-10">
+                <button onclick="returnToHub()" class="absolute -top-12 left-0 sm:static sm:top-auto p-2 sm:p-3 bg-slate-800 hover:bg-slate-700 rounded-full transition-colors text-slate-300 border border-slate-700 flex items-center gap-2 shadow-lg group">
+                    <i data-lucide="arrow-left" class="w-5 h-5 group-hover:-translate-x-1 transition-transform"></i> 
+                    <span class="font-bold text-xs hidden sm:inline">Suite</span>
+                </button>
+                <div class="text-center sm:text-left mt-2 sm:mt-0">
+                    <h1 class="text-2xl sm:text-3xl font-bold text-white"><span class="text-rose-500">Pima</span>Lab</h1>
+                    <p class="text-slate-400 text-xs sm:text-sm">Analizador Biomecánico de la Mano Derecha</p>
+                </div>
+                <div class="flex gap-2 mt-4 sm:mt-0">
+                    <button id="pima-btn-help" class="p-2.5 bg-slate-800 hover:bg-slate-700 rounded-xl transition-colors border border-slate-700 text-slate-400 hover:text-white" title="Información y Lógica">
+                        <i data-lucide="help-circle" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 w-full">
+                
+                <!-- Columna Izquierda: Controles -->
+                <div class="lg:col-span-3 flex flex-col gap-6">
+                    <div class="bg-slate-900 rounded-2xl border border-slate-800 shadow-xl overflow-hidden flex flex-col">
+                        <div class="bg-slate-800/50 p-4 border-b border-slate-800 flex items-center gap-2">
+                            <i data-lucide="sliders" class="w-5 h-5 text-rose-500"></i>
+                            <h2 class="font-bold text-slate-200">Parámetros</h2>
+                        </div>
+                        <div class="p-5 flex flex-col gap-6">
+                            <div>
+                                <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-3 block">Longitud de Secuencia</label>
+                                <div id="pima-length-selector" class="grid grid-cols-4 gap-2">
+                                    <!-- Botones generados por JS -->
+                                </div>
+                            </div>
+
+                            <div class="border-t border-slate-800 pt-4 flex justify-between items-center">
+                                <span class="text-sm font-semibold text-slate-300 flex items-center gap-2"><i data-lucide="baseline" class="w-4 h-4 text-slate-500"></i> Asignar Cuerdas</span>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="pima-opt-strings" class="sr-only peer">
+                                    <div class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-300 after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-rose-500"></div>
+                                </label>
+                            </div>
+                            
+                            <div class="border-t border-slate-800 pt-4 flex justify-between items-center">
+                                <span class="text-sm font-semibold text-slate-300 flex items-center gap-2"><i data-lucide="layers" class="w-4 h-4 text-slate-500"></i> Polifonía (Acordes)</span>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="pima-opt-poly" class="sr-only peer">
+                                    <div class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-300 after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-rose-500"></div>
+                                </label>
+                            </div>
+
+                            <div class="border-t border-slate-800 pt-4 flex justify-between items-center">
+                                <span class="text-sm font-semibold text-slate-300 flex items-center gap-2"><i data-lucide="music-2" class="w-4 h-4 text-slate-500"></i> Agrupar Ritmo</span>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="pima-opt-rhythm" class="sr-only peer">
+                                    <div class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-300 after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-rose-500"></div>
+                                </label>
+                            </div>
+
+                            <button id="pima-btn-generate" class="w-full py-4 mt-2 bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white font-bold rounded-xl shadow-lg transition-transform active:scale-95 flex items-center justify-center gap-2">
+                                <i data-lucide="zap" class="w-5 h-5"></i> Analizar Biomecánica
+                            </button>
+                            <p class="text-[9px] text-slate-500 text-center uppercase tracking-wider">Algoritmo Topográfico V2</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna Central: Display & Historial -->
+                <div class="lg:col-span-6 flex flex-col gap-6">
+                    <!-- Monitor Principal -->
+                    <div id="pima-main-display" class="bg-slate-900 border-2 border-dashed border-slate-700 rounded-2xl min-h-[300px] p-6 flex flex-col relative transition-all duration-300 shadow-xl overflow-hidden group">
+                        <div id="pima-placeholder" class="m-auto text-slate-500 text-sm font-medium italic flex flex-col items-center gap-2">
+                            <i data-lucide="scan-line" class="w-8 h-8 opacity-50"></i> Esperando parámetros para análisis
+                        </div>
+                        
+                        <div class="flex-1 flex items-center justify-center w-full">
+                            <div id="pima-formula-output" class="font-mono text-4xl sm:text-5xl lg:text-6xl font-black text-white text-center flex flex-wrap justify-center gap-x-2 gap-y-4 tracking-tighter drop-shadow-md"></div>
+                        </div>
+
+                        <div id="pima-result-footer" class="opacity-0 transition-opacity duration-300 flex justify-between items-end mt-8 border-t border-slate-800/50 pt-4">
+                            <div id="pima-viability-badge" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 border">
+                                <i data-lucide="activity" class="w-4 h-4"></i> <span id="pima-viability-text"></span>
+                            </div>
+                            <div class="flex gap-2">
+                                <button id="pima-btn-copy" class="p-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-slate-300 hover:text-white transition-colors" title="Copiar"><i data-lucide="copy" class="w-4 h-4"></i></button>
+                                <button id="pima-btn-fav" class="p-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-slate-300 hover:text-amber-400 transition-colors" title="Favorito"><i id="pima-fav-icon" data-lucide="star" class="w-4 h-4"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Historial -->
+                    <div class="bg-slate-900 rounded-2xl border border-slate-800 shadow-xl overflow-hidden flex flex-col h-full min-h-[250px]">
+                        <div class="bg-slate-800/50 p-4 border-b border-slate-800 flex justify-between items-center">
+                            <h2 class="font-bold text-slate-200 text-sm flex items-center gap-2"><i data-lucide="history" class="w-4 h-4 text-sky-500"></i> Historial de Sesión</h2>
+                            <button id="pima-btn-clear-history" class="text-red-400 hover:text-red-300 text-xs flex items-center gap-1 font-semibold"><i data-lucide="trash-2" class="w-3 h-3"></i> Borrar</button>
+                        </div>
+                        <div id="pima-history-list" class="p-4 flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-2">
+                            <div class="text-center p-6 text-slate-500 text-xs italic">El historial está vacío</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna Derecha: Favoritos y Exportación -->
+                <div class="lg:col-span-3 flex flex-col gap-6">
+                    <div class="bg-slate-900 rounded-2xl border border-slate-800 shadow-xl overflow-hidden flex flex-col h-full min-h-[500px]">
+                        <div class="bg-slate-800/50 p-4 border-b border-slate-800 flex justify-between items-center">
+                            <h2 class="font-bold text-slate-200 text-sm flex items-center gap-2"><i data-lucide="bookmark" class="w-4 h-4 text-amber-500"></i> Rutina</h2>
+                            <div class="flex gap-1.5">
+                                <button id="pima-btn-export-jpg" class="p-1.5 bg-slate-700 hover:bg-slate-600 rounded text-slate-300 transition-colors" title="Exportar JPG"><i data-lucide="image" class="w-3.5 h-3.5"></i></button>
+                                <button id="pima-btn-export-pdf" class="p-1.5 bg-slate-700 hover:bg-slate-600 rounded text-slate-300 transition-colors" title="Exportar PDF"><i data-lucide="file-text" class="w-3.5 h-3.5"></i></button>
+                            </div>
+                        </div>
+                        <div class="p-4 flex-1 flex flex-col">
+                            <button id="pima-btn-clear-favs" class="hidden mb-4 w-full py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 text-xs font-bold rounded-lg border border-red-500/30 transition-colors items-center justify-center gap-1.5"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Limpiar Rutina</button>
+                            <div id="pima-fav-list-container" class="flex-1 bg-slate-950 p-3 rounded-xl border border-slate-800">
+                                <div id="pima-fav-list" class="flex flex-col gap-2">
+                                    <div class="text-center p-6 text-slate-500 text-xs italic">No hay fórmulas guardadas.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Help PimaLab -->
+    <div id="pima-help-modal" class="hidden fixed inset-0 z-[2000] bg-slate-950/90 backdrop-blur-sm items-center justify-center p-4">
+        <div class="bg-slate-900 rounded-2xl border border-slate-700 p-6 sm:p-8 max-w-2xl w-full shadow-2xl relative max-h-[90vh] flex flex-col">
+            <button id="pima-close-help" class="absolute top-4 right-4 text-slate-400 hover:text-rose-500 transition-colors z-10 bg-slate-800 rounded-full p-1.5 border border-slate-700">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div class="flex items-center gap-3 mb-6 text-rose-500 shrink-0 border-b border-slate-800 pb-4">
+                <i data-lucide="flask-conical" class="w-6 h-6"></i>
+                <h2 class="text-xl font-bold text-slate-100">Lógica Biomecánica</h2>
+            </div>
+            
+            <div class="overflow-y-auto pr-2 space-y-6 text-sm text-slate-300 custom-scrollbar flex-1">
+                <p>PimaLab evalúa topográficamente secuencias complejas (polifónicas) basándose en vectores reales de la anatomía de la mano derecha en la guitarra clásica.</p>
+                
+                <div class="space-y-4">
+                    <div><h3 class="text-emerald-400 font-bold mb-1">1. Polifonía y Recurrencia</h3><p class="text-xs text-slate-400">El motor permite eventos simultáneos limitados a un techo biomecánico de 3 dedos para mantener la viabilidad técnica.</p></div>
+                    <div><h3 class="text-amber-400 font-bold mb-1">2. Apertura Total (Hand Span)</h3><p class="text-xs text-slate-400">Se evalúa la distancia estática entre el pulgar y el dedo más agudo en cada bloque. Extensiones masivas disparan la tensión base.</p></div>
+                    <div><h3 class="text-red-400 font-bold mb-1">3. Cruces Anatómicos (Crossover)</h3><p class="text-xs text-slate-400">Si un dedo más corto (como i) ataca una cuerda más grave que un dedo más largo (como m), se produce un bloqueo articular severo.</p></div>
+                    <div><h3 class="text-red-400 font-bold mb-1">4. Multiplicador de Estrés Rítmico</h3><p class="text-xs text-slate-400">Activar el ritmo agrupa las notas, multiplicando el costo de fricción y saltos en un 30%.</p></div>
+                </div>
+
+                <div class="mt-6 border-t border-slate-800 pt-6">
+                    <h3 class="text-rose-400 font-bold mb-3 flex items-center gap-2"><i data-lucide="calculator" class="w-4 h-4"></i> Espacio Matemático</h3>
+                    <p class="text-xs text-slate-400 mb-4">El algoritmo genera las secuencias topográficas al azar evaluando "al vuelo". Matemáticamente, el universo de variaciones (incluyendo cuerdas) escala exponencialmente:</p>
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                        <table class="w-full text-xs font-mono text-left">
+                            <thead class="text-slate-500 border-b border-slate-800"><tr><th class="pb-2">Longitud</th><th class="pb-2">Variaciones Topográficas</th></tr></thead>
+                            <tbody class="text-slate-300">
+                                <tr><td class="py-1">2</td><td class="py-1 text-sky-400">168</td></tr>
+                                <tr><td class="py-1">4</td><td class="py-1 text-sky-400">21,120</td></tr>
+                                <tr><td class="py-1">6</td><td class="py-1 text-amber-400">2,654,592</td></tr>
+                                <tr><td class="py-1 text-rose-500 font-bold">8</td><td class="py-1 text-rose-500 font-bold">333,652,992</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- ================= APP 1: JMR GUITAR TRAINER ================= -->
     <div id="jmr-wrapper" class="hidden min-h-screen bg-slate-950 flex-col items-center justify-center p-4 py-12 relative">
@@ -540,7 +730,7 @@
                         <h2 id="modal-title" class="text-3xl font-extrabold mb-4 text-white">¡Nivel Completado!</h2>
                         <div id="modal-stars" class="flex justify-center gap-3 mb-6"></div>
                         <p id="modal-desc" class="text-slate-400 mb-8">Has dominado esta zona.</p>
-                        <button onclick="goToGuidedMap()" class="w-full py-4 bg-emerald-50 hover:bg-emerald-400 text-slate-900 font-bold rounded-xl transition-colors shadow-lg">Continuar</button>
+                        <button onclick="goToGuidedMap()" class="w-full py-4 bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-bold rounded-xl transition-colors shadow-lg">Continuar</button>
                     </div>
                 </div>
                 
@@ -650,7 +840,7 @@
     </div>
 
     <!-- Modal Ayuda JMR -->
-    <div id="help-modal" class="hidden fixed inset-0 bg-slate-950/90 z-[200] items-center justify-center p-4 backdrop-blur-md">
+    <div id="help-modal" class="hidden fixed inset-0 z-[200] bg-slate-950/90 items-center justify-center p-4 backdrop-blur-md">
         <div class="bg-slate-800 rounded-2xl border border-slate-600 p-6 max-w-2xl w-full shadow-2xl modal-enter relative max-h-[90vh] flex flex-col">
             <button onclick="toggleHelp()" class="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors z-10 bg-slate-800 rounded-full p-1 border border-slate-600">
                 <i data-lucide="x" class="w-5 h-5"></i>
@@ -736,7 +926,7 @@
     </div>
 
     <!-- Modal Stats JMR -->
-    <div id="stats-modal" class="hidden fixed inset-0 bg-slate-950/90 z-[200] items-center justify-center p-4 backdrop-blur-md">
+    <div id="stats-modal" class="hidden fixed inset-0 bg-slate-950/90 items-center justify-center p-4 backdrop-blur-md z-[200]">
         <div class="bg-slate-800 rounded-2xl border border-slate-600 p-6 max-w-md w-full shadow-2xl relative max-h-[85vh] flex flex-col">
             <button onclick="toggleStatsModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors z-10 bg-slate-800 rounded-full p-1">
                 <i data-lucide="x" class="w-6 h-6"></i>
@@ -772,6 +962,7 @@
             document.getElementById('jmr-wrapper').classList.add('hidden'); document.getElementById('jmr-wrapper').classList.remove('flex');
             document.getElementById('fm-wrapper').classList.add('hidden'); document.getElementById('fm-wrapper').classList.remove('flex');
             document.getElementById('labchord-wrapper').classList.add('hidden'); document.getElementById('labchord-wrapper').classList.remove('flex');
+            document.getElementById('pimalab-wrapper').classList.add('hidden'); document.getElementById('pimalab-wrapper').classList.remove('flex');
             document.getElementById('main-hub').classList.remove('hidden'); document.getElementById('main-hub').classList.add('flex');
             if (typeof isMetronomeOn !== 'undefined' && isMetronomeOn) { toggleMetronome(); }
             if (typeof exitGame === 'function') { exitGame(); }
@@ -792,6 +983,12 @@
         function launchLabChord() {
             document.getElementById('main-hub').classList.add('hidden'); document.getElementById('main-hub').classList.remove('flex');
             document.getElementById('labchord-wrapper').classList.remove('hidden'); document.getElementById('labchord-wrapper').classList.add('flex');
+            lucide.createIcons();
+        }
+
+        function launchPimaLab() {
+            document.getElementById('main-hub').classList.add('hidden'); document.getElementById('main-hub').classList.remove('flex');
+            document.getElementById('pimalab-wrapper').classList.remove('hidden'); document.getElementById('pimalab-wrapper').classList.add('flex');
             lucide.createIcons();
         }
     </script>
@@ -1410,9 +1607,18 @@
         };
         const INTERVAL_NAMES = { 0: 'Unísono', 1: '2da Menor', 2: '2da Mayor', 3: '3ra Menor', 4: '3ra Mayor', 5: '4ta Justa', 6: 'Tritono', 7: '5ta Justa', 8: '6ta Menor', 9: '6ta Mayor', 10: '7ma Menor', 11: '7ma Mayor', 12: 'Octava' };
 
-        function generateLevels() {
+        function generateLevels(inst = 'guitar') {
             let levels = []; let id = 1;
-            const strings = [5, 4, 3, 2, 1, 0]; const stringNames = ["6ta Cuerda", "5ta Cuerda", "4ta Cuerda", "3ra Cuerda", "2da Cuerda", "1ra Cuerda"];
+            let strings, stringNames;
+            
+            if (inst === 'bass') {
+                strings = [3, 2, 1, 0]; 
+                stringNames = ["4ta Cuerda", "3ra Cuerda", "2da Cuerda", "1ra Cuerda"];
+            } else {
+                strings = [5, 4, 3, 2, 1, 0]; 
+                stringNames = ["6ta Cuerda", "5ta Cuerda", "4ta Cuerda", "3ra Cuerda", "2da Cuerda", "1ra Cuerda"];
+            }
+            
             const ranges = [3, 5, 7, 9, 12];
             ranges.forEach(range => {
                 strings.forEach((sIdx, i) => {
@@ -1437,7 +1643,7 @@
             return levels;
         }
 
-        const GUIDED_LEVELS = generateLevels();
+        let GUIDED_LEVELS = generateLevels('guitar');
 
         let fmState = {
             instrument: 'guitar', handedness: 'right', wood: 'rosewood', maxFret: 5, timeLimit: 0, mode: 'identify', score: 0, streak: 0, 
@@ -1518,7 +1724,19 @@
         };
         window.resetStats = () => { showCustomAlert('¿Seguro que quieres borrar todo tu progreso?', (confirmed) => { if(confirmed) { localStorage.removeItem('fretmindDataV10'); fmState.stats = { totalAnswers: 0, correctAnswers: 0, noteHistory: {}, posHistory: {}, guidedProgress: {}, sessions: [] }; NOTES_SHARP.forEach(n => { fmState.stats.noteHistory[n] = { correct: 0, wrong: 0 }; }); renderStatsHTML(); } }, true); };
 
-        window.setInstrument = (val) => { fmState.instrument = val; fmel('btn-inst-guitar').className = `flex-1 py-1.5 rounded-md text-xs font-bold transition-all ${val==='guitar'?'bg-blue-500 text-white shadow-lg':'text-slate-500 hover:text-slate-300'}`; fmel('btn-inst-bass').className = `flex-1 py-1.5 rounded-md text-xs font-bold transition-all ${val==='bass'?'bg-blue-500 text-white shadow-lg':'text-slate-500 hover:text-slate-300'}`; if(!fmel('screen-guided').classList.contains('hidden')) renderGuidedMap(); };
+        window.setInstrument = (val) => { 
+            fmState.instrument = val; 
+            GUIDED_LEVELS = generateLevels(val);
+            
+            const btnG = fmel('btn-inst-guitar');
+            if (btnG) btnG.className = `flex-1 py-1.5 rounded-md text-xs font-bold transition-all ${val==='guitar'?'bg-blue-500 text-white shadow-lg':'text-slate-500 hover:text-slate-300'}`; 
+            
+            const btnB = fmel('btn-inst-bass');
+            if (btnB) btnB.className = `flex-1 py-1.5 rounded-md text-xs font-bold transition-all ${val==='bass'?'bg-blue-500 text-white shadow-lg':'text-slate-500 hover:text-slate-300'}`; 
+            
+            if(fmel('screen-guided') && !fmel('screen-guided').classList.contains('hidden')) renderGuidedMap(); 
+        };
+
         window.setHandedness = (val) => { fmState.handedness = val; fmel('btn-hand-right').className = `flex-1 py-1.5 rounded-md text-xs font-bold transition-all ${val==='right'?'bg-purple-500 text-white shadow-lg':'text-slate-500 hover:text-slate-300'}`; fmel('btn-hand-left').className = `flex-1 py-1.5 rounded-md text-xs font-bold transition-all ${val==='left'?'bg-purple-500 text-white shadow-lg':'text-slate-500 hover:text-slate-300'}`; };
         window.setWood = (val) => { fmState.wood = val; const r = fmel('btn-wood-rosewood'), m = fmel('btn-wood-maple'), e = fmel('btn-wood-ebony'); r.style.opacity = val === 'rosewood' ? '1' : '0.5'; m.style.opacity = val === 'maple' ? '1' : '0.5'; e.style.opacity = val === 'ebony' ? '1' : '0.5'; };
 
@@ -2000,7 +2218,7 @@
                         <div class="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center font-bold text-[10px] sm:text-xs z-10 transition-all ${dotClass} ${!content && 'group-hover:opacity-30'}">${content}</div>
                     </div>`;
                 }).join('');
-                col += `<div class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] sm:text-xs text-slate-400 font-bold">${f}</div></div>`;
+                col += `<div class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[8px] sm:text-[10px] font-bold text-slate-500">${f}</div></div>`;
                 return col;
             }).join('');
         }
@@ -2131,5 +2349,490 @@
             lucide.createIcons();
         };
     </script>
+
+    <!-- ================= JAVASCRIPT APP 4: PIMALAB ================= -->
+    <script>
+        const PIMA_STATE = {
+            length: 4,
+            stringsOn: false,
+            rhythmOn: false,
+            polyOn: false,
+            currentObj: null,
+            history: [],
+            favorites: []
+        };
+
+        const PIMA_DEDOS = ['p', 'i', 'm', 'a'];
+        const BIO_LIMIT = 3;
+
+        function initPimaLab() {
+            const lengthSelector = document.getElementById('pima-length-selector');
+            if (lengthSelector) {
+                lengthSelector.innerHTML = '';
+                for (let i = 2; i <= 8; i++) {
+                    const btn = document.createElement('button');
+                    const isActive = i === PIMA_STATE.length;
+                    btn.className = `py-2 text-sm font-bold rounded-lg transition-colors border ${isActive ? 'bg-rose-600 text-white border-rose-500 shadow-md scale-105' : 'bg-slate-800 text-slate-400 border-slate-700 hover:bg-slate-700 hover:text-slate-200'}`;
+                    btn.textContent = i;
+                    btn.onclick = () => setPimaLength(i, btn);
+                    lengthSelector.appendChild(btn);
+                }
+            }
+
+            renderPimaFavorites();
+
+            const btnGenerate = document.getElementById('pima-btn-generate');
+            if (btnGenerate) btnGenerate.addEventListener('click', generatePima);
+
+            const optStrings = document.getElementById('pima-opt-strings');
+            if (optStrings) optStrings.addEventListener('change', (e) => PIMA_STATE.stringsOn = e.target.checked);
+
+            const optRhythm = document.getElementById('pima-opt-rhythm');
+            if (optRhythm) optRhythm.addEventListener('change', (e) => PIMA_STATE.rhythmOn = e.target.checked);
+            
+            const optPoly = document.getElementById('pima-opt-poly');
+            if (optPoly) optPoly.addEventListener('change', (e) => PIMA_STATE.polyOn = e.target.checked);
+
+            const btnCopy = document.getElementById('pima-btn-copy');
+            if (btnCopy) btnCopy.addEventListener('click', copyPimaCurrent);
+
+            const btnFav = document.getElementById('pima-btn-fav');
+            if (btnFav) btnFav.addEventListener('click', togglePimaFavorite);
+
+            const btnClearHistory = document.getElementById('pima-btn-clear-history');
+            if (btnClearHistory) btnClearHistory.addEventListener('click', clearPimaHistory);
+
+            const btnClearFavs = document.getElementById('pima-btn-clear-favs');
+            if (btnClearFavs) btnClearFavs.addEventListener('click', clearPimaFavorites);
+
+            const btnExportJPG = document.getElementById('pima-btn-export-jpg');
+            if (btnExportJPG) btnExportJPG.addEventListener('click', exportPimaToJPG);
+
+            const btnExportPDF = document.getElementById('pima-btn-export-pdf');
+            if (btnExportPDF) btnExportPDF.addEventListener('click', exportPimaToPDF);
+            
+            const btnHelp = document.getElementById('pima-btn-help');
+            const helpModal = document.getElementById('pima-help-modal');
+            const closeHelp = document.getElementById('pima-close-help');
+            if (btnHelp) btnHelp.addEventListener('click', () => { helpModal.classList.remove('hidden'); helpModal.classList.add('flex'); });
+            if (closeHelp) closeHelp.addEventListener('click', () => { helpModal.classList.add('hidden'); helpModal.classList.remove('flex'); });
+            
+            window.addEventListener('click', (e) => { if(e.target === helpModal) { helpModal.classList.add('hidden'); helpModal.classList.remove('flex'); } });
+        }
+
+        function setPimaLength(len, btn) {
+            PIMA_STATE.length = len;
+            const container = document.getElementById('pima-length-selector');
+            if (!container) return;
+            const buttons = container.querySelectorAll('button');
+            buttons.forEach(b => {
+                const isSelected = parseInt(b.textContent) === len;
+                b.className = `py-2 text-sm font-bold rounded-lg transition-colors border ${isSelected ? 'bg-rose-600 text-white border-rose-500 shadow-md scale-105' : 'bg-slate-800 text-slate-400 border-slate-700 hover:bg-slate-700 hover:text-slate-200'}`;
+            });
+        }
+
+        // MOTOR DE GENERACIÓN V2 ADAPTADO A LA SUITE
+        function generatePima() {
+            let sequence = [];
+            let prevFingers = [];
+
+            for (let i = 0; i < PIMA_STATE.length; i++) {
+                let available = PIMA_DEDOS.filter(d => d === 'p' || !prevFingers.includes(d));
+                let isChord = PIMA_STATE.polyOn && (Math.random() < 0.20 && available.length > 1);
+                let currentFingers = [];
+                
+                if (isChord) {
+                    if (available.includes('p') && Math.random() < 0.8) {
+                        currentFingers.push('p');
+                    }
+                    let others = available.filter(d => d !== 'p');
+                    if (others.length > 0) {
+                        others.sort(() => 0.5 - Math.random());
+                        let picks = others.slice(0, Math.min(2, BIO_LIMIT - currentFingers.length));
+                        currentFingers.push(...picks);
+                    }
+                    if (currentFingers.length === 0) currentFingers.push(available[0]); 
+                } else {
+                    currentFingers.push(available[Math.floor(Math.random() * available.length)]);
+                }
+                
+                const weight = { 'a':1, 'm':2, 'i':3, 'p':4 };
+                currentFingers.sort((a,b) => weight[a] - weight[b]);
+
+                let currentStrings = {};
+                if (PIMA_STATE.stringsOn) {
+                    currentFingers.forEach(f => {
+                        if (f === 'p') currentStrings[f] = [4, 5, 6][Math.floor(Math.random() * 3)];
+                        else currentStrings[f] = [1, 2, 3, 4][Math.floor(Math.random() * 4)];
+                    });
+                }
+
+                sequence.push({ fingers: currentFingers, strings: currentStrings });
+                prevFingers = currentFingers;
+            }
+
+            const analysis = analyzePimaVectorial(sequence, PIMA_STATE.stringsOn, PIMA_STATE.rhythmOn);
+            const rawStr = formatPimaSequenceRaw(sequence, PIMA_STATE.stringsOn, PIMA_STATE.rhythmOn);
+
+            PIMA_STATE.currentObj = {
+                id: Date.now().toString(),
+                formula: sequence,
+                analysis: analysis,
+                raw: rawStr,
+                rhythm: PIMA_STATE.rhythmOn
+            };
+
+            addPimaToHistory(PIMA_STATE.currentObj);
+            displayPimaResult();
+        }
+
+        function analyzePimaVectorial(seq, stringsOn, rhythmOn) {
+            let tension = 0;
+            let messages = [];
+
+            // Análisis Estructural
+            for (let i = 0; i < seq.length; i++) {
+                let current = seq[i].fingers;
+                if (current.length >= BIO_LIMIT) tension += 8; 
+
+                if (i < seq.length - 1) {
+                    let next = seq[i+1].fingers;
+                    if ((current.includes('m') && next.includes('a')) || (current.includes('a') && next.includes('m'))) {
+                        tension += 12;
+                    }
+                }
+            }
+
+            // Análisis Topográfico
+            if (stringsOn) {
+                for (let i = 0; i < seq.length; i++) {
+                    let currentStr = seq[i].strings;
+                    let fingers = seq[i].fingers;
+                    let strVals = Object.values(currentStr);
+
+                    if (strVals.length > 1) {
+                        let maxStr = Math.max(...strVals);
+                        let minStr = Math.min(...strVals);
+                        let span = maxStr - minStr;
+                        if (span >= 4) { tension += 15; messages.push("Extensión severa (Span > 3)"); }
+                    }
+
+                    if (fingers.includes('i') && fingers.includes('m') && currentStr['i'] < currentStr['m']) { tension += 20; messages.push("Cruce anatómico (i-m)"); }
+                    if (fingers.includes('m') && fingers.includes('a') && currentStr['m'] < currentStr['a']) { tension += 20; messages.push("Cruce anatómico (m-a)"); }
+                    if (fingers.includes('p') && fingers.includes('i') && currentStr['p'] < currentStr['i']) { tension += 30; messages.push("Cruce inverso de pulgar"); }
+
+                    if (i < seq.length - 1) {
+                        let nextStr = seq[i+1].strings;
+                        let nextFingers = seq[i+1].fingers;
+                        
+                        let cF = fingers.filter(f => f !== 'p')[0];
+                        let nF = nextFingers.filter(f => f !== 'p')[0];
+
+                        if (cF && nF) {
+                            let cS = currentStr[cF];
+                            let nS = nextStr[nF];
+                            let dist = cS - nS; 
+                            
+                            if (Math.abs(dist) > 1) {
+                                if (dist < 0) { tension += (Math.abs(dist) * 8); } 
+                                else { tension += (Math.abs(dist) * 4); }
+                                if (Math.abs(dist) > 2) messages.push("Salto de cuerda extremo");
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (rhythmOn) tension *= 1.30; 
+
+            if (tension <= 12) return { color: 'green', text: 'Ergonómica (Vector Natural)', classes: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' };
+            else if (tension <= 38) return { color: 'yellow', text: messages.length > 0 ? messages[0] : 'Compleja (Alta fricción/extensión)', classes: 'bg-amber-500/10 text-amber-400 border-amber-500/30' };
+            else return { color: 'red', text: messages.length > 0 ? messages[0] + ' (Riesgo)' : 'Ineficiente (Bloqueo biomecánico)', classes: 'bg-red-500/10 text-red-400 border-red-500/30' };
+        }
+
+        function formatPimaSequenceRaw(seq, stringsOn, rhythmOn) {
+            let chunks = seq.map(step => {
+                let formattedFingers = step.fingers.map(f => {
+                    return stringsOn ? `${f}(${step.strings[f]})` : f;
+                });
+                return formattedFingers.join('+');
+            });
+
+            if (rhythmOn) {
+                let res = "";
+                for(let i=0; i<chunks.length; i++) {
+                    if (i % 2 === 0) res += "[";
+                    res += chunks[i];
+                    if (i % 2 === 1 || i === chunks.length - 1) res += "] ";
+                    else res += " ";
+                }
+                return res.trim();
+            } else {
+                return chunks.join(' - ');
+            }
+        }
+
+        function formatPimaTokenWithHTML(t) {
+            if(t.includes('(')) {
+                let parts = t.split('(');
+                return `${parts[0]}<span class="text-lg sm:text-2xl text-slate-400 font-normal">(${parts[1]}</span>`;
+            }
+            return t;
+        }
+
+        window.renderPimaFormulaHTML = function(rawFormula, animate = false) {
+            const container = document.createElement('span');
+            if (!animate) {
+                container.style.display = 'flex';
+                container.style.alignItems = 'center';
+                container.style.flexWrap = 'wrap';
+            }
+
+            const tokens = rawFormula.split(/(\s-\s|\s)/);
+            let delay = 0;
+            
+            tokens.forEach(token => {
+                if(!token) return;
+                const span = document.createElement('span');
+                
+                if (token === ' - ' || token === ' ') { 
+                    span.textContent = token; 
+                    span.className = 'text-slate-600 font-light';
+                } else { 
+                    let cleanToken = token;
+                    let prefix = '', suffix = '';
+                    
+                    if (cleanToken.startsWith('[')) { prefix = '<span class="text-slate-600 font-light">[</span>'; cleanToken = cleanToken.substring(1); }
+                    if (cleanToken.endsWith(']')) { suffix = '<span class="text-slate-600 font-light">]</span>'; cleanToken = cleanToken.slice(0, -1); }
+
+                    if (cleanToken.includes('+')) {
+                        const notes = cleanToken.split('+');
+                        let stackHTML = `<span class="inline-flex flex-col items-center justify-center mx-1 text-[0.85em] leading-[1] gap-[0.1rem]">`;
+                        notes.forEach(n => {
+                            stackHTML += `<span>${formatPimaTokenWithHTML(n)}</span>`;
+                        });
+                        stackHTML += `</span>`;
+                        
+                        span.innerHTML = `${prefix}${stackHTML}${suffix}`;
+                        span.className = animate ? 'pima-char-anim inline-flex items-center' : 'inline-flex items-center';
+                    } else {
+                        span.innerHTML = `${prefix}${formatPimaTokenWithHTML(cleanToken)}${suffix}`;
+                        span.className = animate ? 'pima-char-anim inline-flex items-center' : 'inline-flex items-center';
+                    }
+                }
+
+                if (animate) span.style.animationDelay = `${delay}s`;
+                container.appendChild(span);
+                delay += 0.05; 
+            });
+            return container.innerHTML;
+        };
+
+        function displayPimaResult() {
+            const placeholder = document.getElementById('pima-placeholder');
+            const output = document.getElementById('pima-formula-output');
+            const mainDisplay = document.getElementById('pima-main-display');
+            const resultFooter = document.getElementById('pima-result-footer');
+            const viabilityBadge = document.getElementById('pima-viability-badge');
+            const viabilityText = document.getElementById('pima-viability-text');
+
+            if(placeholder) placeholder.style.display = 'none';
+            if(output) {
+                output.innerHTML = window.renderPimaFormulaHTML(PIMA_STATE.currentObj.raw, true);
+            }
+            if(mainDisplay) mainDisplay.classList.replace('border-slate-700', 'border-rose-500/50');
+            
+            if (viabilityBadge) {
+                viabilityBadge.className = `px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 border ${PIMA_STATE.currentObj.analysis.classes}`;
+                if(viabilityText) viabilityText.textContent = PIMA_STATE.currentObj.analysis.text;
+            }
+            
+            if(resultFooter) resultFooter.classList.remove('opacity-0');
+            updatePimaFavButtonState();
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function addPimaToHistory(obj) {
+            PIMA_STATE.history.unshift(obj);
+            if(PIMA_STATE.history.length > 10) PIMA_STATE.history.pop();
+            renderPimaHistory();
+        }
+
+        function renderPimaHistory() {
+            const list = document.getElementById('pima-history-list');
+            if (!list) return;
+
+            list.innerHTML = '';
+            if (PIMA_STATE.history.length === 0) {
+                list.innerHTML = '<div class="text-center p-6 text-slate-500 text-xs italic">El historial está vacío</div>';
+                return;
+            }
+            PIMA_STATE.history.forEach(item => {
+                const el = document.createElement('div');
+                el.className = 'bg-slate-800 p-3 rounded-xl border border-slate-700 flex justify-between items-center transition-all hover:border-slate-500';
+                
+                let dotColorClass = 'bg-slate-500';
+                if(item.analysis.color === 'green') dotColorClass = 'bg-emerald-500';
+                if(item.analysis.color === 'yellow') dotColorClass = 'bg-amber-500';
+                if(item.analysis.color === 'red') dotColorClass = 'bg-red-500';
+
+                el.innerHTML = `
+                    <div>
+                        <div class="font-mono text-sm sm:text-base font-bold text-rose-300 flex items-center flex-wrap gap-y-1">${window.renderPimaFormulaHTML(item.raw, false)}</div>
+                        <div class="text-[10px] text-slate-400 mt-1 flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full ${dotColorClass} shadow-sm"></span> ${item.analysis.text}
+                        </div>
+                    </div>
+                    <button class="text-slate-400 hover:text-rose-400 transition-colors p-2 shrink-0" onclick="loadPimaSpecific('${item.id}')">
+                        <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                    </button>
+                `;
+                list.appendChild(el);
+            });
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function clearPimaHistory() { 
+            PIMA_STATE.history = []; 
+            renderPimaHistory(); 
+            showToastGlobal('Historial borrado', 'success'); 
+        }
+
+        function togglePimaFavorite() {
+            if(!PIMA_STATE.currentObj) return;
+            const idx = PIMA_STATE.favorites.findIndex(f => f.raw === PIMA_STATE.currentObj.raw);
+            if(idx > -1) { 
+                PIMA_STATE.favorites.splice(idx, 1); 
+                showToastGlobal('Eliminado de la rutina', 'success'); 
+            } else { 
+                PIMA_STATE.favorites.unshift(PIMA_STATE.currentObj); 
+                showToastGlobal('Guardado en la rutina', 'success'); 
+            }
+            renderPimaFavorites(); 
+            updatePimaFavButtonState();
+        }
+
+        function removePimaFav(rawId) {
+            PIMA_STATE.favorites = PIMA_STATE.favorites.filter(f => f.raw !== rawId);
+            renderPimaFavorites(); 
+            updatePimaFavButtonState();
+        }
+
+        function clearPimaFavorites() { 
+            PIMA_STATE.favorites = []; 
+            renderPimaFavorites(); 
+            updatePimaFavButtonState(); 
+        }
+
+        function updatePimaFavButtonState() {
+            if(!PIMA_STATE.currentObj) return;
+            const btn = document.getElementById('pima-btn-fav');
+            const icon = document.getElementById('pima-fav-icon');
+            if(!btn || !icon) return;
+
+            const isFav = PIMA_STATE.favorites.some(f => f.raw === PIMA_STATE.currentObj.raw);
+            if (isFav) {
+                btn.classList.add('text-amber-400', 'bg-amber-500/10', 'border-amber-500/30');
+                btn.classList.remove('text-slate-300', 'bg-slate-800', 'border-slate-700');
+                icon.classList.add('fill-amber-400');
+            } else {
+                btn.classList.remove('text-amber-400', 'bg-amber-500/10', 'border-amber-500/30');
+                btn.classList.add('text-slate-300', 'bg-slate-800', 'border-slate-700');
+                icon.classList.remove('fill-amber-400');
+            }
+        }
+
+        function renderPimaFavorites() {
+            const list = document.getElementById('pima-fav-list');
+            const btnClear = document.getElementById('pima-btn-clear-favs');
+            if(!list || !btnClear) return;
+
+            if (PIMA_STATE.favorites.length === 0) {
+                list.innerHTML = '<div class="text-center p-6 text-slate-500 text-xs italic">No hay fórmulas guardadas.</div>';
+                btnClear.classList.add('hidden');
+                btnClear.classList.remove('flex');
+                return;
+            }
+            
+            btnClear.classList.remove('hidden');
+            btnClear.classList.add('flex');
+            list.innerHTML = '';
+            
+            PIMA_STATE.favorites.forEach(item => {
+                const el = document.createElement('div');
+                el.className = 'bg-slate-800 p-3 rounded-xl border border-slate-700 flex justify-between items-center transition-all hover:border-slate-500';
+                
+                let dotColorClass = 'bg-slate-500';
+                if(item.analysis.color === 'green') dotColorClass = 'bg-emerald-500';
+                if(item.analysis.color === 'yellow') dotColorClass = 'bg-amber-500';
+                if(item.analysis.color === 'red') dotColorClass = 'bg-red-500';
+
+                el.innerHTML = `
+                    <div>
+                        <div class="font-mono text-sm sm:text-base font-bold text-rose-300 flex items-center flex-wrap gap-y-1">${window.renderPimaFormulaHTML(item.raw, false)}</div>
+                        <div class="text-[10px] text-slate-400 mt-1 flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full ${dotColorClass} shadow-sm"></span> ${item.analysis.text}
+                        </div>
+                    </div>
+                    <button class="text-slate-500 hover:text-red-400 transition-colors p-2 no-print shrink-0" onclick="removePimaFav('${item.raw}')">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+                `;
+                list.appendChild(el);
+            });
+            if (window.lucide) lucide.createIcons();
+        }
+
+        window.loadPimaSpecific = function(id) {
+            const item = PIMA_STATE.history.find(h => h.id === id);
+            if(item) { PIMA_STATE.currentObj = item; displayPimaResult(); }
+        };
+
+        function copyPimaCurrent() {
+            if (!PIMA_STATE.currentObj) return;
+            const ta = document.createElement('textarea');
+            ta.value = PIMA_STATE.currentObj.raw;
+            document.body.appendChild(ta); ta.select();
+            try { document.execCommand('copy'); showToastGlobal('Copiado al portapapeles', 'success'); } catch(e) {}
+            document.body.removeChild(ta);
+        }
+
+        function exportPimaToJPG() {
+            if(PIMA_STATE.favorites.length === 0) { showToastGlobal('Rutina vacía', 'error'); return; }
+            const elementsToHide = document.querySelectorAll('.no-print');
+            elementsToHide.forEach(el => el.style.display = 'none');
+            
+            const container = document.getElementById('pima-fav-list-container');
+            
+            html2canvas(container, {backgroundColor: '#020617'}).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'rutina_pimalab.jpg';
+                link.href = canvas.toDataURL('image/jpeg');
+                link.click();
+                elementsToHide.forEach(el => el.style.display = 'flex');
+            });
+        }
+
+        function exportPimaToPDF() {
+            if(PIMA_STATE.favorites.length === 0) { showToastGlobal('Rutina vacía', 'error'); return; }
+            const elementsToHide = document.querySelectorAll('.no-print');
+            elementsToHide.forEach(el => el.style.display = 'none');
+            
+            const element = document.getElementById('pima-fav-list-container');
+            const opt = {
+                margin:       0.5,
+                filename:     'rutina_pimalab.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, backgroundColor: '#020617' },
+                jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            
+            html2pdf().set(opt).from(element).save().then(() => {
+                elementsToHide.forEach(el => el.style.display = 'flex');
+            });
+        }
+
+        initPimaLab();
+    </script>
 </body>
-    </html>
+</html>
