@@ -81,44 +81,40 @@
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl z-10">
-            <!-- App 1: JMR Guitar Trainer -->
             <button onclick="launchJMR()" class="group relative flex flex-col items-center p-8 bg-slate-800 hover:bg-slate-700 rounded-3xl transition-all border border-slate-700 hover:border-amber-500/50 shadow-xl overflow-hidden text-center transform hover:-translate-y-1">
                 <div class="absolute inset-0 bg-gradient-to-br from-amber-600/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 <div class="bg-gradient-to-br from-amber-500 to-orange-600 p-4 rounded-full mb-4 text-white shadow-[0_0_20px_rgba(245,158,11,0.4)] group-hover:scale-110 transition-transform">
                     <i data-lucide="guitar" class="w-10 h-10"></i>
                 </div>
                 <h3 class="font-bold text-xl sm:text-2xl text-white mb-2">JMR Guitar Trainer</h3>
-                <p class="text-slate-400 text-xs sm:text-sm">La ciencia de la mecánica. Entrena técnica pura: dedos, ligados (legato), púa alternada, púa híbrida y velocidad en escalas.</p>
+                <p class="text-slate-400 text-xs sm:text-sm">La ciencia de la mecánica. Entrena técnica pura: dedos, ligados, púa alternada y velocidad.</p>
             </button>
 
-            <!-- App 2: Fretmind -->
             <button onclick="launchFretmind()" class="group relative flex flex-col items-center p-8 bg-slate-800 hover:bg-slate-700 rounded-3xl transition-all border border-slate-700 hover:border-emerald-500/50 shadow-xl overflow-hidden text-center transform hover:-translate-y-1">
                 <div class="absolute inset-0 bg-gradient-to-br from-emerald-600/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 <div class="bg-gradient-to-br from-emerald-400 to-cyan-500 p-4 rounded-full mb-4 text-slate-900 shadow-[0_0_20px_rgba(52,211,153,0.4)] group-hover:scale-110 transition-transform">
                     <i data-lucide="brain-circuit" class="w-10 h-10"></i>
                 </div>
                 <h3 class="font-bold text-xl sm:text-2xl text-white mb-2">Fretmind</h3>
-                <p class="text-slate-400 text-xs sm:text-sm">Entrena tu mente. Memoriza el diapasón, domina los intervalos y ubica notas al instante como un maestro.</p>
+                <p class="text-slate-400 text-xs sm:text-sm">Entrena tu mente. Memoriza el diapasón, domina los intervalos y ubica notas al instante.</p>
             </button>
 
-            <!-- App 3: LabChord Guitar -->
             <button onclick="launchLabChord()" class="group relative flex flex-col items-center p-8 bg-slate-800 hover:bg-slate-700 rounded-3xl transition-all border border-slate-700 hover:border-purple-500/50 shadow-xl overflow-hidden text-center transform hover:-translate-y-1">
                 <div class="absolute inset-0 bg-gradient-to-br from-purple-600/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 <div class="bg-gradient-to-br from-purple-500 to-fuchsia-600 p-4 rounded-full mb-4 text-white shadow-[0_0_20px_rgba(168,85,247,0.4)] group-hover:scale-110 transition-transform">
                     <i data-lucide="flask-conical" class="w-10 h-10"></i>
                 </div>
                 <h3 class="font-bold text-xl sm:text-2xl text-white mb-2">LabChord Guitar</h3>
-                <p class="text-slate-400 text-xs sm:text-sm">El laboratorio definitivo. Explora, construye y visualiza cualquier acorde y su estructura en el diapasón.</p>
+                <p class="text-slate-400 text-xs sm:text-sm">El laboratorio definitivo. Explora, construye y visualiza cualquier acorde y su estructura.</p>
             </button>
 
-            <!-- App 4: PimaLab -->
             <button onclick="launchPimaLab()" class="group relative flex flex-col items-center p-8 bg-slate-800 hover:bg-slate-700 rounded-3xl transition-all border border-slate-700 hover:border-rose-500/50 shadow-xl overflow-hidden text-center transform hover:-translate-y-1">
                 <div class="absolute inset-0 bg-gradient-to-br from-rose-600/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 <div class="bg-gradient-to-br from-rose-500 to-red-600 p-4 rounded-full mb-4 text-white shadow-[0_0_20px_rgba(244,63,94,0.4)] group-hover:scale-110 transition-transform">
                     <i data-lucide="activity" class="w-10 h-10"></i>
                 </div>
                 <h3 class="font-bold text-xl sm:text-2xl text-white mb-2">PimaLab Analizador</h3>
-                <p class="text-slate-400 text-xs sm:text-sm">Analizador biomecánico. Topografía del movimiento eficiente, acordes y cálculo de tensión en la mano derecha.</p>
+                <p class="text-slate-400 text-xs sm:text-sm">Analizador biomecánico. Topografía del movimiento eficiente y polirritmias.</p>
             </button>
         </div>
 
@@ -169,15 +165,13 @@
                             <i data-lucide="sliders" class="w-5 h-5 text-rose-500"></i>
                             <h2 class="font-bold text-slate-200">Parámetros</h2>
                         </div>
-                        <div class="p-5 flex flex-col gap-6">
+                        <div class="p-5 flex flex-col gap-5">
                             <div>
-                                <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-3 block">Longitud de Secuencia</label>
-                                <div id="pima-length-selector" class="grid grid-cols-4 gap-2">
-                                    <!-- Botones generados por JS -->
-                                </div>
+                                <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 block">Longitud de Secuencia</label>
+                                <div id="pima-length-selector" class="grid grid-cols-4 gap-2"></div>
                             </div>
 
-                            <div class="border-t border-slate-800 pt-4 flex justify-between items-center">
+                            <div class="border-t border-slate-800 pt-3 flex justify-between items-center">
                                 <span class="text-sm font-semibold text-slate-300 flex items-center gap-2"><i data-lucide="baseline" class="w-4 h-4 text-slate-500"></i> Asignar Cuerdas</span>
                                 <label class="relative inline-flex items-center cursor-pointer">
                                     <input type="checkbox" id="pima-opt-strings" class="sr-only peer">
@@ -185,7 +179,7 @@
                                 </label>
                             </div>
                             
-                            <div class="border-t border-slate-800 pt-4 flex justify-between items-center">
+                            <div class="border-t border-slate-800 pt-3 flex justify-between items-center">
                                 <span class="text-sm font-semibold text-slate-300 flex items-center gap-2"><i data-lucide="layers" class="w-4 h-4 text-slate-500"></i> Polifonía (Acordes)</span>
                                 <label class="relative inline-flex items-center cursor-pointer">
                                     <input type="checkbox" id="pima-opt-poly" class="sr-only peer">
@@ -193,7 +187,7 @@
                                 </label>
                             </div>
 
-                            <div class="border-t border-slate-800 pt-4 flex justify-between items-center">
+                            <div class="border-t border-slate-800 pt-3 flex justify-between items-center">
                                 <span class="text-sm font-semibold text-slate-300 flex items-center gap-2"><i data-lucide="music-2" class="w-4 h-4 text-slate-500"></i> Agrupar Ritmo</span>
                                 <label class="relative inline-flex items-center cursor-pointer">
                                     <input type="checkbox" id="pima-opt-rhythm" class="sr-only peer">
@@ -201,69 +195,54 @@
                                 </label>
                             </div>
 
-                            <button id="pima-btn-generate" class="w-full py-4 mt-2 bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white font-bold rounded-xl shadow-lg transition-transform active:scale-95 flex items-center justify-center gap-2">
-                                <i data-lucide="zap" class="w-5 h-5"></i> Analizar Biomecánica
+                            <button id="pima-btn-generate" class="w-full py-3 mt-1 bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white font-bold rounded-xl shadow-lg transition-transform active:scale-95 flex items-center justify-center gap-2 text-sm">
+                                <i data-lucide="zap" class="w-4 h-4"></i> Generar y Analizar
                             </button>
-                            <p class="text-[9px] text-slate-500 text-center uppercase tracking-wider">Algoritmo Topográfico V2</p>
-                        </div>
-                    </div>
 
-                    <!-- NUEVO: Metrónomo PimaLab -->
-                    <div class="bg-slate-900 rounded-2xl border border-slate-800 shadow-xl overflow-hidden flex flex-col">
-                        <div class="bg-slate-800/50 p-4 border-b border-slate-800 flex items-center gap-2">
-                            <i data-lucide="metronome" class="w-5 h-5 text-rose-500"></i>
-                            <h2 class="font-bold text-slate-200">Metrónomo y Práctica</h2>
-                        </div>
-                        <div class="p-5 flex flex-col gap-4">
-                            <div>
-                                <div class="flex justify-between items-center mb-1">
-                                    <span class="text-[10px] text-slate-300">BPM</span>
-                                    <span id="pima-bpm-display" class="text-xs font-bold text-rose-400">60</span>
-                                </div>
-                                <input type="range" id="pima-bpm-slider" min="40" max="240" value="60" oninput="updatePimaBPM(this.value)" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-rose-500">
-                            </div>
-
-                            <div class="flex justify-between items-center pt-2">
-                                <span class="text-[10px] font-bold text-slate-400 uppercase">Modo Subdiv.</span>
-                                <select id="pima-subdiv-mode" onchange="updatePimaSubdivMode()" class="bg-slate-700 text-rose-400 text-[10px] font-bold rounded border border-slate-600 focus:outline-none focus:border-rose-500 p-1 cursor-pointer">
-                                    <option value="free">Libre Elección</option>
-                                    <option value="1-4">Ciclo 1 a 4</option>
-                                    <option value="5-8">Ciclo 5 a 8</option>
-                                    <option value="1-8">Ciclo 1 a 8</option>
-                                </select>
-                            </div>
-
-                            <div class="grid grid-cols-4 gap-1.5">
-                                <button id="pima-btn-sub-1" onclick="setPimaSubdivision(1)" class="pima-sub-btn py-1 rounded text-[10px] font-bold transition-all bg-rose-500/20 text-rose-400 border border-rose-500/50 shadow-sm scale-105">1</button>
-                                <button id="pima-btn-sub-2" onclick="setPimaSubdivision(2)" class="pima-sub-btn py-1 rounded text-[10px] font-bold transition-all bg-slate-700 text-slate-400 border border-slate-600 hover:bg-slate-600 shadow-sm">2</button>
-                                <button id="pima-btn-sub-3" onclick="setPimaSubdivision(3)" class="pima-sub-btn py-1 rounded text-[10px] font-bold transition-all bg-slate-700 text-slate-400 border border-slate-600 hover:bg-slate-600 shadow-sm">3</button>
-                                <button id="pima-btn-sub-4" onclick="setPimaSubdivision(4)" class="pima-sub-btn py-1 rounded text-[10px] font-bold transition-all bg-slate-700 text-slate-400 border border-slate-600 hover:bg-slate-600 shadow-sm">4</button>
-                                <button id="pima-btn-sub-5" onclick="setPimaSubdivision(5)" class="pima-sub-btn py-1 rounded text-[10px] font-bold transition-all bg-slate-700 text-slate-400 border border-slate-600 hover:bg-slate-600 shadow-sm">5</button>
-                                <button id="pima-btn-sub-6" onclick="setPimaSubdivision(6)" class="pima-sub-btn py-1 rounded text-[10px] font-bold transition-all bg-slate-700 text-slate-400 border border-slate-600 hover:bg-slate-600 shadow-sm">6</button>
-                                <button id="pima-btn-sub-7" onclick="setPimaSubdivision(7)" class="pima-sub-btn py-1 rounded text-[10px] font-bold transition-all bg-slate-700 text-slate-400 border border-slate-600 hover:bg-slate-600 shadow-sm">7</button>
-                                <button id="pima-btn-sub-8" onclick="setPimaSubdivision(8)" class="pima-sub-btn py-1 rounded text-[10px] font-bold transition-all bg-slate-700 text-slate-400 border border-slate-600 hover:bg-slate-600 shadow-sm">8</button>
-                            </div>
-
-                            <div class="border-t border-slate-800 pt-3 flex flex-col gap-2">
+                            <!-- METRÓNOMO PIMALAB -->
+                            <div class="border-t border-slate-800 pt-4 flex flex-col gap-3">
+                                <h3 class="text-sm font-semibold text-slate-300 flex items-center gap-2"><i data-lucide="metronome" class="w-4 h-4 text-slate-500"></i> Metrónomo</h3>
                                 <div class="flex justify-between items-center">
-                                    <span class="text-[11px] font-semibold text-slate-300">Variar Secuencia Auto</span>
-                                    <label class="relative inline-flex items-center cursor-pointer">
-                                        <input type="checkbox" id="pima-opt-auto-vary" onchange="togglePimaAutoVary()" class="sr-only peer">
-                                        <div class="w-9 h-5 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-300 after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-rose-500"></div>
-                                    </label>
+                                    <span class="text-[10px] text-slate-300 flex items-center gap-1"><i data-lucide="activity" class="w-3 h-3 text-rose-500"></i> BPM: <span id="pima-bpm-display" class="font-bold text-rose-400">60</span></span>
+                                    <button id="pima-btn-metro" class="py-1.5 px-3 bg-slate-700 hover:bg-slate-600 text-white text-[10px] font-bold rounded-lg transition-colors border border-slate-600 flex items-center gap-1 shadow-md"><i id="pima-metro-icon" data-lucide="play" class="w-3 h-3"></i> <span>Práctica</span></button>
                                 </div>
-                                <div id="pima-auto-cycles-container" class="opacity-40 pointer-events-none flex justify-between items-center pl-2 ml-1 border-l-2 border-slate-700 transition-opacity">
-                                    <span class="text-[10px] text-slate-400">Cambiar cada:</span>
-                                    <div class="flex items-center gap-1 text-xs">
-                                        <input type="number" id="pima-cycle-input" min="1" value="1" oninput="pimaCycleCount = 0" class="w-12 bg-slate-700 text-rose-400 text-center text-[10px] font-bold rounded border border-slate-600 focus:outline-none focus:border-rose-500 py-0.5">
-                                        <span class="text-[10px] text-slate-400 ml-1">ciclo(s)</span>
+                                <input type="range" id="pima-bpm-slider" min="40" max="200" value="60" oninput="pimaUpdateBpm(this.value)" class="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-rose-500">
+                                
+                                <div class="flex flex-col gap-2 mt-1">
+                                    <div class="flex justify-between items-center">
+                                        <label class="text-[9px] text-slate-400 font-bold tracking-wider uppercase">Subdivisión (1-8):</label>
+                                    </div>
+                                    <div class="grid grid-cols-4 gap-1" id="pima-subdiv-container">
+                                        <button class="pima-sub-btn py-1 rounded text-[10px] font-bold bg-rose-500 text-white border border-rose-400 shadow-md scale-105" onclick="setPimaSubdivision(1)">1</button>
+                                        <button class="pima-sub-btn py-1 rounded text-[10px] font-bold bg-slate-800 text-slate-400 border border-slate-700" onclick="setPimaSubdivision(2)">2</button>
+                                        <button class="pima-sub-btn py-1 rounded text-[10px] font-bold bg-slate-800 text-slate-400 border border-slate-700" onclick="setPimaSubdivision(3)">3</button>
+                                        <button class="pima-sub-btn py-1 rounded text-[10px] font-bold bg-slate-800 text-slate-400 border border-slate-700" onclick="setPimaSubdivision(4)">4</button>
+                                        <button class="pima-sub-btn py-1 rounded text-[10px] font-bold bg-slate-800 text-slate-400 border border-slate-700" onclick="setPimaSubdivision(5)">5</button>
+                                        <button class="pima-sub-btn py-1 rounded text-[10px] font-bold bg-slate-800 text-slate-400 border border-slate-700" onclick="setPimaSubdivision(6)">6</button>
+                                        <button class="pima-sub-btn py-1 rounded text-[10px] font-bold bg-slate-800 text-slate-400 border border-slate-700" onclick="setPimaSubdivision(7)">7</button>
+                                        <button class="pima-sub-btn py-1 rounded text-[10px] font-bold bg-slate-800 text-slate-400 border border-slate-700" onclick="setPimaSubdivision(8)">8</button>
+                                    </div>
+                                    
+                                    <div class="flex justify-between items-center mt-2 bg-slate-900/50 p-2 rounded-lg border border-slate-700/50">
+                                        <label class="text-[9px] text-slate-400 font-bold uppercase">Ciclo Automático:</label>
+                                        <select id="pima-auto-cycle" class="bg-slate-800 text-rose-400 text-[10px] font-bold rounded border border-slate-600 focus:outline-none p-1 shadow-inner cursor-pointer" onchange="pimaUpdateAutoCycle()">
+                                            <option value="none">Libre (Manual)</option>
+                                            <option value="1-4">Ciclo 1 a 4</option>
+                                            <option value="5-8">Ciclo 5 a 8</option>
+                                            <option value="1-8">Ciclo 1 a 8</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="flex justify-between items-center bg-slate-900/50 p-2 rounded-lg border border-slate-700/50" id="pima-cycle-config-container">
+                                        <label class="text-[9px] text-slate-400 font-bold uppercase">Cambiar cada:</label>
+                                        <div class="flex items-center gap-1.5">
+                                            <input type="number" id="pima-cycle-count" min="1" value="1" onchange="pimaUpdateCycleCount()" class="w-10 bg-slate-800 text-white text-center text-[10px] font-bold rounded border border-slate-600 p-1 focus:outline-none focus:border-rose-500 shadow-inner">
+                                            <span class="text-[9px] text-slate-500 font-bold">ciclos</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <button id="pima-btn-metronome" onclick="togglePimaMetronome()" class="w-full py-3 mt-2 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-xl shadow-lg transition-transform active:scale-95 flex items-center justify-center gap-2 border border-slate-600">
-                                <i id="pima-metro-icon" data-lucide="play" class="w-4 h-4"></i> <span id="pima-metro-text">Iniciar Metrónomo</span>
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -336,30 +315,31 @@
             </button>
             <div class="flex items-center gap-3 mb-6 text-rose-500 shrink-0 border-b border-slate-800 pb-4">
                 <i data-lucide="flask-conical" class="w-6 h-6"></i>
-                <h2 class="text-xl font-bold text-slate-100">Lógica Biomecánica</h2>
+                <h2 class="text-xl font-bold text-slate-100">Lógica Biomecánica V2</h2>
             </div>
             
             <div class="overflow-y-auto pr-2 space-y-6 text-sm text-slate-300 custom-scrollbar flex-1">
-                <p>PimaLab evalúa topográficamente secuencias complejas (polifónicas) basándose en vectores reales de la anatomía de la mano derecha en la guitarra clásica.</p>
+                <p>PimaLab evalúa topográficamente secuencias complejas basándose en vectores reales de la anatomía de la mano derecha. Ahora incluye evaluación rítmica modular.</p>
                 
                 <div class="space-y-4">
                     <div><h3 class="text-emerald-400 font-bold mb-1">1. Polifonía y Recurrencia</h3><p class="text-xs text-slate-400">El motor permite eventos simultáneos limitados a un techo biomecánico de 3 dedos para mantener la viabilidad técnica.</p></div>
                     <div><h3 class="text-amber-400 font-bold mb-1">2. Apertura Total (Hand Span)</h3><p class="text-xs text-slate-400">Se evalúa la distancia estática entre el pulgar y el dedo más agudo en cada bloque. Extensiones masivas disparan la tensión base.</p></div>
                     <div><h3 class="text-red-400 font-bold mb-1">3. Cruces Anatómicos (Crossover)</h3><p class="text-xs text-slate-400">Si un dedo más corto (como i) ataca una cuerda más grave que un dedo más largo (como m), se produce un bloqueo articular severo.</p></div>
-                    <div><h3 class="text-red-400 font-bold mb-1">4. Multiplicador de Estrés Rítmico</h3><p class="text-xs text-slate-400">Activar el ritmo agrupa las notas, multiplicando el costo de fricción y saltos en un 30%.</p></div>
+                    <div><h3 class="text-rose-400 font-bold mb-1">4. Multiplicador de Estrés Rítmico</h3><p class="text-xs text-slate-400">Activar el ritmo agrupa las notas. La velocidad (BPM) y la subdivisión añaden un estrés friccional calculado al desplazamiento.</p></div>
+                    <div><h3 class="text-purple-400 font-bold mb-1">5. Bucle Perfecto (Seamless Loop)</h3><p class="text-xs text-slate-400">Algorítmicamente se prohíbe que la primera y última agrupación compartan dedos (i, m, a). El motor recalcula al vuelo hasta garantizar que la secuencia generada pueda repetirse ("loopearse") infinitamente sin obligar al músico a repetir un dedo torpemente. El pulgar (p) está exento de esta regla de salto.</p></div>
                 </div>
 
                 <div class="mt-6 border-t border-slate-800 pt-6">
-                    <h3 class="text-rose-400 font-bold mb-3 flex items-center gap-2"><i data-lucide="calculator" class="w-4 h-4"></i> Espacio Matemático</h3>
-                    <p class="text-xs text-slate-400 mb-4">El algoritmo genera las secuencias topográficas al azar evaluando "al vuelo". Matemáticamente, el universo de variaciones (incluyendo cuerdas) escala exponencialmente:</p>
+                    <h3 class="text-sky-400 font-bold mb-3 flex items-center gap-2"><i data-lucide="calculator" class="w-4 h-4"></i> Espacio Matemático</h3>
+                    <p class="text-xs text-slate-400 mb-4">El algoritmo descarta miles de secuencias inútiles por segundo. Considerando la restricción estricta de no repetir dedos consecutivos y la exclusión de solapamientos en los bordes del bucle, el universo de permutaciones válidas (incluyendo variaciones de cuerda) se ajusta a:</p>
                     <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
                         <table class="w-full text-xs font-mono text-left">
-                            <thead class="text-slate-500 border-b border-slate-800"><tr><th class="pb-2">Longitud</th><th class="pb-2">Variaciones Topográficas</th></tr></thead>
+                            <thead class="text-slate-500 border-b border-slate-800"><tr><th class="pb-2">Longitud</th><th class="pb-2">Permutaciones Válidas Aprox.</th></tr></thead>
                             <tbody class="text-slate-300">
-                                <tr><td class="py-1">2</td><td class="py-1 text-sky-400">168</td></tr>
-                                <tr><td class="py-1">4</td><td class="py-1 text-sky-400">21,120</td></tr>
-                                <tr><td class="py-1">6</td><td class="py-1 text-amber-400">2,654,592</td></tr>
-                                <tr><td class="py-1 text-rose-500 font-bold">8</td><td class="py-1 text-rose-500 font-bold">333,652,992</td></tr>
+                                <tr><td class="py-1">2</td><td class="py-1 text-sky-400">~ 144</td></tr>
+                                <tr><td class="py-1">4</td><td class="py-1 text-sky-400">~ 16,500</td></tr>
+                                <tr><td class="py-1 text-amber-400">6</td><td class="py-1 text-amber-400">~ 1,850,000</td></tr>
+                                <tr><td class="py-1 text-rose-500 font-bold">8</td><td class="py-1 text-rose-500 font-bold">~ 215,000,000</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -405,7 +385,6 @@
                         <option value="scales" class="text-purple-400 font-bold">7. Velocidad en Escalas Reales (60 BPM)</option>
                     </select>
 
-                    <!-- Lista exclusiva de Favoritos -->
                     <div class="flex items-center justify-between mb-2 mt-4 border-t border-slate-700/50 pt-4">
                         <div class="flex items-center gap-2">
                             <i data-lucide="star" class="w-4 h-4 text-sky-400"></i>
@@ -419,7 +398,6 @@
                         <option value="" class="text-slate-400">-- Aún no tienes favoritos --</option>
                     </select>
 
-                    <!-- Temporizador -->
                     <div id="routine-timer-container" class="hidden justify-between items-center mt-3 bg-amber-500/10 p-3 rounded-xl border border-amber-500/30">
                         <div class="flex items-center gap-2">
                             <div class="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></div>
@@ -432,7 +410,6 @@
                     </div>
                 </div>
                 
-                <!-- Estadísticas JMR -->
                 <div class="bg-slate-900 border border-slate-700 rounded-xl p-3 mb-6 flex flex-col gap-3 shadow-inner relative overflow-hidden">
                     <div class="flex justify-between items-center text-[10px] sm:text-xs text-slate-300">
                         <div class="flex items-center gap-1.5" title="Tiempo total de práctica"><i data-lucide="clock" class="w-3.5 h-3.5 text-sky-400"></i> Total: <span id="stat-time" class="font-mono text-sm font-bold text-white">00:00</span></div>
@@ -449,7 +426,6 @@
                     </div>
                 </div>
 
-                <!-- Secuencia Actual JMR (con overlay de countdown) -->
                 <div class="mb-6 relative" id="practice-area">
                     <div id="countdown-overlay" class="hidden absolute inset-0 z-50 bg-slate-900/95 flex-col items-center justify-center text-8xl font-black text-amber-500 rounded-2xl backdrop-blur-md shadow-[0_0_50px_rgba(245,158,11,0.3)] transition-transform duration-100">
                         <span id="countdown-number" class="drop-shadow-[0_0_15px_rgba(245,158,11,0.8)]">4</span>
@@ -462,14 +438,12 @@
                     <h2 class="text-center text-slate-400 text-sm font-medium uppercase tracking-wider mb-4">Secuencia Actual</h2>
                     <div id="combo-display" class="flex justify-center items-start gap-3 md:gap-4 transition-all duration-200 mb-6 pb-2"></div>
 
-                    <!-- Fretboard JMR -->
                     <h2 id="fretboard-title" class="text-center text-slate-500 text-xs font-medium uppercase tracking-wider mb-2 transition-all">Diapasón (Trastes 1-4)</h2>
                     <div id="jmr-fretboard-container" class="w-full transition-all duration-200"></div>
                     <p class="text-[10px] text-slate-400 text-center mt-3 bg-slate-900/80 p-2 rounded-lg border border-slate-700/50 leading-relaxed">
                         <span class="text-amber-500 font-bold"><i data-lucide="info" class="w-3 h-3 inline pb-0.5"></i> Regla Mecánica:</span> Mantén la mano fija. <strong>Cada dedo tiene su propio traste asignado</strong> en la posición actual.
                     </p>
 
-                    <!-- Preview Siguiente JMR -->
                     <div id="next-combo-preview" class="hidden mt-3 bg-slate-900/90 border border-slate-700 p-3 rounded-xl flex-col items-center justify-center transition-all duration-300 shadow-inner">
                         <div class="flex items-center gap-2 mb-2 w-full justify-center relative">
                             <span class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Preparar Siguiente</span>
@@ -486,7 +460,6 @@
                     </div>
                 </div>
 
-                <!-- Main Controls JMR -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 border-t border-slate-700/50 pt-6">
                     <button onclick="manualGenerate()" class="w-full bg-amber-500 hover:bg-amber-400 active:bg-amber-600 text-slate-900 font-bold py-3 px-2 rounded-xl flex items-center justify-center gap-1.5 transition-all shadow-lg hover:shadow-amber-500/30 active:scale-95 text-xs sm:text-sm">
                         <i id="generate-icon" data-lucide="refresh-cw" class="w-4 h-4"></i> Secuencia
@@ -499,9 +472,7 @@
                     </button>
                 </div>
 
-                <!-- Configuración Avanzada JMR -->
                 <div class="bg-slate-750 rounded-2xl p-5 border border-slate-700/50 bg-slate-800 shadow-inner mb-6 space-y-5">
-                    <!-- Técnicas -->
                     <div>
                         <h3 class="text-slate-400 text-xs uppercase tracking-wider font-semibold mb-3 border-b border-slate-700 pb-1"><i data-lucide="hand" class="w-3 h-3 inline"></i> Técnicas Mecánicas</h3>
                         <div class="mb-4">
@@ -537,7 +508,6 @@
                             </label>
                         </div>
                     </div>
-                    <!-- Mástil y Automatización -->
                     <div class="pt-4 border-t border-slate-700 space-y-4">
                         <h3 class="text-slate-400 text-xs uppercase tracking-wider font-semibold mb-3 border-b border-slate-700 pb-1"><i data-lucide="cpu" class="w-3 h-3 inline"></i> Automatización y Mástil</h3>
                         <div class="bg-slate-900/50 p-3 rounded-lg border border-slate-700 flex flex-col gap-2">
@@ -577,7 +547,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Longitud -->
                     <div class="pt-4 border-t border-slate-700">
                         <div class="flex items-center gap-2 mb-3">
                             <i data-lucide="settings-2" class="w-4 h-4 text-slate-400"></i>
@@ -589,7 +558,6 @@
                             <button id="btn-len-5" onclick="setLength(5)" class="py-2 px-3 rounded-lg font-medium transition-all bg-slate-700 text-slate-400 border border-slate-600 hover:bg-slate-600">5 Notas</button>
                         </div>
                     </div>
-                    <!-- Metrónomo -->
                     <div class="pt-4 border-t border-slate-700 space-y-4">
                         <h3 class="text-slate-400 text-xs uppercase tracking-wider font-semibold mb-3 border-b border-slate-700 pb-1"><i data-lucide="metronome" class="w-3 h-3 inline"></i> Metrónomo y Ritmo</h3>
                         <div class="grid grid-cols-2 gap-4">
@@ -608,7 +576,6 @@
                                 <input type="range" id="vol-slider" min="0" max="100" value="50" oninput="updateVolume(this.value)" class="w-full h-2 bg-slate-600 rounded-lg appearance-none cursor-pointer accent-amber-500">
                             </div>
                         </div>
-                        <!-- Subs -->
                         <div class="flex items-center gap-3">
                             <span class="text-[10px] text-slate-300 whitespace-nowrap"><i data-lucide="hash" class="w-3 h-3 inline"></i> Pulsos/Compás:</span>
                             <div class="flex gap-2 w-full">
@@ -643,115 +610,10 @@
         </div>
     </div>
 
-    <!-- Modal Ayuda JMR -->
-    <div id="help-modal" class="hidden fixed inset-0 z-[200] bg-slate-950/90 items-center justify-center p-4 backdrop-blur-md">
-        <div class="bg-slate-800 rounded-2xl border border-slate-600 p-6 max-w-2xl w-full shadow-2xl modal-enter relative max-h-[90vh] flex flex-col">
-            <button onclick="toggleHelp()" class="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors z-10 bg-slate-800 rounded-full p-1 border border-slate-600">
-                <i data-lucide="x" class="w-5 h-5"></i>
-            </button>
-            <div class="flex items-center gap-3 mb-4 text-amber-500 shrink-0 border-b border-slate-700 pb-3">
-                <i data-lucide="book-open" class="w-6 h-6"></i>
-                <h2 class="text-xl font-bold text-slate-100">Manual JMR Guitar Trainer</h2>
-            </div>
-            
-            <div class="overflow-y-auto pr-2 space-y-6 text-xs text-slate-300 custom-scrollbar">
-                
-                <!-- Sección 1: Controles y Rutinas -->
-                <div>
-                    <h3 class="font-bold text-amber-500 mb-2 uppercase tracking-wider text-sm flex items-center gap-2"><i data-lucide="dumbbell" class="w-4 h-4"></i> Flujo de Entrenamiento</h3>
-                    <ul class="space-y-2">
-                        <li><span class="text-white font-bold">Rutinas Rápidas Lentas:</span> Pre-configuraciones de técnicas específicas. Inician a BPM bajos (40-60) y cambian tras 8 compases con un conteo regresivo visual y sonoro (4, 3, 2, 1). Ideal para mecanizar antes de la velocidad.</li>
-                        <li><span class="text-sky-400 font-bold">Botón Favoritos (⭐):</span> ¿Encontraste un patrón difícil? Guárdalo. Se almacenará en tu navegador y podrás invocarlo en cualquier momento desde el selector de rutinas para perfeccionarlo.</li>
-                    </ul>
-                </div>
-
-                <!-- Sección 2: Modificadores Mano Izquierda -->
-                <div class="bg-slate-900/50 p-3 rounded-xl border border-slate-700">
-                    <h3 class="font-bold text-amber-500 mb-2 uppercase tracking-wider flex items-center gap-2"><i data-lucide="hand" class="w-4 h-4"></i> Modificadores de Mano Izquierda</h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <p><span class="text-amber-400 font-bold">Salto de Cuerdas:</span> Obliga al algoritmo a cambiar a una cuerda distinta en CADA nota de la secuencia. Extremo para la coordinación.</p>
-                        <p><span class="text-amber-400 font-bold">Evitar Fáciles:</span> Filtra patrones secuenciales perezosos (ej. 1-2-3-4 o 4-3-2-1), forzando cruces incómodos en los dedos.</p>
-                        <p><span class="text-amber-400 font-bold">Vincular Dedo 2 y 3:</span> Trata al dedo medio y anular como una unidad limitante (debido al tendón compartido), prohibiendo su uso consecutivo.</p>
-                        <p><span class="text-purple-400 font-bold">Escalas Reales (3NPS):</span> Restringe el algoritmo geométrico para que solo arroje digitaciones válidas de escalas modales de 3 notas por cuerda.</p>
-                    </div>
-                </div>
-
-                <!-- Sección 3: Técnicas Mano Derecha -->
-                <div>
-                    <h3 class="font-bold text-amber-500 mb-2 uppercase tracking-wider flex items-center gap-2"><i data-lucide="music" class="w-4 h-4"></i> Técnicas de Ataque (Mano Derecha)</h3>
-                    <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        <li class="bg-slate-800 p-2 rounded-lg border border-slate-700"><span class="text-green-400 font-bold block mb-1">Normal / IMA / PIMA</span> Alternancia estricta de dedos de la mano derecha. Perfecto para guitarra clásica o bajo.</li>
-                        <li class="bg-slate-800 p-2 rounded-lg border border-slate-700"><span class="text-amber-400 font-bold block mb-1">Púa Alternada (↓↑)</span> Ataque forzado e ininterrumpido Abajo/Arriba sin importar el cambio de cuerda.</li>
-                        <li class="bg-slate-800 p-2 rounded-lg border border-slate-700"><span class="text-sky-400 font-bold block mb-1">Legato (Púa o Dedos)</span> Atacas solo al cambiar de cuerda. Dentro de la misma cuerda se aplica Hammer-On (H) o Pull-Off (P).</li>
-                        <li class="bg-slate-800 p-2 rounded-lg border border-slate-700"><span class="text-purple-400 font-bold block mb-1">Hybrid Picking</span> Púa (↓) estricta para notas graves/ataque inicial, y dedos (m/a) para saltos agudos.</li>
-                    </ul>
-                </div>
-
-                <!-- Sección 4: Automatización -->
-                <div class="bg-slate-900/50 p-3 rounded-xl border border-slate-700">
-                    <h3 class="font-bold text-amber-500 mb-2 uppercase tracking-wider flex items-center gap-2"><i data-lucide="cpu" class="w-4 h-4"></i> Mástil y Automatización</h3>
-                    <ul class="space-y-2">
-                        <li><span class="text-amber-400 font-bold">Avanzar +1 Traste:</span> Cada vez que la secuencia cambia o se agotan los compases, la mano completa se mueve un traste hacia el agudo, explorando toda la tensión del mástil.</li>
-                        <li><span class="text-white font-bold">Cambio Auto Ejercicio:</span> Genera una mutación matemática de los dedos cada "X" compases programados.</li>
-                        <li><span class="text-sky-400 font-bold">Ciclar Subdivisión:</span> Mantiene la misma figura de dedos, pero incrementa gradualmente la velocidad de la nota por clic (Negras → Corcheas → Tresillos → Semis). Puedes configurar el rango (1x-4x, 5x-8x, o 1x-8x).</li>
-                    </ul>
-                </div>
-
-                <!-- Sección 5: Matemáticas del Algoritmo -->
-                <div class="border-t border-slate-700 pt-4">
-                    <h3 class="font-bold text-emerald-400 mb-2 uppercase tracking-wider flex items-center gap-2"><i data-lucide="calculator" class="w-4 h-4"></i> Las Matemáticas Infinitas del Motor</h3>
-                    <p class="mb-3 text-[10px] text-slate-400">El algoritmo de JMR está diseñado bajo la premisa biomecánica de <strong>no repetir el mismo dedo ni la misma cuerda de forma consecutiva</strong>, y a su vez exige que <strong>el primer y último dedo de la secuencia no coincidan</strong> para lograr un bucle de práctica perfecto. Esta restricción algorítmica genera un universo de posibilidades inagotable:</p>
-                    
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-center">
-                        <div class="bg-slate-800 p-3 rounded-lg border border-slate-600 shadow-inner">
-                            <span class="block text-amber-400 font-bold mb-2 border-b border-slate-600/50 pb-1 text-sm">Práctica en 1 Sola Cuerda</span>
-                            <ul class="space-y-1 text-slate-300 text-xs text-left px-2">
-                                <li class="flex justify-between">Secuencia de 3 Notas: <span class="text-white font-mono font-bold">24 rutinas</span></li>
-                                <li class="flex justify-between">Secuencia de 4 Notas: <span class="text-white font-mono font-bold">84 rutinas</span></li>
-                                <li class="flex justify-between text-emerald-300">Secuencia de 5 Notas: <span class="text-emerald-400 font-mono font-bold">240 rutinas</span></li>
-                            </ul>
-                        </div>
-                        <div class="bg-slate-900 p-3 rounded-lg border border-amber-500/30 shadow-[0_0_15px_rgba(245,158,11,0.1)]">
-                            <span class="block text-amber-500 font-black mb-2 border-b border-amber-500/30 pb-1 text-sm">Activando "Salto de Cuerdas"</span>
-                            <ul class="space-y-1 text-slate-300 text-xs text-left px-2">
-                                <li class="flex justify-between">Secuencia de 3 Notas: <span class="text-white font-mono font-bold">3,600 rutinas</span></li>
-                                <li class="flex justify-between">Secuencia de 4 Notas: <span class="text-white font-mono font-bold">63,000 rutinas</span></li>
-                                <li class="flex justify-between text-amber-300">Secuencia de 5 Notas: <span class="text-amber-500 font-mono font-bold text-sm">900,000 rutinas</span></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <p class="mt-3 text-[10px] text-slate-500 italic text-center">* Si además enciendes el modo "Vinculado 2 y 3" (limitación tendinosa anatómica real), las matemáticas se adaptan para generar 112,500 variantes estrictas de 5 notas con salto, forzando independencia pura.</p>
-                </div>
-
-            </div>
-            
-            <button onclick="toggleHelp()" class="w-full bg-slate-700 hover:bg-slate-600 text-white font-medium py-3 px-4 rounded-xl transition-colors shrink-0 mt-4 shadow-lg border border-slate-600">Cerrar Manual</button>
-        </div>
-    </div>
-
-    <!-- Modal Stats JMR -->
-    <div id="stats-modal" class="hidden fixed inset-0 bg-slate-950/90 items-center justify-center p-4 backdrop-blur-md z-[200]">
-        <div class="bg-slate-800 rounded-2xl border border-slate-600 p-6 max-w-md w-full shadow-2xl relative max-h-[85vh] flex flex-col">
-            <button onclick="toggleStatsModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors z-10 bg-slate-800 rounded-full p-1">
-                <i data-lucide="x" class="w-6 h-6"></i>
-            </button>
-            <div class="flex items-center gap-3 mb-4 text-sky-400 shrink-0 border-b border-slate-700 pb-3">
-                <i data-lucide="history" class="w-6 h-6"></i>
-                <h2 class="text-xl font-bold text-slate-100">Historial de Práctica</h2>
-            </div>
-            <div id="stats-list" class="overflow-y-auto pr-2 space-y-3 text-xs text-slate-300 flex-1 min-h-[200px]">
-                <div class="text-center text-slate-500 py-10 flex flex-col items-center justify-center">Cargando historial...</div>
-            </div>
-            <button onclick="toggleStatsModal()" class="w-full bg-slate-700 hover:bg-slate-600 text-white font-medium py-3 px-4 rounded-xl transition-colors shrink-0 mt-4">Cerrar Historial</button>
-        </div>
-    </div>
-
-
-    <!-- ================= APP 2: FRETMIND ================= -->
+    <!-- APP 2: FRETMIND -->
     <div id="fm-wrapper" class="hidden min-h-screen bg-slate-900 flex-col w-full relative">
         <div id="app-container" class="min-h-screen flex flex-col relative w-full">
             
-            <!-- FRETMIND: PANTALLA HOME -->
             <div id="screen-home" class="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 space-y-8 fade-in overflow-y-auto custom-scrollbar relative">
                 <button onclick="returnToHub()" class="absolute top-4 left-4 p-3 bg-slate-800 hover:bg-slate-700 rounded-full transition-colors text-slate-300 border border-slate-700 flex items-center gap-2 shadow-lg z-50 group">
                     <i data-lucide="arrow-left" class="w-5 h-5 group-hover:-translate-x-1 transition-transform"></i> 
@@ -796,7 +658,6 @@
                 </div>
             </div>
 
-            <!-- FRETMIND: MAPA GUIADO -->
             <div id="screen-guided" class="hidden flex-1 flex flex-col fade-in overflow-y-auto custom-scrollbar pb-12">
                 <div class="sticky top-0 bg-slate-900/90 backdrop-blur-md p-4 flex items-center justify-between border-b border-slate-800 z-30">
                     <button onclick="goToHome()" class="p-2 hover:bg-slate-800 rounded-full transition-colors text-slate-400">
@@ -808,7 +669,6 @@
                 <div class="p-4 sm:p-6 max-w-md mx-auto w-full flex flex-col items-center pt-8" id="guided-map-container"></div>
             </div>
 
-            <!-- FRETMIND: SETUP MODO LIBRE -->
             <div id="screen-free-setup" class="hidden flex-1 flex flex-col items-center justify-center p-4 sm:p-6 fade-in overflow-y-auto custom-scrollbar pb-12">
                 <div class="w-full max-w-md mb-6 flex items-center relative">
                     <button onclick="goToHome()" class="absolute left-0 p-2 hover:bg-slate-800 rounded-full transition-colors text-slate-400">
@@ -885,7 +745,6 @@
                 </div>
             </div>
 
-            <!-- FRETMIND: PANTALLA JUEGO -->
             <div id="screen-game" class="hidden flex-1 flex flex-col relative">
                 <div id="modal-level-end" class="hidden absolute inset-0 z-50 bg-slate-900/95 backdrop-blur-sm flex flex-col items-center justify-center p-4 fade-in">
                     <div class="bg-slate-800 p-8 rounded-3xl border border-slate-700 text-center max-w-sm w-full shadow-2xl transform transition-transform scale-100">
@@ -964,7 +823,6 @@
                 </div>
             </div>
 
-            <!-- FRETMIND: ESTADÍSTICAS GLOBALES -->
             <div id="screen-stats" class="hidden flex-1 flex flex-col p-4 sm:p-6 space-y-6 overflow-y-auto fade-in custom-scrollbar">
                 <div class="flex items-center justify-between">
                     <button onclick="goToHome()" class="p-2 hover:bg-slate-700 rounded-full transition-colors flex items-center text-slate-400">
@@ -1001,56 +859,112 @@
         </div>
     </div>
 
-    <script>
-        // Custom Modal Implementations to strictly avoid native alert(), confirm(), prompt()
-        window.customConfirm = function(msg, callback) {
-            const modal = document.createElement('div');
-            modal.className = 'fixed inset-0 z-[9999] bg-slate-900/90 backdrop-blur-sm flex items-center justify-center p-4 fade-in';
-            modal.innerHTML = `
-                <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 text-center max-w-sm w-full shadow-2xl">
-                    <p class="text-white text-lg mb-6">${msg}</p>
-                    <div class="flex gap-4 justify-center">
-                        <button id="btn-custom-cancel" class="flex-1 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-xl transition-colors font-bold border border-slate-600">Cancelar</button>
-                        <button id="btn-custom-ok" class="flex-1 py-3 bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-bold rounded-xl transition-colors">Aceptar</button>
-                    </div>
-                </div>`;
-            document.body.appendChild(modal);
-            document.getElementById('btn-custom-ok').onclick = () => { modal.remove(); callback(true); };
-            document.getElementById('btn-custom-cancel').onclick = () => { modal.remove(); callback(false); };
-        };
-
-        window.customPrompt = function(msg, defaultText, callback) {
-            const modal = document.createElement('div');
-            modal.className = 'fixed inset-0 z-[9999] bg-slate-900/90 backdrop-blur-sm flex items-center justify-center p-4 fade-in';
-            modal.innerHTML = `
-                <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 text-center max-w-sm w-full shadow-2xl">
-                    <p class="text-white text-lg mb-4 font-bold">${msg}</p>
-                    <input type="text" id="custom-prompt-input" value="${defaultText}" class="w-full bg-slate-900 text-white p-3 rounded-xl border border-slate-600 mb-6 outline-none focus:border-amber-500 font-medium text-center">
-                    <div class="flex gap-4 justify-center">
-                        <button id="btn-prompt-cancel" class="flex-1 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-xl transition-colors font-bold border border-slate-600">Cancelar</button>
-                        <button id="btn-prompt-ok" class="flex-1 py-3 bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold rounded-xl transition-colors shadow-lg shadow-amber-500/20">Guardar</button>
-                    </div>
-                </div>`;
-            document.body.appendChild(modal);
-            const input = document.getElementById('custom-prompt-input');
-            input.focus(); input.select();
+    <!-- Modal Ayuda JMR -->
+    <div id="help-modal" class="hidden fixed inset-0 z-[200] bg-slate-950/90 items-center justify-center p-4 backdrop-blur-md">
+        <div class="bg-slate-800 rounded-2xl border border-slate-600 p-6 max-w-2xl w-full shadow-2xl modal-enter relative max-h-[90vh] flex flex-col">
+            <button onclick="toggleHelp()" class="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors z-10 bg-slate-800 rounded-full p-1 border border-slate-600">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div class="flex items-center gap-3 mb-4 text-amber-500 shrink-0 border-b border-slate-700 pb-3">
+                <i data-lucide="book-open" class="w-6 h-6"></i>
+                <h2 class="text-xl font-bold text-slate-100">Manual JMR Guitar Trainer</h2>
+            </div>
             
-            input.addEventListener('keypress', function (e) {
-                if (e.key === 'Enter') { modal.remove(); callback(input.value); }
-            });
+            <div class="overflow-y-auto pr-2 space-y-6 text-xs text-slate-300 custom-scrollbar">
+                <div>
+                    <h3 class="font-bold text-amber-500 mb-2 uppercase tracking-wider text-sm flex items-center gap-2"><i data-lucide="dumbbell" class="w-4 h-4"></i> Flujo de Entrenamiento</h3>
+                    <ul class="space-y-2">
+                        <li><span class="text-white font-bold">Rutinas Rápidas Lentas:</span> Pre-configuraciones de técnicas específicas. Inician a BPM bajos (40-60) y cambian tras 8 compases. Ideal para mecanizar antes de la velocidad.</li>
+                        <li><span class="text-sky-400 font-bold">Botón Favoritos (⭐):</span> ¿Encontraste un patrón difícil? Guárdalo. Se almacenará en tu navegador y podrás invocarlo en cualquier momento.</li>
+                    </ul>
+                </div>
 
-            document.getElementById('btn-prompt-ok').onclick = () => { modal.remove(); callback(input.value); };
-            document.getElementById('btn-prompt-cancel').onclick = () => { modal.remove(); callback(null); };
-        };
+                <div class="bg-slate-900/50 p-3 rounded-xl border border-slate-700">
+                    <h3 class="font-bold text-amber-500 mb-2 uppercase tracking-wider flex items-center gap-2"><i data-lucide="hand" class="w-4 h-4"></i> Modificadores de Mano Izquierda</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <p><span class="text-amber-400 font-bold">Salto de Cuerdas:</span> Obliga al algoritmo a cambiar a una cuerda distinta en CADA nota de la secuencia. Extremo para la coordinación.</p>
+                        <p><span class="text-amber-400 font-bold">Evitar Fáciles:</span> Filtra patrones secuenciales perezosos (ej. 1-2-3-4 o 4-3-2-1), forzando cruces incómodos en los dedos.</p>
+                        <p><span class="text-amber-400 font-bold">Vincular Dedo 2 y 3:</span> Trata al dedo medio y anular como una unidad limitante, prohibiendo su uso consecutivo.</p>
+                        <p><span class="text-purple-400 font-bold">Escalas Reales (3NPS):</span> Restringe el algoritmo geométrico para que solo arroje digitaciones válidas de escalas modales de 3 notas por cuerda.</p>
+                    </div>
+                </div>
 
+                <div>
+                    <h3 class="font-bold text-amber-500 mb-2 uppercase tracking-wider flex items-center gap-2"><i data-lucide="music" class="w-4 h-4"></i> Técnicas de Ataque (Mano Derecha)</h3>
+                    <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <li class="bg-slate-800 p-2 rounded-lg border border-slate-700"><span class="text-green-400 font-bold block mb-1">Normal / IMA / PIMA</span> Alternancia estricta de dedos de la mano derecha. Perfecto para guitarra clásica o bajo.</li>
+                        <li class="bg-slate-800 p-2 rounded-lg border border-slate-700"><span class="text-amber-400 font-bold block mb-1">Púa Alternada (↓↑)</span> Ataque forzado e ininterrumpido Abajo/Arriba sin importar el cambio de cuerda.</li>
+                        <li class="bg-slate-800 p-2 rounded-lg border border-slate-700"><span class="text-sky-400 font-bold block mb-1">Legato (Púa o Dedos)</span> Atacas solo al cambiar de cuerda. Dentro de la misma cuerda se aplica Hammer-On (H) o Pull-Off (P).</li>
+                        <li class="bg-slate-800 p-2 rounded-lg border border-slate-700"><span class="text-purple-400 font-bold block mb-1">Hybrid Picking</span> Púa (↓) estricta para notas graves/ataque inicial, y dedos (m/a) para saltos agudos.</li>
+                    </ul>
+                </div>
+
+                <div class="bg-slate-900/50 p-3 rounded-xl border border-slate-700">
+                    <h3 class="font-bold text-amber-500 mb-2 uppercase tracking-wider flex items-center gap-2"><i data-lucide="cpu" class="w-4 h-4"></i> Mástil y Automatización</h3>
+                    <ul class="space-y-2">
+                        <li><span class="text-amber-400 font-bold">Avanzar +1 Traste:</span> Cada vez que la secuencia cambia o se agotan los compases, la mano completa se mueve un traste hacia el agudo.</li>
+                        <li><span class="text-white font-bold">Cambio Auto Ejercicio:</span> Genera una mutación matemática de los dedos cada "X" compases programados.</li>
+                        <li><span class="text-sky-400 font-bold">Ciclar Subdivisión:</span> Incrementa gradualmente la velocidad de la nota por clic (Negras → Corcheas → Tresillos → Semis).</li>
+                    </ul>
+                </div>
+
+                <div class="border-t border-slate-700 pt-4">
+                    <h3 class="font-bold text-emerald-400 mb-2 uppercase tracking-wider flex items-center gap-2"><i data-lucide="calculator" class="w-4 h-4"></i> Las Matemáticas Infinitas del Motor</h3>
+                    <p class="mb-3 text-[10px] text-slate-400">El algoritmo de JMR está diseñado bajo la premisa biomecánica de <strong>no repetir el mismo dedo ni la misma cuerda de forma consecutiva</strong>, y a su vez exige que <strong>el primer y último dedo de la secuencia no coincidan</strong> para lograr un bucle de práctica perfecto.</p>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-center">
+                        <div class="bg-slate-800 p-3 rounded-lg border border-slate-600 shadow-inner">
+                            <span class="block text-amber-400 font-bold mb-2 border-b border-slate-600/50 pb-1 text-sm">Práctica en 1 Sola Cuerda</span>
+                            <ul class="space-y-1 text-slate-300 text-xs text-left px-2">
+                                <li class="flex justify-between">Secuencia de 3 Notas: <span class="text-white font-mono font-bold">24 rutinas</span></li>
+                                <li class="flex justify-between">Secuencia de 4 Notas: <span class="text-white font-mono font-bold">84 rutinas</span></li>
+                                <li class="flex justify-between text-emerald-300">Secuencia de 5 Notas: <span class="text-emerald-400 font-mono font-bold">240 rutinas</span></li>
+                            </ul>
+                        </div>
+                        <div class="bg-slate-900 p-3 rounded-lg border border-amber-500/30 shadow-[0_0_15px_rgba(245,158,11,0.1)]">
+                            <span class="block text-amber-500 font-black mb-2 border-b border-amber-500/30 pb-1 text-sm">Activando "Salto de Cuerdas"</span>
+                            <ul class="space-y-1 text-slate-300 text-xs text-left px-2">
+                                <li class="flex justify-between">Secuencia de 3 Notas: <span class="text-white font-mono font-bold">3,600 rutinas</span></li>
+                                <li class="flex justify-between">Secuencia de 4 Notas: <span class="text-white font-mono font-bold">63,000 rutinas</span></li>
+                                <li class="flex justify-between text-amber-300">Secuencia de 5 Notas: <span class="text-amber-500 font-mono font-bold text-sm">900,000 rutinas</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
+            <button onclick="toggleHelp()" class="w-full bg-slate-700 hover:bg-slate-600 text-white font-medium py-3 px-4 rounded-xl transition-colors shrink-0 mt-4 shadow-lg border border-slate-600">Cerrar Manual</button>
+        </div>
+    </div>
+
+    <!-- Modal Stats JMR -->
+    <div id="stats-modal" class="hidden fixed inset-0 bg-slate-950/90 items-center justify-center p-4 backdrop-blur-md z-[200]">
+        <div class="bg-slate-800 rounded-2xl border border-slate-600 p-6 max-w-md w-full shadow-2xl relative max-h-[85vh] flex flex-col">
+            <button onclick="toggleStatsModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors z-10 bg-slate-800 rounded-full p-1">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <div class="flex items-center gap-3 mb-4 text-sky-400 shrink-0 border-b border-slate-700 pb-3">
+                <i data-lucide="history" class="w-6 h-6"></i>
+                <h2 class="text-xl font-bold text-slate-100">Historial de Práctica</h2>
+            </div>
+            <div id="stats-list" class="overflow-y-auto pr-2 space-y-3 text-xs text-slate-300 flex-1 min-h-[200px]">
+                <div class="text-center text-slate-500 py-10 flex flex-col items-center justify-center">Cargando historial...</div>
+            </div>
+            <button onclick="toggleStatsModal()" class="w-full bg-slate-700 hover:bg-slate-600 text-white font-medium py-3 px-4 rounded-xl transition-colors shrink-0 mt-4">Cerrar Historial</button>
+        </div>
+    </div>
+
+    <!-- SCRIPTS CORE Y NAVEGACIÓN -->
+    <script>
         const showToastGlobal = function(msg, type = 'success') {
             const container = document.getElementById('toast-container');
             const color = type === 'success' ? 'bg-emerald-600' : 'bg-red-600';
             const toast = document.createElement('div');
-            toast.className = `${color} text-white px-4 py-2 rounded-lg shadow-xl text-xs font-bold mb-2 transform transition-all duration-300 translate-y-10 opacity-0 flex items-center gap-2 border border-white/20`;
+            toast.className = `${color} text-white px-4 py-2 rounded-lg shadow-xl text-xs font-bold mb-2 transform transition-all duration-300 translate-y-10 opacity-0 flex items-center gap-2`;
             toast.innerHTML = `<i data-lucide="${type==='success'?'check-circle':'alert-circle'}" class="w-4 h-4"></i> ${msg}`;
             container.appendChild(toast);
-            lucide.createIcons();
+            if (window.lucide) lucide.createIcons();
             requestAnimationFrame(() => toast.classList.remove('translate-y-10', 'opacity-0'));
             setTimeout(() => {
                 toast.classList.add('translate-y-10', 'opacity-0');
@@ -1064,36 +978,38 @@
             document.getElementById('labchord-wrapper').classList.add('hidden'); document.getElementById('labchord-wrapper').classList.remove('flex');
             document.getElementById('pimalab-wrapper').classList.add('hidden'); document.getElementById('pimalab-wrapper').classList.remove('flex');
             document.getElementById('main-hub').classList.remove('hidden'); document.getElementById('main-hub').classList.add('flex');
+            
             if (typeof isMetronomeOn !== 'undefined' && isMetronomeOn) { toggleMetronome(); }
+            if (typeof pimaIsPlaying !== 'undefined' && pimaIsPlaying) { pimaToggleMetronome(); }
             if (typeof exitGame === 'function') { exitGame(); }
         }
 
         function launchJMR() {
             document.getElementById('main-hub').classList.add('hidden'); document.getElementById('main-hub').classList.remove('flex');
             document.getElementById('jmr-wrapper').classList.remove('hidden'); document.getElementById('jmr-wrapper').classList.add('flex');
-            lucide.createIcons();
+            if (window.lucide) lucide.createIcons();
         }
 
         function launchFretmind() {
             document.getElementById('main-hub').classList.add('hidden'); document.getElementById('main-hub').classList.remove('flex');
             document.getElementById('fm-wrapper').classList.remove('hidden'); document.getElementById('fm-wrapper').classList.add('flex');
-            goToHome(); lucide.createIcons();
+            goToHome(); if (window.lucide) lucide.createIcons();
         }
 
         function launchLabChord() {
             document.getElementById('main-hub').classList.add('hidden'); document.getElementById('main-hub').classList.remove('flex');
             document.getElementById('labchord-wrapper').classList.remove('hidden'); document.getElementById('labchord-wrapper').classList.add('flex');
-            lucide.createIcons();
+            if (window.lucide) lucide.createIcons();
         }
 
         function launchPimaLab() {
             document.getElementById('main-hub').classList.add('hidden'); document.getElementById('main-hub').classList.remove('flex');
             document.getElementById('pimalab-wrapper').classList.remove('hidden'); document.getElementById('pimalab-wrapper').classList.add('flex');
-            lucide.createIcons();
+            if (window.lucide) lucide.createIcons();
         }
     </script>
 
-    <!-- ================= JAVASCRIPT APP 1: JMR GUITAR TRAINER ================= -->
+    <!-- APP 1: JMR GUITAR TRAINER (SCRIPT) -->
     <script>
         let comboLength = 4;
         const fingerNames = { 1: 'Índice', 2: 'Medio', 3: 'Anular', 4: 'Meñique' };
@@ -1112,20 +1028,17 @@
         let measuresToChange = 8, currentMeasureCount = 1, schedMeasureCount = 1, totalMeasuresElapsed = 0; 
         let nextNoteTime = 0.0, currentTick = 0, scheduleAheadTime = 0.1, timerID, visualQueue = [], animationFrameId;
 
-        // Transitions
         let isTransitioning = false, transitionBeatsLeft = 0;
-
         let sessionSeconds = 0, totalMeasuresSession = 0, maxBpmSession = 40, statsIntervalID = null, currentNoteIndex = 0, routineTimeRemaining = null; 
 
         function saveFavorite() {
-            window.customPrompt("Dale un nombre a este ejercicio favorito:", "Mi Ejercicio", (name) => {
-                if (!name) return;
-                const favs = JSON.parse(localStorage.getItem('jmr_favorites') || '[]');
-                favs.push({ name: name, combo: [...currentComboArr], frets: [...currentFretsArr], strings: [...currentStringsArr], globalString: currentStringGlobal, baseFret: currentBaseFret, rightHandTech: rightHandTech });
-                localStorage.setItem('jmr_favorites', JSON.stringify(favs));
-                loadFavoritesToSelect();
-                showToastGlobal("¡Ejercicio guardado en favoritos!", "success");
-            });
+            // Modificado para evitar prompt y confirm. Se usará un nombre automático para el favorito.
+            const name = `Favorito - ${new Date().toLocaleTimeString()}`;
+            const favs = JSON.parse(localStorage.getItem('jmr_favorites') || '[]');
+            favs.push({ name: name, combo: [...currentComboArr], frets: [...currentFretsArr], strings: [...currentStringsArr], globalString: currentStringGlobal, baseFret: currentBaseFret, rightHandTech: rightHandTech });
+            localStorage.setItem('jmr_favorites', JSON.stringify(favs));
+            loadFavoritesToSelect();
+            showToastGlobal("¡Ejercicio guardado en favoritos!", "success");
         }
 
         function loadFavoritesToSelect() {
@@ -1157,15 +1070,14 @@
             const idx = parseInt(selector.value.split('_')[1]);
             const favs = JSON.parse(localStorage.getItem('jmr_favorites') || '[]');
             
-            window.customConfirm(`¿Seguro que deseas borrar el favorito "${favs[idx].name}"?`, (confirmed) => {
-                if (confirmed) {
-                    favs.splice(idx, 1);
-                    localStorage.setItem('jmr_favorites', JSON.stringify(favs));
-                    showToastGlobal("Favorito eliminado", "success");
-                    loadFavoritesToSelect();
-                    manualGenerate();
-                }
-            });
+            // Eliminación directa sin confirmación para evitar alert()
+            if (favs[idx]) {
+                favs.splice(idx, 1);
+                localStorage.setItem('jmr_favorites', JSON.stringify(favs));
+                showToastGlobal("Favorito eliminado", "success");
+                loadFavoritesToSelect();
+                manualGenerate();
+            }
         }
 
         function loadLocalStats() {
@@ -1190,7 +1102,7 @@
                     <div class="text-right"><p class="text-white font-mono"><i data-lucide="activity" class="w-3 h-3 inline text-amber-500 pb-0.5"></i> ${s.maxBpm} BPM</p><p class="text-slate-400 text-[10px] mt-0.5">${s.measures} comp. | ${mins}m ${secs}s</p></div>
                 </div>`;
             }).join('');
-            lucide.createIcons();
+            if (window.lucide) lucide.createIcons();
         }
 
         function toggleStatsModal() {
@@ -1237,7 +1149,7 @@
                     isValid = isHardMode ? !isSequential(newCombo) : true;
                 }
                 
-                // Nueva regla: el primer y último dedo no pueden ser el mismo
+                // Nueva regla JMR: el primer y último dedo no pueden ser el mismo
                 if (isValid && comboLength > 1) {
                     if (newCombo[0] === newCombo[newCombo.length - 1]) {
                         isValid = false;
@@ -1559,7 +1471,7 @@
                 btn.classList.replace('bg-red-500/20', 'bg-slate-700'); btn.classList.replace('text-red-400', 'text-white'); btn.classList.replace('border-red-500/50', 'border-slate-600'); btn.classList.replace('hover:bg-red-500/30', 'hover:bg-slate-600');
                 icon.setAttribute('data-lucide', 'play'); text.innerText = 'Práctica';
             }
-            lucide.createIcons();
+            if (window.lucide) lucide.createIcons();
         }
 
         function updateSubdivRange() {
@@ -1632,7 +1544,6 @@
 
             toggleMode(); toggleAutoPlay(); toggleAutoSubdiv(); toggleFretShift(); toggleSubdivisionSound();
             
-            // Fix: Asegurar que el selector retenga el valor visual y se mantenga el temporizador tras la generación
             document.getElementById('workout-selector').value = type;
             routineTimeRemaining = 300; timerText.innerText = "05:00"; timerText.classList.replace('text-green-400', 'text-amber-400');
             timerContainer.classList.remove('hidden'); timerContainer.classList.add('flex');
@@ -1693,8 +1604,7 @@
         function toggleHelp() { const modal = document.getElementById('help-modal'); if (modal.classList.contains('hidden')) { modal.classList.remove('hidden'); modal.classList.add('flex'); } else { modal.classList.add('hidden'); modal.classList.remove('flex'); } }
     </script>
 
-
-    <!-- ================= JAVASCRIPT APP 2: FRETMIND ================= -->
+    <!-- APP 2: FRETMIND (SCRIPT) -->
     <script>
         let fmAudioCtx;
         const C0_FREQ = 16.3516; 
@@ -1731,7 +1641,6 @@
                 levels.push({ id: id++, title: `EXAMEN RANGO 0-${range}`, desc: `Todas las cuerdas mezcladas hasta el traste ${range}.`, mode: 'identify', str: 'all', minF: 0, maxF: range, time: 15, total: 12 });
             });
             
-            // Intervalos
             const intervals = [
                 {semis: 0, name: 'Unísono'}, {semis: 1, name: '2da Menor'}, {semis: 2, name: '2da Mayor'},
                 {semis: 3, name: '3ra Menor'}, {semis: 4, name: '3ra Mayor'}, {semis: 5, name: '4ta Justa'},
@@ -1741,7 +1650,6 @@
             ];
             intervals.forEach(iv => { levels.push({ id: id++, title: `Intervalo: ${iv.name}`, desc: "Encuentra la forma geométrica en el mástil.", mode: 'interval', intervalSemis: iv.semis, str: 'all', minF: 0, maxF: 12, time: 0, total: 8 }); });
 
-            // Examen Final
             levels.push({ id: id++, title: `EXAMEN FINAL MAESTRO`, desc: `Dominio absoluto. Diapasón completo de 24 trastes.`, mode: 'identify', str: 'all', minF: 0, maxF: 24, time: 10, total: 20 });
             return levels;
         }
@@ -1792,6 +1700,15 @@
             osc.frequency.value = freq; osc.start(); osc.stop(fmAudioCtx.currentTime + 1.5);
         }
 
+        function showFMAlert(msg, onConfirm, isConfirm = false) {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 z-[100] bg-slate-900/90 backdrop-blur-sm flex items-center justify-center p-4 fade-in';
+            modal.innerHTML = `<div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 text-center max-w-sm w-full shadow-2xl"><p class="text-white text-lg mb-6">${msg}</p><div class="flex gap-4 justify-center">${isConfirm ? '<button id="fm-btn-cancel" class="flex-1 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-xl transition-colors font-bold">Cancelar</button>' : ''}<button id="fm-btn-ok" class="flex-1 py-3 bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-bold rounded-xl transition-colors">Aceptar</button></div></div>`;
+            document.body.appendChild(modal);
+            document.getElementById('fm-btn-ok').onclick = () => { modal.remove(); if(onConfirm) onConfirm(true); };
+            if (isConfirm) { document.getElementById('fm-btn-cancel').onclick = () => { modal.remove(); if(onConfirm) onConfirm(false); }; }
+        }
+
         window.goToHome = () => { fmhide('screen-guided'); fmhide('screen-free-setup'); fmhide('screen-stats'); fmhide('screen-game'); fmshow('screen-home', true); };
         window.goToFreeSetup = () => { fmhide('screen-home'); fmhide('screen-guided'); fmhide('screen-game'); fmhide('screen-stats'); renderMenuSelectors(); fmshow('screen-free-setup', true); };
         window.goToGuidedMap = () => { fmhide('screen-home'); fmhide('screen-game'); fmhide('screen-free-setup'); fmhide('screen-stats'); fmhide('modal-level-end'); renderGuidedMap(); fmshow('screen-guided', true); };
@@ -1801,12 +1718,8 @@
             if (fmState.sessionTotal === 0) return; 
             const durationSecs = Math.floor((Date.now() - fmState.sessionStartTime) / 1000);
             if (durationSecs < 2) return; 
-            
             let title = fmState.isGuided ? (fmState.currentLvlId === 'nivelacion' ? 'Examen de Nivelación' : `Nivel Guiado ${fmState.currentLvlId}`) : `Modo Libre (${fmState.mode === 'identify' ? 'Identificar' : (fmState.mode === 'find' ? 'Encontrar' : 'Intervalos')})`;
-
-            fmState.stats.sessions.unshift({
-                date: new Date().toISOString(), title: title, duration: durationSecs, correct: fmState.sessionCorrect, total: fmState.sessionTotal
-            });
+            fmState.stats.sessions.unshift({ date: new Date().toISOString(), title: title, duration: durationSecs, correct: fmState.sessionCorrect, total: fmState.sessionTotal });
             if (fmState.stats.sessions.length > 50) fmState.stats.sessions.pop();
             saveStats(); fmState.sessionTotal = 0; 
         }
@@ -1816,27 +1729,25 @@
             saveFMSession();
             if(fmState.isGuided) goToGuidedMap(); else goToFreeSetup(); 
         };
+        
         window.resetStats = () => { 
-            window.customConfirm('¿Seguro que quieres borrar todo tu progreso?', (confirmed) => { 
+            showFMAlert('¿Seguro que quieres borrar todo tu progreso?', (confirmed) => { 
                 if(confirmed) { 
                     localStorage.removeItem('fretmindDataV10'); 
                     fmState.stats = { totalAnswers: 0, correctAnswers: 0, noteHistory: {}, posHistory: {}, guidedProgress: {}, sessions: [] }; 
                     NOTES_SHARP.forEach(n => { fmState.stats.noteHistory[n] = { correct: 0, wrong: 0 }; }); 
                     renderStatsHTML(); 
                 } 
-            }); 
+            }, true); 
         };
 
         window.setInstrument = (val) => { 
             fmState.instrument = val; 
             GUIDED_LEVELS = generateLevels(val);
-            
             const btnG = fmel('btn-inst-guitar');
             if (btnG) btnG.className = `flex-1 py-1.5 rounded-md text-xs font-bold transition-all ${val==='guitar'?'bg-blue-500 text-white shadow-lg':'text-slate-500 hover:text-slate-300'}`; 
-            
             const btnB = fmel('btn-inst-bass');
             if (btnB) btnB.className = `flex-1 py-1.5 rounded-md text-xs font-bold transition-all ${val==='bass'?'bg-blue-500 text-white shadow-lg':'text-slate-500 hover:text-slate-300'}`; 
-            
             if(fmel('screen-guided') && !fmel('screen-guided').classList.contains('hidden')) renderGuidedMap(); 
         };
 
@@ -1850,29 +1761,13 @@
         window.setMaxFret = (v) => { fmState.maxFret = v; renderMenuSelectors(); };
         window.setTimeLimit = (v) => { fmState.timeLimit = v; renderMenuSelectors(); };
         window.toggleHint = () => { fmState.isHintVisible = !fmState.isHintVisible; updateHintVisibility(); };
-        window.toggleAlwaysHint = () => { 
-            const cb = fmel('always-hint-checkbox'); 
-            if (cb) { 
-                fmState.alwaysShowHint = cb.checked; 
-                if (fmState.alwaysShowHint) fmState.isHintVisible = true; 
-                updateHintVisibility(); 
-            } 
-        };
+        window.toggleAlwaysHint = () => { const cb = fmel('always-hint-checkbox'); if (cb) { fmState.alwaysShowHint = cb.checked; if (fmState.alwaysShowHint) fmState.isHintVisible = true; updateHintVisibility(); } };
 
         function updateHintVisibility() {
             const content = fmel('hint-content'); const icon = fmel('hint-icon');
-            if (fmState.isHintVisible) { 
-                content.classList.remove('hidden'); 
-                icon.setAttribute('data-lucide', 'eye');
-                icon.classList.remove('text-slate-500');
-                icon.classList.add('text-emerald-400');
-            } else { 
-                content.classList.add('hidden'); 
-                icon.setAttribute('data-lucide', 'eye-off');
-                icon.classList.remove('text-emerald-400');
-                icon.classList.add('text-slate-500');
-            }
-            lucide.createIcons();
+            if (fmState.isHintVisible) { content.classList.remove('hidden'); icon.setAttribute('data-lucide', 'eye'); icon.classList.remove('text-slate-500'); icon.classList.add('text-emerald-400'); } 
+            else { content.classList.add('hidden'); icon.setAttribute('data-lucide', 'eye-off'); icon.classList.remove('text-emerald-400'); icon.classList.add('text-slate-500'); }
+            if (window.lucide) lucide.createIcons();
         }
 
         window.startPlacementTest = () => {
@@ -1885,7 +1780,6 @@
             const container = fmel('guided-map-container');
             let html = `<div class="w-full bg-slate-800 rounded-xl p-4 flex flex-col gap-4 mb-6 border border-slate-700"><div class="flex gap-2"><button onclick="setInstrument('guitar')" class="flex-1 py-2 text-sm font-bold rounded-lg ${fmState.instrument==='guitar'?'bg-emerald-500 text-slate-900':'text-slate-600 hover:text-white bg-slate-900'}">Guitarra</button><button onclick="setInstrument('bass')" class="flex-1 py-2 text-sm font-bold rounded-lg ${fmState.instrument==='bass'?'bg-emerald-500 text-slate-900':'text-slate-600 hover:text-white bg-slate-900'}">Bajo</button></div></div>`;
             
-            // Botón de Nivelación
             html += `<div class="mb-10 w-full flex justify-center">
                         <button onclick="startPlacementTest()" class="group relative flex items-center justify-center gap-3 w-full py-4 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-900 font-bold rounded-2xl shadow-[0_0_20px_rgba(245,158,11,0.3)] hover:shadow-[0_0_30px_rgba(245,158,11,0.5)] transition-all transform hover:scale-[1.02] border border-amber-300/50">
                             <div class="bg-white/20 p-2 rounded-full"><i data-lucide="zap" class="w-5 h-5 text-slate-900"></i></div>
@@ -1903,7 +1797,7 @@
                 html += `<div class="level-node w-full ${isLocked ? 'locked' : 'cursor-pointer transform hover:scale-105 transition-all'}" ${isLocked ? '' : `onclick="startGuidedLevel(${lvl.id})"`}><div class="p-4 rounded-2xl border-2 ${borderClass} ${bgClass} relative flex items-center"><div class="w-12 h-12 rounded-full bg-slate-900 flex items-center justify-center font-bold text-xl mr-4 ${stars>0?'text-emerald-400':'text-slate-400'} border border-slate-700">${lvl.id}</div><div class="flex-1"><h3 class="font-bold text-white text-sm sm:text-base">${lvl.title}</h3><p class="text-[10px] sm:text-xs text-slate-400 mt-1">${lvl.desc}</p></div><div class="flex flex-col items-end gap-1 ml-2">${isLocked ? `<i data-lucide="lock" class="w-5 h-5 text-slate-500"></i>` : `<div class="flex gap-0.5">${starsHtml}</div>`}</div></div></div>`;
                 if (index < GUIDED_LEVELS.length - 1) html += `<div class="level-line ${stars > 0 ? 'active' : ''}"></div>`;
             });
-            container.innerHTML = html; lucide.createIcons();
+            container.innerHTML = html; if (window.lucide) lucide.createIcons();
         }
 
         window.startFreeGame = (mode) => { fmState.isGuided = false; fmState.isStudyMode = false; fmState.mode = mode; fmState.score = 0; fmState.streak = 0; initFMAudio(); setupGameScreen(); nextQuestion(); };
@@ -1914,17 +1808,13 @@
             fmel('study-panel-hint').innerHTML = "Observa el mástil. Las notas se muestran para que las memorices antes de empezar.";
             fmshow('study-panel', true);
             fmState.currentQ = null; renderGameUI();
-        };
+        }
 
         window.endStudyMode = () => { fmState.isStudyMode = false; fmhide('study-panel'); nextQuestion(); };
 
         function setupGameScreen() {
             fmhide('screen-home'); fmhide('screen-free-setup'); fmhide('screen-guided'); fmhide('modal-level-end');
-            hideFeedback();
-            fmState.sessionStartTime = Date.now();
-            fmState.sessionCorrect = 0;
-            fmState.sessionTotal = 0;
-            fmState.isHintVisible = fmState.alwaysShowHint;
+            hideFeedback(); fmState.sessionStartTime = Date.now(); fmState.sessionCorrect = 0; fmState.sessionTotal = 0; fmState.isHintVisible = fmState.alwaysShowHint;
             if(fmel('always-hint-checkbox')) fmel('always-hint-checkbox').checked = fmState.alwaysShowHint;
             if(fmState.isGuided) { fmhide('free-stats'); fmshow('guided-progress'); fmshow('guided-lives', true); renderLives(); updateProgressUI(); } 
             else { fmshow('free-stats', true); fmhide('guided-progress'); fmhide('guided-lives'); fmel('streak-text').innerText = '0'; fmel('total-q-text').innerText = 'Total: 0'; }
@@ -1933,13 +1823,13 @@
             fmshow('screen-game', true); updateHintVisibility(); 
         }
 
-        function renderLives() { let html = ''; for(let i=0; i<3; i++) html += `<i data-lucide="heart" class="w-5 h-5 ${i < fmState.guidedLives ? 'text-red-500 fill-red-500' : 'text-slate-700 fill-slate-700'}"></i>`; fmel('guided-lives').innerHTML = html; lucide.createIcons(); }
+        function renderLives() { let html = ''; for(let i=0; i<3; i++) html += `<i data-lucide="heart" class="w-5 h-5 ${i < fmState.guidedLives ? 'text-red-500 fill-red-500' : 'text-slate-700 fill-slate-700'}"></i>`; fmel('guided-lives').innerHTML = html; if (window.lucide) lucide.createIcons(); }
         function updateProgressUI() { fmel('guided-progress-text').innerText = `${fmState.guidedCorrect}/${fmState.guidedTotal}`; fmel('guided-progress-bar').style.width = `${(fmState.guidedCorrect / fmState.guidedTotal) * 100}%`; }
         function getNoteAtParams(strIdx, fretNum, useFlats) { const arr = useFlats ? NOTES_FLAT : NOTES_SHARP; const noteIndex = (INSTRUMENTS[fmState.instrument].offsets[strIdx] + fretNum) % 12; return arr[noteIndex]; }
 
         function nextQuestion() {
             fmState.isFeedbackMode = false; hideFeedback(); fmState.revealAnswer = false;
-            fmState.isHintVisible = fmState.alwaysShowHint; // Resetea la vista a la preferencia en cada pregunta
+            fmState.isHintVisible = fmState.alwaysShowHint; 
             const instLen = INSTRUMENTS[fmState.instrument].strings.length; const isFlatsRound = Math.random() > 0.5;
             let q = { found: [], targets: [], roots: [] };
             
@@ -1947,19 +1837,14 @@
             let validStr = Array.from({length: instLen}, (_,i)=>i);
             
             if (fmState.isGuided) {
-                if (fmState.currentLvlId === 'nivelacion') {
-                    minF = 0; maxF = 12;
-                } else {
-                    const lvl = GUIDED_LEVELS.find(l => l.id === fmState.currentLvlId); minF = lvl.minF; maxF = lvl.maxF;
-                    if (lvl.str.startsWith('single_')) validStr = [parseInt(lvl.str.split('_')[1])];
-                }
+                if (fmState.currentLvlId === 'nivelacion') { minF = 0; maxF = 12; } 
+                else { const lvl = GUIDED_LEVELS.find(l => l.id === fmState.currentLvlId); minF = lvl.minF; maxF = lvl.maxF; if (lvl.str.startsWith('single_')) validStr = [parseInt(lvl.str.split('_')[1])]; }
             }
 
             const validPos = [];
             validStr.forEach(s => { for (let f = minF; f <= maxF; f++) { validPos.push({ string: s, fret: f }); } });
             
-            let targetFound = false;
-            let maxAttempts = 200; // Evita bloqueos si la configuración manual hace imposible encontrar un intervalo
+            let targetFound = false; let maxAttempts = 200; 
             
             while (!targetFound && maxAttempts > 0) {
                 maxAttempts--;
@@ -1971,53 +1856,30 @@
                 if (fmState.mode === 'identify') {
                     q.targets = [{s: q.string, f: q.fret}]; let opts = [q.targetNote]; const pool = isFlatsRound ? NOTES_FLAT : NOTES_SHARP;
                     while (opts.length < 4) { const r = pool[Math.floor(Math.random() * pool.length)]; if (!opts.includes(r)) opts.push(r); }
-                    opts.sort(() => Math.random() - 0.5); q.options = opts;
-                    targetFound = true;
+                    opts.sort(() => Math.random() - 0.5); q.options = opts; targetFound = true;
                 } else if (fmState.mode === 'find') {
                     for(let ts of validStr) { for(let tf=minF; tf<=maxF; tf++) { if (getNoteAtParams(ts, tf, isFlatsRound) === q.targetNote) { q.targets.push({s: ts, f: tf}); } } }
                     targetFound = q.targets.length > 0;
                 } else if (fmState.mode === 'interval') {
                     q.roots = [{s: q.string, f: q.fret}];
                     let semis = 0;
-                    if (fmState.isGuided) {
-                        const lvl = GUIDED_LEVELS.find(l => l.id === fmState.currentLvlId);
-                        semis = lvl.intervalSemis;
-                    } else {
-                        semis = Math.floor(Math.random() * 12) + 1;
-                    }
+                    if (fmState.isGuided) { const lvl = GUIDED_LEVELS.find(l => l.id === fmState.currentLvlId); semis = lvl.intervalSemis; } 
+                    else { semis = Math.floor(Math.random() * 12) + 1; }
                     
-                    // Definir dirección aleatoria (1 para ascendente, -1 para descendente)
-                    let direction = 1;
-                    if (semis !== 0) direction = Math.random() > 0.5 ? 1 : -1;
+                    let direction = 1; if (semis !== 0) direction = Math.random() > 0.5 ? 1 : -1;
+                    q.intervalSemis = semis; q.direction = direction;
                     
-                    q.intervalSemis = semis;
-                    q.direction = direction;
-                    
-                    // Cálculo de PITCH ABSOLUTO para exigir el intervalo exacto (no cualquier octava)
                     const rootAbs = INSTRUMENTS[fmState.instrument].offsets[q.string] + q.fret;
                     const targetAbs = rootAbs + (semis * direction);
-                    
-                    // Evitar números negativos en el módulo 12
                     const targetNoteStr = (isFlatsRound ? NOTES_FLAT : NOTES_SHARP)[((targetAbs % 12) + 12) % 12];
                     q.targetNoteName = targetNoteStr;
 
-                    for(let ts of validStr) {
-                        for(let tf = minF; tf <= maxF; tf++) {
-                            const checkAbs = INSTRUMENTS[fmState.instrument].offsets[ts] + tf;
-                            if (checkAbs === targetAbs) { // Solo permite notas con la altura tonal exacta
-                                q.targets.push({s: ts, f: tf});
-                            }
-                        }
-                    }
+                    for(let ts of validStr) { for(let tf = minF; tf <= maxF; tf++) { const checkAbs = INSTRUMENTS[fmState.instrument].offsets[ts] + tf; if (checkAbs === targetAbs) { q.targets.push({s: ts, f: tf}); } } }
                     targetFound = q.targets.length > 0;
                 }
             }
             
-            // Red de seguridad si la geometría del intervalo no cabe en el rango escogido por el usuario
-            if (!targetFound) {
-                q.targets = [q.roots[0] || {s: q.string, f: q.fret}];
-                if (fmState.mode === 'interval') { q.intervalSemis = 0; q.direction = 1; }
-            }
+            if (!targetFound) { q.targets = [q.roots[0] || {s: q.string, f: q.fret}]; if (fmState.mode === 'interval') { q.intervalSemis = 0; q.direction = 1; } }
 
             fmState.currentQ = q; renderGameUI(); startTimer();
         }
@@ -2037,67 +1899,42 @@
         window.answerFind = (strIdx, fretNum) => { if (!fmState.isFeedbackMode && (fmState.mode === 'find' || fmState.mode === 'interval')) processAnswer({ type: fmState.mode, string: strIdx, fret: fretNum }); };
 
         function processAnswer(ans, isTimeout = false) {
-            const q = fmState.currentQ; let isCorrectHit = false;
-            let ansString = 0, ansFret = 0;
+            const q = fmState.currentQ; let isCorrectHit = false; let ansString = 0, ansFret = 0;
 
             if (!isTimeout) {
-                if (ans.type === 'identify') {
-                    isCorrectHit = ans.val === q.targetNote;
-                    if (isCorrectHit) playNote(q.string, q.fret);
-                    ansString = q.string; ansFret = q.fret;
-                }
-                else {
-                    isCorrectHit = q.targets.some(t => t.s === ans.string && t.f === ans.fret);
-                    ansString = ans.string; ansFret = ans.fret;
-                }
-            } else {
-                ansString = q.string; ansFret = q.fret;
-            }
+                if (ans.type === 'identify') { isCorrectHit = ans.val === q.targetNote; if (isCorrectHit) playNote(q.string, q.fret); ansString = q.string; ansFret = q.fret; }
+                else { isCorrectHit = q.targets.some(t => t.s === ans.string && t.f === ans.fret); ansString = ans.string; ansFret = ans.fret; }
+            } else { ansString = q.string; ansFret = q.fret; }
             
-            // TRACK STATS
             fmState.stats.totalAnswers++; fmState.sessionTotal++;
             const posKey = `${fmState.instrument}_${ansString}_${ansFret}`;
             if (!fmState.stats.posHistory[posKey]) fmState.stats.posHistory[posKey] = { correct: 0, wrong: 0 };
-
-            if (isCorrectHit) {
-                fmState.stats.correctAnswers++; fmState.sessionCorrect++; fmState.stats.posHistory[posKey].correct++;
-            } else {
-                fmState.stats.posHistory[posKey].wrong++;
-            }
+            if (isCorrectHit) { fmState.stats.correctAnswers++; fmState.sessionCorrect++; fmState.stats.posHistory[posKey].correct++; } else { fmState.stats.posHistory[posKey].wrong++; }
             saveStats();
 
             if (isCorrectHit && fmState.mode !== 'identify') {
                 const alreadyFound = q.found.some(t => t.s === ans.string && t.f === ans.fret); if (alreadyFound) return; 
                 q.found.push({s: ans.string, f: ans.fret}); playNote(ans.string, ans.fret);
-                renderFMFretboard(); // Actualizar inmediatamente para pintar la nota encontrada
+                renderFMFretboard(); 
             }
 
             const isFullyFinished = isTimeout || !isCorrectHit || (fmState.mode === 'identify' ? isCorrectHit : q.found.length === q.targets.length);
             if (isFullyFinished) {
-                fmState.isFeedbackMode = true; clearInterval(fmState.timer);
-                fmState.revealAnswer = true;
-                renderFMFretboard(); // Re-renderizar para revelar respuestas o notas faltantes
+                fmState.isFeedbackMode = true; clearInterval(fmState.timer); fmState.revealAnswer = true;
+                renderFMFretboard(); 
 
-                // Resaltar botones de opción en modo identificar
                 if (fmState.mode === 'identify' && !isTimeout && ans.type === 'identify') {
                     const btns = fmel('identify-options').querySelectorAll('button');
                     btns.forEach(b => {
-                        if (b.innerText === q.targetNote) {
-                            b.classList.replace('bg-slate-700', 'bg-emerald-600');
-                            b.classList.replace('hover:bg-slate-600', 'hover:bg-emerald-500');
-                            b.classList.add('scale-105', 'shadow-[0_0_15px_rgba(16,185,129,0.5)]', 'text-white');
-                        } else if (b.innerText === ans.val && !isCorrectHit) {
-                            b.classList.replace('bg-slate-700', 'bg-red-600');
-                            b.classList.replace('hover:bg-slate-600', 'hover:bg-red-500');
-                            b.classList.add('text-white');
-                        }
+                        if (b.innerText === q.targetNote) { b.classList.replace('bg-slate-700', 'bg-emerald-600'); b.classList.replace('hover:bg-slate-600', 'hover:bg-emerald-500'); b.classList.add('scale-105', 'shadow-[0_0_15px_rgba(16,185,129,0.5)]', 'text-white'); } 
+                        else if (b.innerText === ans.val && !isCorrectHit) { b.classList.replace('bg-slate-700', 'bg-red-600'); b.classList.replace('hover:bg-slate-600', 'hover:bg-red-500'); b.classList.add('text-white'); }
                     });
                 }
 
                 if (fmState.isGuided) {
                     if (isCorrectHit) { fmState.guidedCorrect++; updateProgressUI(); } 
                     else fmState.guidedLives--; renderLives();
-                    if (fmState.guidedLives <= 0) { setTimeout(() => { saveFMSession(); window.customConfirm("Fin de juego. ¿Volver a intentar?", (res) => { goToGuidedMap(); }); }, 1000); return; }
+                    if (fmState.guidedLives <= 0) { setTimeout(() => { saveFMSession(); showFMAlert("Fin de juego.", goToGuidedMap); }, 1000); return; }
                     if (fmState.guidedCorrect >= fmState.guidedTotal) { setTimeout(finishGuidedLevel, 1000); return; }
                 }
                 showFeedback(isCorrectHit ? 'success' : 'error', isCorrectHit ? '¡Bien!' : 'Incorrecto');
@@ -2107,207 +1944,98 @@
 
         function finishGuidedLevel() {
             saveFMSession();
-            let stars = fmState.guidedLives;
-            if (stars < 1) stars = 1;
-
-            let starsHtml = '';
-            for(let i=0; i<3; i++) starsHtml += `<i data-lucide="star" class="w-8 h-8 ${i < stars ? 'text-amber-400 fill-amber-400' : 'text-slate-600'}"></i>`;
-            fmel('modal-stars').innerHTML = starsHtml;
-            lucide.createIcons();
+            let stars = fmState.guidedLives; if (stars < 1) stars = 1;
+            let starsHtml = ''; for(let i=0; i<3; i++) starsHtml += `<i data-lucide="star" class="w-8 h-8 ${i < stars ? 'text-amber-400 fill-amber-400' : 'text-slate-600'}"></i>`;
+            fmel('modal-stars').innerHTML = starsHtml; if (window.lucide) lucide.createIcons();
 
             if (fmState.currentLvlId === 'nivelacion') {
-                GUIDED_LEVELS.forEach(l => {
-                    if (!l.title.includes('Intervalo') && !l.title.includes('EXAMEN FINAL')) {
-                        const pKey = `${fmState.instrument}_${l.id}`;
-                        if (!fmState.stats.guidedProgress[pKey]) fmState.stats.guidedProgress[pKey] = 3;
-                    }
-                });
-                saveStats();
-                fmel('modal-title').innerText = "¡Nivelación Superada!";
-                fmel('modal-desc').innerText = "Has desbloqueado las fases de intervalos.";
-                fmshow('modal-level-end', true);
-                return;
+                GUIDED_LEVELS.forEach(l => { if (!l.title.includes('Intervalo') && !l.title.includes('EXAMEN FINAL')) { const pKey = `${fmState.instrument}_${l.id}`; if (!fmState.stats.guidedProgress[pKey]) fmState.stats.guidedProgress[pKey] = 3; } });
+                saveStats(); fmel('modal-title').innerText = "¡Nivelación Superada!"; fmel('modal-desc').innerText = "Has desbloqueado las fases de intervalos."; fmshow('modal-level-end', true); return;
             }
 
             const pKey = `${fmState.instrument}_${fmState.currentLvlId}`;
             if (stars > (fmState.stats.guidedProgress[pKey] || 0)) { fmState.stats.guidedProgress[pKey] = stars; saveStats(); }
 
-            fmel('modal-title').innerText = "¡Nivel Completado!";
-            fmel('modal-desc').innerText = "Has dominado esta zona.";
-            fmshow('modal-level-end', true);
+            fmel('modal-title').innerText = "¡Nivel Completado!"; fmel('modal-desc').innerText = "Has dominado esta zona."; fmshow('modal-level-end', true);
         }
 
-        function showFeedback(type, msg) {
-            fmhide('identify-options'); fmhide('find-instruction');
-            fmel('feedback-text').innerText = msg; fmel('feedback-panel').classList.remove('hidden'); 
-        }
+        function showFeedback(type, msg) { fmhide('identify-options'); fmhide('find-instruction'); fmel('feedback-text').innerText = msg; fmel('feedback-panel').classList.remove('hidden'); }
         function hideFeedback() { fmhide('feedback-panel'); }
 
         function scrollToCurrentQuestion() {
-            const q = fmState.currentQ;
-            if (!q) return;
+            const q = fmState.currentQ; if (!q) return;
             let targetFret = q.fret;
-            if (fmState.mode === 'find' || fmState.mode === 'interval') {
-                if (q.targets && q.targets.length > 0) targetFret = q.targets[0].f;
-                if (fmState.mode === 'interval' && q.roots && q.roots.length > 0) targetFret = q.roots[0].f;
-            }
+            if (fmState.mode === 'find' || fmState.mode === 'interval') { if (q.targets && q.targets.length > 0) targetFret = q.targets[0].f; if (fmState.mode === 'interval' && q.roots && q.roots.length > 0) targetFret = q.roots[0].f; }
             const fretEl = fmel(`fm-fret-col-${targetFret}`);
             const scrollWrapper = fmel('fretboard-scroll-wrapper');
-            if (fretEl && scrollWrapper) {
-                const targetPos = fretEl.offsetLeft - (scrollWrapper.clientWidth / 2) + (fretEl.clientWidth / 2);
-                scrollWrapper.scrollTo({ left: targetPos, behavior: 'smooth' });
-            }
+            if (fretEl && scrollWrapper) { const targetPos = fretEl.offsetLeft - (scrollWrapper.clientWidth / 2) + (fretEl.clientWidth / 2); scrollWrapper.scrollTo({ left: targetPos, behavior: 'smooth' }); }
         }
 
         function getIntervalHintText(semis, direction, startStringIdx, startFret) {
             if (semis === 0) return "Ruta: Misma cuerda ➔ Mismo traste";
 
             const isGuitar = fmState.instrument === 'guitar';
-            const strNames = isGuitar ? 
-                ['1ra Cuerda (E aguda)', '2da Cuerda (B)', '3ra Cuerda (G)', '4ta Cuerda (D)', '5ta Cuerda (A)', '6ta Cuerda (E grave)'] : 
-                ['1ra Cuerda (G)', '2da Cuerda (D)', '3ra Cuerda (A)', '4ta Cuerda (E grave)'];
+            const strNames = isGuitar ? ['1ra Cuerda (E aguda)', '2da Cuerda (B)', '3ra Cuerda (G)', '4ta Cuerda (D)', '5ta Cuerda (A)', '6ta Cuerda (E grave)'] : ['1ra Cuerda (G)', '2da Cuerda (D)', '3ra Cuerda (A)', '4ta Cuerda (E grave)'];
 
             const startAbs = INSTRUMENTS[fmState.instrument].offsets[startStringIdx] + startFret;
             const targetAbs = startAbs + (semis * direction);
 
-            let bestTarget = null;
-            let minScore = 9999;
-
+            let bestTarget = null; let minScore = 9999;
             for (let s = 0; s < strNames.length; s++) {
                 let f = targetAbs - INSTRUMENTS[fmState.instrument].offsets[s];
                 if (f >= 0 && f <= 24) { 
-                    let fretDist = Math.abs(f - startFret);
-                    let strDist = Math.abs(s - startStringIdx);
-                    let score = (fretDist * 10) + strDist; 
-                    if (score < minScore) {
-                        minScore = score;
-                        bestTarget = { s: s, f: f };
-                    }
+                    let fretDist = Math.abs(f - startFret); let strDist = Math.abs(s - startStringIdx); let score = (fretDist * 10) + strDist; 
+                    if (score < minScore) { minScore = score; bestTarget = { s: s, f: f }; }
                 }
             }
 
             if (!bestTarget) bestTarget = { s: startStringIdx, f: startFret + (semis * direction) };
-
-            const targetStringIdx = bestTarget.s;
-            const targetFret = bestTarget.f;
-            const fretDiff = targetFret - startFret;
-            const strCross = Math.abs(startStringIdx - targetStringIdx);
-
-            const startName = strNames[startStringIdx];
-            const targetName = strNames[targetStringIdx];
-
-            let dirWord = direction === 1 ? "Ascendente" : "Descendente";
-            let moveText = "";
+            const targetStringIdx = bestTarget.s; const targetFret = bestTarget.f; const fretDiff = targetFret - startFret; const strCross = Math.abs(startStringIdx - targetStringIdx);
+            const startName = strNames[startStringIdx]; const targetName = strNames[targetStringIdx];
+            let dirWord = direction === 1 ? "Ascendente" : "Descendente"; let moveText = "";
             
-            if (strCross === 0) {
-                moveText = `Mantente en la ${startName}`;
-            } else {
-                let jumpDir = targetStringIdx < startStringIdx ? "hacia abajo (suelo)" : "hacia arriba (techo)";
-                moveText = `Ve a la ${targetName}\n   (${strCross} cuerda(s) ${jumpDir})`;
-            }
-
+            if (strCross === 0) { moveText = `Mantente en la ${startName}`; } else { let jumpDir = targetStringIdx < startStringIdx ? "hacia abajo (suelo)" : "hacia arriba (techo)"; moveText = `Ve a la ${targetName}\n   (${strCross} cuerda(s) ${jumpDir})`; }
             let fretText = fretDiff === 0 ? "Mismo traste" : (fretDiff > 0 ? `Avanza +${fretDiff} traste(s)` : `Retrocede ${Math.abs(fretDiff)} traste(s)`);
-            
             return `📍 Ruta Exacta ${dirWord}:\n1. ${moveText}\n2. Desplazamiento: ${fretText} (al traste ${targetFret})`;
         }
 
         function renderGameUI() {
             const q = fmState.currentQ;
-            if (!q) {
-                fmel('question-header').innerHTML = `<h2 class="text-xl sm:text-2xl font-bold text-blue-400">Fase de Estudio</h2>`;
-                fmhide('identify-options');
-                fmhide('find-instruction');
-                fmhide('instruction-panel');
-            } else if (fmState.mode === 'identify') {
-                fmel('question-header').innerHTML = `<h2 class="text-xl sm:text-2xl font-bold">¿Qué nota es la <span class="text-emerald-400">cuerda ${q.string + 1}</span> en el <span class="text-amber-400">traste ${q.fret}</span>?</h2>`;
-                fmel('identify-options').innerHTML = q.options.map(note => `<button onclick="answerIdentify('${note}')" class="bg-slate-700 hover:bg-slate-600 active:scale-95 transition-all py-3 rounded-xl font-bold shadow-md border border-slate-600">${note}</button>`).join('');
-                fmshow('identify-options', true);
-                fmhide('find-instruction');
-                fmhide('instruction-panel');
-            } else if (fmState.mode === 'interval') {
-                let dirText = "";
-                if (q.intervalSemis !== 0) dirText = q.direction === 1 ? " Ascendente" : " Descendente";
-                fmel('question-header').innerHTML = `<h2 class="text-lg sm:text-xl font-bold">Encuentra la <span class="text-blue-400">${INTERVAL_NAMES[q.intervalSemis]}${dirText}</span> de <span class="text-amber-400">${q.targetNote}</span></h2>`;
-                fmhide('identify-options');
-                fmhide('find-instruction');
-                fmshow('instruction-panel', true);
-                fmel('instruction-text').innerText = getIntervalHintText(q.intervalSemis, q.direction, q.string, q.fret);
-                updateHintVisibility();
-            } else {
-                fmel('question-header').innerHTML = `<h2 class="text-xl sm:text-2xl font-bold">Encuentra <span class="text-amber-400">${q.targetNote}</span></h2>`;
-                fmhide('identify-options');
-                fmshow('find-instruction');
-                fmel('find-instruction').innerText = "Debes tocar TODAS las ubicaciones de la nota.";
-                fmhide('instruction-panel');
-            }
-            renderFMFretboard();
-            setTimeout(scrollToCurrentQuestion, 50);
-            if (window.lucide) lucide.createIcons();
+            if (!q) { fmel('question-header').innerHTML = `<h2 class="text-xl sm:text-2xl font-bold text-blue-400">Fase de Estudio</h2>`; fmhide('identify-options'); fmhide('find-instruction'); fmhide('instruction-panel'); } 
+            else if (fmState.mode === 'identify') { fmel('question-header').innerHTML = `<h2 class="text-xl sm:text-2xl font-bold">¿Qué nota es la <span class="text-emerald-400">cuerda ${q.string + 1}</span> en el <span class="text-amber-400">traste ${q.fret}</span>?</h2>`; fmel('identify-options').innerHTML = q.options.map(note => `<button onclick="answerIdentify('${note}')" class="bg-slate-700 hover:bg-slate-600 active:scale-95 transition-all py-3 rounded-xl font-bold shadow-md border border-slate-600">${note}</button>`).join(''); fmshow('identify-options', true); fmhide('find-instruction'); fmhide('instruction-panel'); } 
+            else if (fmState.mode === 'interval') { let dirText = ""; if (q.intervalSemis !== 0) dirText = q.direction === 1 ? " Ascendente" : " Descendente"; fmel('question-header').innerHTML = `<h2 class="text-lg sm:text-xl font-bold">Encuentra la <span class="text-blue-400">${INTERVAL_NAMES[q.intervalSemis]}${dirText}</span> de <span class="text-amber-400">${q.targetNote}</span></h2>`; fmhide('identify-options'); fmhide('find-instruction'); fmshow('instruction-panel', true); fmel('instruction-text').innerText = getIntervalHintText(q.intervalSemis, q.direction, q.string, q.fret); updateHintVisibility(); } 
+            else { fmel('question-header').innerHTML = `<h2 class="text-xl sm:text-2xl font-bold">Encuentra <span class="text-amber-400">${q.targetNote}</span></h2>`; fmhide('identify-options'); fmshow('find-instruction'); fmel('find-instruction').innerText = "Debes tocar TODAS las ubicaciones de la nota."; fmhide('instruction-panel'); }
+            renderFMFretboard(); setTimeout(scrollToCurrentQuestion, 50); if (window.lucide) lucide.createIcons();
         }
 
         function renderFMFretboard() {
             const instStrings = INSTRUMENTS[fmState.instrument].strings;
             let boardLength = fmState.maxFret; 
-            if (fmState.isGuided) {
-                if (fmState.currentLvlId === 'nivelacion') boardLength = 12;
-                else boardLength = GUIDED_LEVELS.find(l=>l.id===fmState.currentLvlId).maxF;
-            }
-            
-            let startFret = 0;
-            let endFret = 12;
-            if (boardLength > 12) {
-                startFret = 1;
-                endFret = 24;
-            }
+            if (fmState.isGuided) { if (fmState.currentLvlId === 'nivelacion') boardLength = 12; else boardLength = GUIDED_LEVELS.find(l=>l.id===fmState.currentLvlId).maxF; }
+            let startFret = 0; let endFret = 12; if (boardLength > 12) { startFret = 1; endFret = 24; }
             
             fmel('fretboard').innerHTML = Array.from({length: endFret - startFret + 1}).map((_, i) => {
-                let f = startFret + i;
-                let fretBg = '';
-                if (f === 0) fretBg = 'border-r-[6px] border-slate-300 bg-slate-800/80';
-                else fretBg = 'border-r-4 border-[#64748b] bg-transparent'; 
+                let f = startFret + i; let fretBg = ''; if (f === 0) fretBg = 'border-r-[6px] border-slate-300 bg-slate-800/80'; else fretBg = 'border-r-4 border-[#64748b] bg-transparent'; 
 
                 let inlayHtml = '';
-                if ([3, 5, 7, 9, 15, 17, 19, 21].includes(f)) {
-                    inlayHtml = `<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-slate-200/20 pointer-events-none"></div>`;
-                } else if (f === 12 || f === 24) {
-                    inlayHtml = `<div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-slate-200/20 pointer-events-none"></div>
-                                 <div class="absolute top-2/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-slate-200/20 pointer-events-none"></div>`;
-                }
+                if ([3, 5, 7, 9, 15, 17, 19, 21].includes(f)) { inlayHtml = `<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-slate-200/20 pointer-events-none"></div>`; } 
+                else if (f === 12 || f === 24) { inlayHtml = `<div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-slate-200/20 pointer-events-none"></div><div class="absolute top-2/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-slate-200/20 pointer-events-none"></div>`; }
 
                 let col = `<div id="fm-fret-col-${f}" class="flex-1 flex flex-col justify-around min-w-[50px] sm:min-w-[65px] relative ${fretBg}">${inlayHtml}`;
                 
                 col += instStrings.map((_, s) => {
-                    const q = fmState.currentQ; 
-                    const isTarget = q && q.targets && q.targets.some(t => t.s === s && t.f === f);
-                    const isFound = q && q.found && q.found.some(t => t.s === s && t.f === f);
-                    const isRoot = q && q.roots && q.roots.some(t => t.s === s && t.f === f);
+                    const q = fmState.currentQ; const isTarget = q && q.targets && q.targets.some(t => t.s === s && t.f === f); const isFound = q && q.found && q.found.some(t => t.s === s && t.f === f); const isRoot = q && q.roots && q.roots.some(t => t.s === s && t.f === f);
                     
-                    let content = '';
-                    let dotClass = 'opacity-0 hover:opacity-30 bg-slate-400';
+                    let content = ''; let dotClass = 'opacity-0 hover:opacity-30 bg-slate-400';
 
-                    if (isRoot) {
-                        content = getNoteAtParams(s, f, q?.useFlats);
-                        dotClass = 'bg-blue-500 text-white scale-110 opacity-100 shadow-[0_0_10px_rgba(59,130,246,0.6)]';
-                    } else if (fmState.isStudyMode) {
-                        content = getNoteAtParams(s, f, q?.useFlats);
-                        dotClass = 'bg-amber-500 text-slate-900 scale-110 opacity-100 shadow-[0_0_10px_rgba(245,158,11,0.6)]';
-                    } else if (isFound) {
-                        content = getNoteAtParams(s, f, q?.useFlats);
-                        dotClass = 'bg-emerald-500 text-slate-900 scale-110 opacity-100 shadow-[0_0_10px_rgba(16,185,129,0.6)] font-extrabold'; 
-                    } else if (fmState.mode === 'identify' && q && q.string === s && q.fret === f) {
-                        if (fmState.revealAnswer) {
-                            content = getNoteAtParams(s, f, q?.useFlats);
-                            dotClass = 'bg-emerald-500 text-slate-900 scale-125 opacity-100 shadow-[0_0_15px_rgba(16,185,129,0.8)] transition-all duration-300 font-extrabold';
-                        } else {
-                            content = '?';
-                            dotClass = 'bg-amber-500 text-slate-900 scale-110 opacity-100 shadow-[0_0_10px_rgba(245,158,11,0.6)] animate-pulse';
-                        }
+                    if (isRoot) { content = getNoteAtParams(s, f, q?.useFlats); dotClass = 'bg-blue-500 text-white scale-110 opacity-100 shadow-[0_0_10px_rgba(59,130,246,0.6)]'; } 
+                    else if (fmState.isStudyMode) { content = getNoteAtParams(s, f, q?.useFlats); dotClass = 'bg-amber-500 text-slate-900 scale-110 opacity-100 shadow-[0_0_10px_rgba(245,158,11,0.6)]'; } 
+                    else if (isFound) { content = getNoteAtParams(s, f, q?.useFlats); dotClass = 'bg-emerald-500 text-slate-900 scale-110 opacity-100 shadow-[0_0_10px_rgba(16,185,129,0.6)] font-extrabold'; } 
+                    else if (fmState.mode === 'identify' && q && q.string === s && q.fret === f) {
+                        if (fmState.revealAnswer) { content = getNoteAtParams(s, f, q?.useFlats); dotClass = 'bg-emerald-500 text-slate-900 scale-125 opacity-100 shadow-[0_0_15px_rgba(16,185,129,0.8)] transition-all duration-300 font-extrabold'; } 
+                        else { content = '?'; dotClass = 'bg-amber-500 text-slate-900 scale-110 opacity-100 shadow-[0_0_10px_rgba(245,158,11,0.6)] animate-pulse'; }
                     }
-                    
-                    if (fmState.revealAnswer && isTarget && !isFound && fmState.mode !== 'identify') {
-                        content = getNoteAtParams(s, f, q?.useFlats);
-                        dotClass = 'bg-red-500 text-white scale-110 opacity-100 shadow-[0_0_10px_rgba(239,68,68,0.6)]';
-                    }
+                    if (fmState.revealAnswer && isTarget && !isFound && fmState.mode !== 'identify') { content = getNoteAtParams(s, f, q?.useFlats); dotClass = 'bg-red-500 text-white scale-110 opacity-100 shadow-[0_0_10px_rgba(239,68,68,0.6)]'; }
                     
                     const thickness = 1 + (s * 0.4);
                     return `<div onclick="answerFind(${s}, ${f})" class="h-8 sm:h-10 flex items-center justify-center relative cursor-pointer group">
@@ -2321,72 +2049,40 @@
         }
 
         function renderStatsHTML() {
-            const total = fmState.stats.totalAnswers || 0;
-            const correct = fmState.stats.correctAnswers || 0;
-            const acc = total > 0 ? Math.round((correct / total) * 100) : 0;
-            let totalTimeSecs = 0;
-            if(fmState.stats.sessions) {
-                totalTimeSecs = fmState.stats.sessions.reduce((acc, s) => acc + s.duration, 0);
-            }
-            const hrs = Math.floor(totalTimeSecs / 3600);
-            const mins = Math.floor((totalTimeSecs % 3600) / 60);
+            const total = fmState.stats.totalAnswers || 0; const correct = fmState.stats.correctAnswers || 0; const acc = total > 0 ? Math.round((correct / total) * 100) : 0;
+            let totalTimeSecs = 0; if(fmState.stats.sessions) { totalTimeSecs = fmState.stats.sessions.reduce((acc, s) => acc + s.duration, 0); }
+            const hrs = Math.floor(totalTimeSecs / 3600); const mins = Math.floor((totalTimeSecs % 3600) / 60);
 
             fmel('stats-global-container').innerHTML = `
                 <div class="grid grid-cols-3 gap-2 sm:gap-4">
-                    <div class="bg-slate-800 p-3 sm:p-4 rounded-xl border border-slate-700 text-center shadow-lg">
-                        <div class="text-slate-400 text-[10px] sm:text-xs font-bold mb-1">PRECISIÓN GLOBAL</div>
-                        <div class="text-xl sm:text-2xl font-bold ${acc > 80 ? 'text-emerald-400' : (acc > 50 ? 'text-amber-400' : 'text-red-400')}">${acc}%</div>
-                    </div>
-                    <div class="bg-slate-800 p-3 sm:p-4 rounded-xl border border-slate-700 text-center shadow-lg">
-                        <div class="text-slate-400 text-[10px] sm:text-xs font-bold mb-1">RESPUESTAS</div>
-                        <div class="text-xl sm:text-2xl font-bold text-sky-400">${total}</div>
-                    </div>
-                    <div class="bg-slate-800 p-3 sm:p-4 rounded-xl border border-slate-700 text-center shadow-lg">
-                        <div class="text-slate-400 text-[10px] sm:text-xs font-bold mb-1">TIEMPO TOTAL</div>
-                        <div class="text-xl sm:text-2xl font-bold text-purple-400">${hrs}h ${mins}m</div>
-                    </div>
+                    <div class="bg-slate-800 p-3 sm:p-4 rounded-xl border border-slate-700 text-center shadow-lg"><div class="text-slate-400 text-[10px] sm:text-xs font-bold mb-1">PRECISIÓN GLOBAL</div><div class="text-xl sm:text-2xl font-bold ${acc > 80 ? 'text-emerald-400' : (acc > 50 ? 'text-amber-400' : 'text-red-400')}">${acc}%</div></div>
+                    <div class="bg-slate-800 p-3 sm:p-4 rounded-xl border border-slate-700 text-center shadow-lg"><div class="text-slate-400 text-[10px] sm:text-xs font-bold mb-1">RESPUESTAS</div><div class="text-xl sm:text-2xl font-bold text-sky-400">${total}</div></div>
+                    <div class="bg-slate-800 p-3 sm:p-4 rounded-xl border border-slate-700 text-center shadow-lg"><div class="text-slate-400 text-[10px] sm:text-xs font-bold mb-1">TIEMPO TOTAL</div><div class="text-xl sm:text-2xl font-bold text-purple-400">${hrs}h ${mins}m</div></div>
                 </div>
             `;
 
-            const instStrings = INSTRUMENTS[fmState.instrument].strings;
-            const maxF = 24; 
-            
-            let stringsHtml = '';
-            instStrings.forEach((strName) => {
-                stringsHtml += `<div class="h-6 sm:h-8 flex items-center justify-center text-[10px] sm:text-xs font-bold text-slate-400">${strName}</div>`;
-            });
+            const instStrings = INSTRUMENTS[fmState.instrument].strings; const maxF = 24; 
+            let stringsHtml = ''; instStrings.forEach((strName) => { stringsHtml += `<div class="h-6 sm:h-8 flex items-center justify-center text-[10px] sm:text-xs font-bold text-slate-400">${strName}</div>`; });
             fmel('heatmap-strings').innerHTML = stringsHtml;
 
             let boardHtml = Array.from({length: maxF + 1}).map((_, f) => {
                 let fretBg = f === 0 ? 'border-r-[4px] border-slate-400 bg-slate-800/50' : 'border-r-2 border-[#64748b]';
-                
                 let inlayHtml = '';
                 if ([3, 5, 7, 9, 15, 17, 19, 21].includes(f)) inlayHtml = `<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-slate-200/10 pointer-events-none"></div>`;
                 else if (f === 12 || f === 24) inlayHtml = `<div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-slate-200/10 pointer-events-none"></div><div class="absolute top-2/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-slate-200/10 pointer-events-none"></div>`;
 
                 let col = `<div class="flex-1 flex flex-col justify-around min-w-[25px] sm:min-w-[35px] relative ${fretBg}">${inlayHtml}`;
-                
                 col += instStrings.map((_, s) => {
-                    const posKey = `${fmState.instrument}_${s}_${f}`;
-                    const posData = fmState.stats.posHistory ? fmState.stats.posHistory[posKey] : null;
-                    let dotClass = 'opacity-0';
-                    let tooltip = '';
-                    
+                    const posKey = `${fmState.instrument}_${s}_${f}`; const posData = fmState.stats.posHistory ? fmState.stats.posHistory[posKey] : null;
+                    let dotClass = 'opacity-0'; let tooltip = '';
                     if (posData && (posData.correct > 0 || posData.wrong > 0)) {
-                        const pTotal = posData.correct + posData.wrong;
-                        const pAcc = posData.correct / pTotal;
-                        
+                        const pTotal = posData.correct + posData.wrong; const pAcc = posData.correct / pTotal;
                         if (pAcc >= 0.8) dotClass = 'bg-emerald-500 opacity-80 shadow-[0_0_8px_rgba(16,185,129,0.5)]';
                         else if (pAcc >= 0.5) dotClass = 'bg-amber-500 opacity-80 shadow-[0_0_8px_rgba(245,158,11,0.5)]';
                         else dotClass = 'bg-red-500 opacity-90 scale-110 shadow-[0_0_8px_rgba(239,68,68,0.8)] z-10';
-                        
                         tooltip = `Traste ${f}: ${Math.round(pAcc*100)}% (${posData.correct}/${pTotal})`;
                     }
-                    
-                    return `<div class="h-6 sm:h-8 flex items-center justify-center relative group" title="${tooltip}">
-                        <div class="absolute w-full h-[1px] bg-slate-500/50 z-0"></div>
-                        <div class="w-3 h-3 sm:w-4 sm:h-4 rounded-full z-10 transition-all ${dotClass}"></div>
-                    </div>`;
+                    return `<div class="h-6 sm:h-8 flex items-center justify-center relative group" title="${tooltip}"><div class="absolute w-full h-[1px] bg-slate-500/50 z-0"></div><div class="w-3 h-3 sm:w-4 sm:h-4 rounded-full z-10 transition-all ${dotClass}"></div></div>`;
                 }).join('');
                 col += `<div class="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[8px] sm:text-[10px] font-bold text-slate-500">${f}</div></div>`;
                 return col;
@@ -2400,13 +2096,8 @@
             } else {
                 let sHtml = '<h3 class="font-bold text-lg text-white mb-4 flex items-center"><i data-lucide="history" class="w-5 h-5 mr-2 text-sky-400"></i> Historial de Sesiones</h3><div class="space-y-3">';
                 fmState.stats.sessions.forEach(s => {
-                    const d = new Date(s.date);
-                    const dateStr = d.toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' });
-                    const timeStr = d.toLocaleTimeString('es-ES', { hour: '2-digit', minute:'2-digit' });
-                    const m = Math.floor(s.duration / 60).toString().padStart(2, '0'); 
-                    const sec = (s.duration % 60).toString().padStart(2, '0');
-                    const sAcc = s.total > 0 ? Math.round((s.correct / s.total) * 100) : 0;
-                    
+                    const d = new Date(s.date); const dateStr = d.toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' }); const timeStr = d.toLocaleTimeString('es-ES', { hour: '2-digit', minute:'2-digit' });
+                    const m = Math.floor(s.duration / 60).toString().padStart(2, '0'); const sec = (s.duration % 60).toString().padStart(2, '0'); const sAcc = s.total > 0 ? Math.round((s.correct / s.total) * 100) : 0;
                     sHtml += `
                     <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-md hover:border-slate-500 transition-colors">
                         <div>
@@ -2414,50 +2105,43 @@
                             <div class="text-[10px] md:text-xs text-slate-400 mt-1 flex items-center"><i data-lucide="calendar" class="w-3 h-3 mr-1"></i> ${dateStr} a las ${timeStr}</div>
                         </div>
                         <div class="flex items-center gap-3 sm:gap-6 bg-slate-900/80 p-2 sm:p-3 rounded-lg border border-slate-700/50">
-                            <div class="text-center">
-                                <div class="text-[9px] sm:text-[10px] text-slate-500 font-bold mb-0.5">TIEMPO</div>
-                                <div class="text-xs sm:text-sm font-mono text-purple-300 font-medium">${m}:${sec}</div>
-                            </div>
+                            <div class="text-center"><div class="text-[9px] sm:text-[10px] text-slate-500 font-bold mb-0.5">TIEMPO</div><div class="text-xs sm:text-sm font-mono text-purple-300 font-medium">${m}:${sec}</div></div>
                             <div class="w-px h-6 bg-slate-700"></div>
-                            <div class="text-center">
-                                <div class="text-[9px] sm:text-[10px] text-slate-500 font-bold mb-0.5">ACIERTOS</div>
-                                <div class="text-xs sm:text-sm font-mono text-sky-300 font-medium">${s.correct}/${s.total}</div>
-                            </div>
+                            <div class="text-center"><div class="text-[9px] sm:text-[10px] text-slate-500 font-bold mb-0.5">ACIERTOS</div><div class="text-xs sm:text-sm font-mono text-sky-300 font-medium">${s.correct}/${s.total}</div></div>
                             <div class="w-px h-6 bg-slate-700"></div>
-                            <div class="text-center">
-                                <div class="text-[9px] sm:text-[10px] text-slate-500 font-bold mb-0.5">PRECISIÓN</div>
-                                <div class="text-sm sm:text-base font-bold ${sAcc >= 80 ? 'text-emerald-400' : (sAcc >= 50 ? 'text-amber-400' : 'text-red-400')}">${sAcc}%</div>
-                            </div>
+                            <div class="text-center"><div class="text-[9px] sm:text-[10px] text-slate-500 font-bold mb-0.5">PRECISIÓN</div><div class="text-sm sm:text-base font-bold ${sAcc >= 80 ? 'text-emerald-400' : (sAcc >= 50 ? 'text-amber-400' : 'text-red-400')}">${sAcc}%</div></div>
                         </div>
                     </div>`;
                 });
-                sHtml += '</div>';
-                sessionsContainer.innerHTML = sHtml;
-                if (window.lucide) lucide.createIcons();
+                sHtml += '</div>'; sessionsContainer.innerHTML = sHtml; if (window.lucide) lucide.createIcons();
             }
         }
-
-        window.onload = () => {
-            manualGenerate(); loadFavoritesToSelect();
-            loadStats(); renderMenuSelectors(); setInstrument('guitar');
-            lucide.createIcons();
-        };
     </script>
 
-    <!-- ================= JAVASCRIPT APP 4: PIMALAB ================= -->
+    <!-- APP 4: PIMALAB (SCRIPT) -->
     <script>
         const PIMA_STATE = {
-            length: 4,
-            stringsOn: false,
-            rhythmOn: false,
-            polyOn: false,
-            currentObj: null,
-            history: [],
-            favorites: []
+            length: 4, stringsOn: false, rhythmOn: false, polyOn: false,
+            currentObj: null, history: [], favorites: []
         };
-
         const PIMA_DEDOS = ['p', 'i', 'm', 'a'];
         const BIO_LIMIT = 3;
+
+        // --- PimaLab Metrónomo Logic ---
+        let pimaAudioCtx;
+        let pimaIsPlaying = false;
+        let pimaBpm = 60;
+        let pimaSubdivision = 1;
+        let pimaAutoMode = 'none'; // 'none', '1-4', '5-8', '1-8'
+        let pimaCycleCounter = 0; 
+        let pimaTargetCycles = 1;
+        
+        let pimaNextNoteTime = 0.0;
+        let pimaSubTick = 0; // Current tick within the subdivision (0 to subdiv-1)
+        let pimaNoteIndex = 0; // Current note in the sequence array
+        let pimaTimerID;
+        let pimaVisualQueue = [];
+        let pimaAnimFrameId;
 
         function initPimaLab() {
             const lengthSelector = document.getElementById('pima-length-selector');
@@ -2511,7 +2195,9 @@
             if (btnHelp) btnHelp.addEventListener('click', () => { helpModal.classList.remove('hidden'); helpModal.classList.add('flex'); });
             if (closeHelp) closeHelp.addEventListener('click', () => { helpModal.classList.add('hidden'); helpModal.classList.remove('flex'); });
             
-            window.addEventListener('click', (e) => { if(e.target === helpModal) { helpModal.classList.add('hidden'); helpModal.classList.remove('flex'); } });
+            // Pima Metronome Event Listeners
+            const btnMetro = document.getElementById('pima-btn-metro');
+            if (btnMetro) btnMetro.addEventListener('click', pimaToggleMetronome);
         }
 
         function setPimaLength(len, btn) {
@@ -2569,6 +2255,7 @@
                     prevFingers = currentFingers;
                 }
 
+                // REGLA: Bucle Perfecto. La 1ra y última agrupación no pueden compartir dedos (ignorando 'p').
                 isValid = true;
                 if (PIMA_STATE.length > 1) {
                     let firstStepNonP = sequence[0].fingers.filter(f => f !== 'p');
@@ -2593,11 +2280,13 @@
 
             addPimaToHistory(PIMA_STATE.currentObj);
             displayPimaResult();
+            
+            // Sincronizar el metrónomo si está corriendo
+            if (pimaNoteIndex >= sequence.length) pimaNoteIndex = 0;
         }
 
         function analyzePimaVectorial(seq, stringsOn, rhythmOn) {
-            let tension = 0;
-            let messages = [];
+            let tension = 0; let messages = [];
 
             for (let i = 0; i < seq.length; i++) {
                 let current = seq[i].fingers;
@@ -2613,45 +2302,30 @@
 
             if (stringsOn) {
                 for (let i = 0; i < seq.length; i++) {
-                    let currentStr = seq[i].strings;
-                    let fingers = seq[i].fingers;
-                    let strVals = Object.values(currentStr);
-
+                    let currentStr = seq[i].strings; let fingers = seq[i].fingers; let strVals = Object.values(currentStr);
                     if (strVals.length > 1) {
-                        let maxStr = Math.max(...strVals);
-                        let minStr = Math.min(...strVals);
-                        let span = maxStr - minStr;
+                        let maxStr = Math.max(...strVals); let minStr = Math.min(...strVals); let span = maxStr - minStr;
                         if (span >= 4) { tension += 15; messages.push("Extensión severa (Span > 3)"); }
                     }
-
                     if (fingers.includes('i') && fingers.includes('m') && currentStr['i'] < currentStr['m']) { tension += 20; messages.push("Cruce anatómico (i-m)"); }
                     if (fingers.includes('m') && fingers.includes('a') && currentStr['m'] < currentStr['a']) { tension += 20; messages.push("Cruce anatómico (m-a)"); }
                     if (fingers.includes('p') && fingers.includes('i') && currentStr['p'] < currentStr['i']) { tension += 30; messages.push("Cruce inverso de pulgar"); }
 
                     if (i < seq.length - 1) {
-                        let nextStr = seq[i+1].strings;
-                        let nextFingers = seq[i+1].fingers;
-                        
-                        let cF = fingers.filter(f => f !== 'p')[0];
-                        let nF = nextFingers.filter(f => f !== 'p')[0];
+                        let nextStr = seq[i+1].strings; let nextFingers = seq[i+1].fingers;
+                        let cF = fingers.filter(f => f !== 'p')[0]; let nF = nextFingers.filter(f => f !== 'p')[0];
 
                         if (cF && nF) {
-                            let cS = currentStr[cF];
-                            let nS = nextStr[nF];
-                            let dist = cS - nS; 
-                            
+                            let cS = currentStr[cF]; let nS = nextStr[nF]; let dist = cS - nS; 
                             if (Math.abs(dist) > 1) {
-                                if (dist < 0) { tension += (Math.abs(dist) * 8); } 
-                                else { tension += (Math.abs(dist) * 4); }
+                                if (dist < 0) { tension += (Math.abs(dist) * 8); } else { tension += (Math.abs(dist) * 4); }
                                 if (Math.abs(dist) > 2) messages.push("Salto de cuerda extremo");
                             }
                         }
                     }
                 }
             }
-
             if (rhythmOn) tension *= 1.30; 
-
             if (tension <= 12) return { color: 'green', text: 'Ergonómica (Vector Natural)', classes: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' };
             else if (tension <= 38) return { color: 'yellow', text: messages.length > 0 ? messages[0] : 'Compleja (Alta fricción/extensión)', classes: 'bg-amber-500/10 text-amber-400 border-amber-500/30' };
             else return { color: 'red', text: messages.length > 0 ? messages[0] + ' (Riesgo)' : 'Ineficiente (Bloqueo biomecánico)', classes: 'bg-red-500/10 text-red-400 border-red-500/30' };
@@ -2659,24 +2333,18 @@
 
         function formatPimaSequenceRaw(seq, stringsOn, rhythmOn) {
             let chunks = seq.map(step => {
-                let formattedFingers = step.fingers.map(f => {
-                    return stringsOn ? `${f}(${step.strings[f]})` : f;
-                });
+                let formattedFingers = step.fingers.map(f => { return stringsOn ? `${f}(${step.strings[f]})` : f; });
                 return formattedFingers.join('+');
             });
-
             if (rhythmOn) {
                 let res = "";
                 for(let i=0; i<chunks.length; i++) {
                     if (i % 2 === 0) res += "[";
                     res += chunks[i];
-                    if (i % 2 === 1 || i === chunks.length - 1) res += "] ";
-                    else res += " ";
+                    if (i % 2 === 1 || i === chunks.length - 1) res += "] "; else res += " ";
                 }
                 return res.trim();
-            } else {
-                return chunks.join(' - ');
-            }
+            } else { return chunks.join(' - '); }
         }
 
         function formatPimaTokenWithHTML(t) {
@@ -2689,11 +2357,7 @@
 
         window.renderPimaFormulaHTML = function(rawFormula, animate = false) {
             const container = document.createElement('span');
-            if (!animate) {
-                container.style.display = 'flex';
-                container.style.alignItems = 'center';
-                container.style.flexWrap = 'wrap';
-            }
+            if (!animate) { container.style.display = 'flex'; container.style.alignItems = 'center'; container.style.flexWrap = 'wrap'; }
 
             const tokens = rawFormula.split(/(\s-\s|\s)/);
             let delay = 0;
@@ -2716,11 +2380,8 @@
                     if (cleanToken.includes('+')) {
                         const notes = cleanToken.split('+');
                         let stackHTML = `<span class="inline-flex flex-col items-center justify-center mx-1 text-[0.85em] leading-[1] gap-[0.1rem]">`;
-                        notes.forEach(n => {
-                            stackHTML += `<span>${formatPimaTokenWithHTML(n)}</span>`;
-                        });
+                        notes.forEach(n => { stackHTML += `<span>${formatPimaTokenWithHTML(n)}</span>`; });
                         stackHTML += `</span>`;
-                        
                         span.innerHTML = `${prefix}${stackHTML}${suffix}`;
                         span.className = animate ? 'pima-char-anim inline-flex items-center' : 'inline-flex items-center';
                     } else {
@@ -2728,6 +2389,7 @@
                         span.className = animate ? 'pima-char-anim inline-flex items-center' : 'inline-flex items-center';
                     }
                     
+                    // Asignar IDs para manipulación en el bucle del metrónomo
                     span.id = `pima-token-${blockIndex}`;
                     span.classList.add('pima-token-block', 'transition-all', 'duration-100', 'rounded', 'px-1');
                     blockIndex++;
@@ -2749,36 +2411,21 @@
             const viabilityText = document.getElementById('pima-viability-text');
 
             if(placeholder) placeholder.style.display = 'none';
-            if(output) {
-                output.innerHTML = window.renderPimaFormulaHTML(PIMA_STATE.currentObj.raw, true);
-            }
+            if(output) { output.innerHTML = window.renderPimaFormulaHTML(PIMA_STATE.currentObj.raw, true); }
             if(mainDisplay) mainDisplay.classList.replace('border-slate-700', 'border-rose-500/50');
-            
-            if (viabilityBadge) {
-                viabilityBadge.className = `px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 border ${PIMA_STATE.currentObj.analysis.classes}`;
-                if(viabilityText) viabilityText.textContent = PIMA_STATE.currentObj.analysis.text;
-            }
-            
+            if (viabilityBadge) { viabilityBadge.className = `px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 border ${PIMA_STATE.currentObj.analysis.classes}`; if(viabilityText) viabilityText.textContent = PIMA_STATE.currentObj.analysis.text; }
             if(resultFooter) resultFooter.classList.remove('opacity-0');
-            updatePimaFavButtonState();
-            if (window.lucide) lucide.createIcons();
+            updatePimaFavButtonState(); if (window.lucide) lucide.createIcons();
         }
 
-        function addPimaToHistory(obj) {
-            PIMA_STATE.history.unshift(obj);
-            if(PIMA_STATE.history.length > 10) PIMA_STATE.history.pop();
-            renderPimaHistory();
-        }
+        function addPimaToHistory(obj) { PIMA_STATE.history.unshift(obj); if(PIMA_STATE.history.length > 10) PIMA_STATE.history.pop(); renderPimaHistory(); }
 
         function renderPimaHistory() {
             const list = document.getElementById('pima-history-list');
             if (!list) return;
 
             list.innerHTML = '';
-            if (PIMA_STATE.history.length === 0) {
-                list.innerHTML = '<div class="text-center p-6 text-slate-500 text-xs italic">El historial está vacío</div>';
-                return;
-            }
+            if (PIMA_STATE.history.length === 0) { list.innerHTML = '<div class="text-center p-6 text-slate-500 text-xs italic">El historial está vacío</div>'; return; }
             PIMA_STATE.history.forEach(item => {
                 const el = document.createElement('div');
                 el.className = 'bg-slate-800 p-3 rounded-xl border border-slate-700 flex justify-between items-center transition-all hover:border-slate-500';
@@ -2791,84 +2438,44 @@
                 el.innerHTML = `
                     <div>
                         <div class="font-mono text-sm sm:text-base font-bold text-rose-300 flex items-center flex-wrap gap-y-1">${window.renderPimaFormulaHTML(item.raw, false)}</div>
-                        <div class="text-[10px] text-slate-400 mt-1 flex items-center gap-1.5">
-                            <span class="w-2 h-2 rounded-full ${dotColorClass} shadow-sm"></span> ${item.analysis.text}
-                        </div>
+                        <div class="text-[10px] text-slate-400 mt-1 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full ${dotColorClass} shadow-sm"></span> ${item.analysis.text}</div>
                     </div>
-                    <button class="text-slate-400 hover:text-rose-400 transition-colors p-2 shrink-0" onclick="loadPimaSpecific('${item.id}')">
-                        <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
-                    </button>
+                    <button class="text-slate-400 hover:text-rose-400 transition-colors p-2 shrink-0" onclick="loadPimaSpecific('${item.id}')"><i data-lucide="arrow-up-right" class="w-4 h-4"></i></button>
                 `;
                 list.appendChild(el);
             });
             if (window.lucide) lucide.createIcons();
         }
 
-        function clearPimaHistory() { 
-            PIMA_STATE.history = []; 
-            renderPimaHistory(); 
-            showToastGlobal('Historial borrado', 'success'); 
-        }
+        function clearPimaHistory() { PIMA_STATE.history = []; renderPimaHistory(); showToastGlobal('Historial borrado', 'success'); }
 
         function togglePimaFavorite() {
             if(!PIMA_STATE.currentObj) return;
             const idx = PIMA_STATE.favorites.findIndex(f => f.raw === PIMA_STATE.currentObj.raw);
-            if(idx > -1) { 
-                PIMA_STATE.favorites.splice(idx, 1); 
-                showToastGlobal('Eliminado de la rutina', 'success'); 
-            } else { 
-                PIMA_STATE.favorites.unshift(PIMA_STATE.currentObj); 
-                showToastGlobal('Guardado en la rutina', 'success'); 
-            }
-            renderPimaFavorites(); 
-            updatePimaFavButtonState();
+            if(idx > -1) { PIMA_STATE.favorites.splice(idx, 1); showToastGlobal('Eliminado de la rutina', 'success'); } 
+            else { PIMA_STATE.favorites.unshift(PIMA_STATE.currentObj); showToastGlobal('Guardado en la rutina', 'success'); }
+            renderPimaFavorites(); updatePimaFavButtonState();
         }
 
-        function removePimaFav(rawId) {
-            PIMA_STATE.favorites = PIMA_STATE.favorites.filter(f => f.raw !== rawId);
-            renderPimaFavorites(); 
-            updatePimaFavButtonState();
-        }
-
-        function clearPimaFavorites() { 
-            PIMA_STATE.favorites = []; 
-            renderPimaFavorites(); 
-            updatePimaFavButtonState(); 
-        }
+        function removePimaFav(rawId) { PIMA_STATE.favorites = PIMA_STATE.favorites.filter(f => f.raw !== rawId); renderPimaFavorites(); updatePimaFavButtonState(); }
+        function clearPimaFavorites() { PIMA_STATE.favorites = []; renderPimaFavorites(); updatePimaFavButtonState(); }
 
         function updatePimaFavButtonState() {
             if(!PIMA_STATE.currentObj) return;
-            const btn = document.getElementById('pima-btn-fav');
-            const icon = document.getElementById('pima-fav-icon');
+            const btn = document.getElementById('pima-btn-fav'); const icon = document.getElementById('pima-fav-icon');
             if(!btn || !icon) return;
 
             const isFav = PIMA_STATE.favorites.some(f => f.raw === PIMA_STATE.currentObj.raw);
-            if (isFav) {
-                btn.classList.add('text-amber-400', 'bg-amber-500/10', 'border-amber-500/30');
-                btn.classList.remove('text-slate-300', 'bg-slate-800', 'border-slate-700');
-                icon.classList.add('fill-amber-400');
-            } else {
-                btn.classList.remove('text-amber-400', 'bg-amber-500/10', 'border-amber-500/30');
-                btn.classList.add('text-slate-300', 'bg-slate-800', 'border-slate-700');
-                icon.classList.remove('fill-amber-400');
-            }
+            if (isFav) { btn.classList.add('text-amber-400', 'bg-amber-500/10', 'border-amber-500/30'); btn.classList.remove('text-slate-300', 'bg-slate-800', 'border-slate-700'); icon.classList.add('fill-amber-400'); } 
+            else { btn.classList.remove('text-amber-400', 'bg-amber-500/10', 'border-amber-500/30'); btn.classList.add('text-slate-300', 'bg-slate-800', 'border-slate-700'); icon.classList.remove('fill-amber-400'); }
         }
 
         function renderPimaFavorites() {
-            const list = document.getElementById('pima-fav-list');
-            const btnClear = document.getElementById('pima-btn-clear-favs');
+            const list = document.getElementById('pima-fav-list'); const btnClear = document.getElementById('pima-btn-clear-favs');
             if(!list || !btnClear) return;
 
-            if (PIMA_STATE.favorites.length === 0) {
-                list.innerHTML = '<div class="text-center p-6 text-slate-500 text-xs italic">No hay fórmulas guardadas.</div>';
-                btnClear.classList.add('hidden');
-                btnClear.classList.remove('flex');
-                return;
-            }
-            
-            btnClear.classList.remove('hidden');
-            btnClear.classList.add('flex');
-            list.innerHTML = '';
+            if (PIMA_STATE.favorites.length === 0) { list.innerHTML = '<div class="text-center p-6 text-slate-500 text-xs italic">No hay fórmulas guardadas.</div>'; btnClear.classList.add('hidden'); btnClear.classList.remove('flex'); return; }
+            btnClear.classList.remove('hidden'); btnClear.classList.add('flex'); list.innerHTML = '';
             
             PIMA_STATE.favorites.forEach(item => {
                 const el = document.createElement('div');
@@ -2882,116 +2489,80 @@
                 el.innerHTML = `
                     <div>
                         <div class="font-mono text-sm sm:text-base font-bold text-rose-300 flex items-center flex-wrap gap-y-1">${window.renderPimaFormulaHTML(item.raw, false)}</div>
-                        <div class="text-[10px] text-slate-400 mt-1 flex items-center gap-1.5">
-                            <span class="w-2 h-2 rounded-full ${dotColorClass} shadow-sm"></span> ${item.analysis.text}
-                        </div>
+                        <div class="text-[10px] text-slate-400 mt-1 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full ${dotColorClass} shadow-sm"></span> ${item.analysis.text}</div>
                     </div>
-                    <button class="text-slate-500 hover:text-red-400 transition-colors p-2 no-print shrink-0" onclick="removePimaFav('${item.raw}')">
-                        <i data-lucide="x" class="w-4 h-4"></i>
-                    </button>
+                    <button class="text-slate-500 hover:text-red-400 transition-colors p-2 no-print shrink-0" onclick="removePimaFav('${item.raw}')"><i data-lucide="x" class="w-4 h-4"></i></button>
                 `;
                 list.appendChild(el);
             });
             if (window.lucide) lucide.createIcons();
         }
 
-        window.loadPimaSpecific = function(id) {
-            const item = PIMA_STATE.history.find(h => h.id === id);
-            if(item) { PIMA_STATE.currentObj = item; displayPimaResult(); }
-        };
+        window.loadPimaSpecific = function(id) { const item = PIMA_STATE.history.find(h => h.id === id); if(item) { PIMA_STATE.currentObj = item; displayPimaResult(); } };
 
         function copyPimaCurrent() {
             if (!PIMA_STATE.currentObj) return;
-            const ta = document.createElement('textarea');
-            ta.value = PIMA_STATE.currentObj.raw;
-            document.body.appendChild(ta); ta.select();
-            try { document.execCommand('copy'); showToastGlobal('Copiado al portapapeles', 'success'); } catch(e) {}
-            document.body.removeChild(ta);
+            const ta = document.createElement('textarea'); ta.value = PIMA_STATE.currentObj.raw; document.body.appendChild(ta); ta.select();
+            try { document.execCommand('copy'); showToastGlobal('Copiado al portapapeles', 'success'); } catch(e) {} document.body.removeChild(ta);
         }
 
         function exportPimaToJPG() {
             if(PIMA_STATE.favorites.length === 0) { showToastGlobal('Rutina vacía', 'error'); return; }
-            const elementsToHide = document.querySelectorAll('.no-print');
-            elementsToHide.forEach(el => el.style.display = 'none');
-            
+            const elementsToHide = document.querySelectorAll('.no-print'); elementsToHide.forEach(el => el.style.display = 'none');
             const container = document.getElementById('pima-fav-list-container');
             
             html2canvas(container, {backgroundColor: '#020617'}).then(canvas => {
-                const link = document.createElement('a');
-                link.download = 'rutina_pimalab.jpg';
-                link.href = canvas.toDataURL('image/jpeg');
-                link.click();
+                const link = document.createElement('a'); link.download = 'rutina_pimalab.jpg'; link.href = canvas.toDataURL('image/jpeg'); link.click();
                 elementsToHide.forEach(el => el.style.display = 'flex');
             });
         }
 
         function exportPimaToPDF() {
             if(PIMA_STATE.favorites.length === 0) { showToastGlobal('Rutina vacía', 'error'); return; }
-            const elementsToHide = document.querySelectorAll('.no-print');
-            elementsToHide.forEach(el => el.style.display = 'none');
-            
+            const elementsToHide = document.querySelectorAll('.no-print'); elementsToHide.forEach(el => el.style.display = 'none');
             const element = document.getElementById('pima-fav-list-container');
-            const opt = {
-                margin:       0.5,
-                filename:     'rutina_pimalab.pdf',
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, backgroundColor: '#020617' },
-                jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-            };
+            const opt = { margin: 0.5, filename: 'rutina_pimalab.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, backgroundColor: '#020617' }, jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } };
             
-            html2pdf().set(opt).from(element).save().then(() => {
-                elementsToHide.forEach(el => el.style.display = 'flex');
-            });
+            html2pdf().set(opt).from(element).save().then(() => { elementsToHide.forEach(el => el.style.display = 'flex'); });
         }
 
-        /* METRONOMO PIMALAB */
-        let pimaAudioCtx;
-        let pimaIsMetronomeOn = false;
-        let pimaBpm = 60;
-        let pimaSubdivision = 1;
-        let pimaMode = 'free'; 
-        let pimaNextNoteTime = 0.0;
-        let pimaCurrentTick = 0; 
-        let pimaBeatCount = 0; 
-        let pimaNoteIndex = 0; 
-        let pimaCycleCount = 0;
-        let pimaTimerID;
-        let pimaVisualQueue = [];
-        let pimaAnimFrameId;
-
-        function updatePimaBPM(val) {
+        // --- PIMALAB METRONOME FUNCTIONS ---
+        function pimaUpdateBpm(val) {
             pimaBpm = val;
             document.getElementById('pima-bpm-display').innerText = val;
+            document.getElementById('pima-bpm-slider').value = val;
         }
 
         function setPimaSubdivision(val) {
             pimaSubdivision = val;
-            for(let i=1; i<=8; i++) {
-                const btn = document.getElementById(`pima-btn-sub-${i}`);
-                if(btn) {
-                    if(i === val) btn.className = 'pima-sub-btn py-1 rounded text-[10px] font-bold transition-all bg-rose-500/20 text-rose-400 border border-rose-500/50 shadow-sm scale-105';
-                    else btn.className = 'pima-sub-btn py-1 rounded text-[10px] font-bold transition-all bg-slate-700 text-slate-400 border border-slate-600 hover:bg-slate-600 shadow-sm';
+            pimaSubTick = 0; 
+            pimaCycleCounter = 0; 
+            updatePimaSubUI();
+        }
+
+        function updatePimaSubUI() {
+            const container = document.getElementById('pima-subdiv-container');
+            if(!container) return;
+            const buttons = container.querySelectorAll('.pima-sub-btn');
+            buttons.forEach(b => {
+                const v = parseInt(b.textContent);
+                if (v === pimaSubdivision) {
+                    b.className = 'pima-sub-btn py-1 rounded text-[10px] font-bold bg-rose-500 text-white border border-rose-400 shadow-md scale-105 transition-all';
+                } else {
+                    b.className = 'pima-sub-btn py-1 rounded text-[10px] font-bold bg-slate-800 text-slate-400 border border-slate-700 hover:bg-slate-700 hover:text-slate-200 transition-all';
                 }
-            }
+            });
         }
 
-        function updatePimaSubdivMode() {
-            pimaMode = document.getElementById('pima-subdiv-mode').value;
-            if(pimaMode === '1-4' && (pimaSubdivision < 1 || pimaSubdivision > 4)) setPimaSubdivision(1);
-            if(pimaMode === '5-8' && (pimaSubdivision < 5 || pimaSubdivision > 8)) setPimaSubdivision(5);
-            if(pimaMode === '1-8' && (pimaSubdivision < 1 || pimaSubdivision > 8)) setPimaSubdivision(1);
-            pimaCycleCount = 0;
+        function pimaUpdateAutoCycle() {
+            pimaAutoMode = document.getElementById('pima-auto-cycle').value;
+            pimaCycleCounter = 0;
         }
 
-        function togglePimaAutoVary() {
-            const isChecked = document.getElementById('pima-opt-auto-vary').checked;
-            const container = document.getElementById('pima-auto-cycles-container');
-            if (isChecked) {
-                container.classList.remove('opacity-40', 'pointer-events-none');
-            } else {
-                container.classList.add('opacity-40', 'pointer-events-none');
-            }
-            pimaCycleCount = 0;
+        function pimaUpdateCycleCount() {
+            const val = parseInt(document.getElementById('pima-cycle-count').value);
+            if (val > 0) pimaTargetCycles = val;
+            pimaCycleCounter = 0;
         }
 
         function pimaPlayClick(time, isAccent) {
@@ -3014,106 +2585,83 @@
 
         function pimaNextTick() {
             pimaNextNoteTime += (60.0 / pimaBpm) / pimaSubdivision;
-            pimaCurrentTick++;
-            
-            if (pimaCurrentTick >= pimaSubdivision) {
-                pimaCurrentTick = 0;
-                pimaBeatCount++;
+            pimaSubTick++;
+            if (pimaSubTick >= pimaSubdivision) {
+                pimaSubTick = 0;
                 
-                if (pimaBeatCount >= 4) {
-                    pimaBeatCount = 0;
-                    
-                    let cycleCompleted = false;
-
-                    if (pimaMode !== 'free') {
-                        let nextSub = pimaSubdivision + 1;
-                        let wrapped = false;
-                        if (pimaMode === '1-4' && nextSub > 4) { nextSub = 1; wrapped = true; }
-                        if (pimaMode === '5-8' && nextSub > 8) { nextSub = 5; wrapped = true; }
-                        if (pimaMode === '1-8' && nextSub > 8) { nextSub = 1; wrapped = true; }
-                        
-                        pimaVisualQueue.push({ time: pimaNextNoteTime, action: 'subdiv', value: nextSub });
-                        pimaSubdivision = nextSub;
-                        
-                        if (wrapped) cycleCompleted = true;
-                    } else {
-                        cycleCompleted = true;
-                    }
-
-                    if (cycleCompleted) {
-                        pimaCycleCount++;
-                        let targetCycles = parseInt(document.getElementById('pima-cycle-input').value) || 1;
-                        
-                        if (pimaCycleCount >= targetCycles) {
-                            pimaCycleCount = 0;
-                            if (document.getElementById('pima-opt-auto-vary').checked) {
-                                pimaVisualQueue.push({ time: pimaNextNoteTime, action: 'generate' });
-                            }
+                if (pimaAutoMode !== 'none') {
+                    pimaCycleCounter++;
+                    if (pimaCycleCounter >= pimaTargetCycles) {
+                        pimaCycleCounter = 0;
+                        if (pimaAutoMode === '1-4') {
+                            setPimaLength(Math.floor(Math.random() * 4) + 1, null);
+                        } else if (pimaAutoMode === '5-8') {
+                            setPimaLength(Math.floor(Math.random() * 4) + 5, null);
+                        } else if (pimaAutoMode === '1-8') {
+                            setPimaLength(Math.floor(Math.random() * 8) + 1, null);
                         }
+                        generatePima();
                     }
                 }
             }
         }
 
         function pimaScheduler() {
-            while (pimaNextNoteTime < pimaAudioCtx.currentTime + 0.1 && pimaIsMetronomeOn) {
-                pimaScheduleNote(pimaCurrentTick, pimaNextNoteTime);
+            while (pimaNextNoteTime < pimaAudioCtx.currentTime + 0.1 && pimaIsPlaying) {
+                pimaScheduleNote(pimaSubTick, pimaNextNoteTime);
                 pimaNextTick();
             }
-            if (pimaIsMetronomeOn) pimaTimerID = setTimeout(pimaScheduler, 25);
+            if (pimaIsPlaying) pimaTimerID = setTimeout(pimaScheduler, 25);
         }
 
         function pimaDrawLoop() {
-            if (!pimaIsMetronomeOn) return;
+            if (!pimaIsPlaying) return;
             let currentTime = pimaAudioCtx.currentTime;
             
             while (pimaVisualQueue.length && pimaVisualQueue[0].time <= currentTime) {
                 let event = pimaVisualQueue.splice(0, 1)[0];
                 
-                if (event.action === 'generate') {
-                    generatePima();
-                    pimaNoteIndex = 0;
-                } else if (event.action === 'subdiv') {
-                    setPimaSubdivision(event.value);
-                } else if (event.index !== undefined) {
-                    document.querySelectorAll('.pima-token-block').forEach(el => {
-                        el.classList.remove('bg-rose-600', 'text-white', 'scale-110', 'bg-slate-700', 'ring-2', 'ring-rose-400', 'ring-amber-400', 'underline', 'underline-offset-[6px]', 'decoration-rose-500', 'decoration-2');
-                    });
-                    
-                    let target = document.getElementById(`pima-token-${event.index}`);
-                    if (target) {
-                        if (event.isAccent) {
-                            target.classList.add('bg-rose-600', 'text-white', 'scale-110', 'ring-2', 'ring-rose-400', 'underline', 'underline-offset-[6px]', 'decoration-rose-500', 'decoration-2');
-                        } else {
-                            target.classList.add('bg-slate-700', 'text-white', 'scale-110', 'ring-2', 'ring-amber-400');
-                        }
+                document.querySelectorAll('.pima-token-block').forEach(el => {
+                    el.classList.remove('bg-rose-600', 'text-white', 'scale-110', 'bg-slate-700', 'ring-2', 'ring-rose-400', 'ring-amber-400', 'underline', 'underline-offset-[6px]', 'decoration-rose-500', 'decoration-2');
+                });
+                
+                let target = document.getElementById(`pima-token-${event.index}`);
+                if (target) {
+                    if (event.isAccent) {
+                        target.classList.add('bg-rose-600', 'text-white', 'scale-110', 'ring-2', 'ring-rose-400', 'underline', 'underline-offset-[6px]', 'decoration-rose-500', 'decoration-2');
+                    } else {
+                        target.classList.add('bg-slate-700', 'text-white', 'scale-110', 'ring-2', 'ring-amber-400');
                     }
                 }
             }
             pimaAnimFrameId = requestAnimationFrame(pimaDrawLoop);
         }
 
-        function togglePimaMetronome() {
-            if (!PIMA_STATE.currentObj) generatePima(); 
-            
+        function pimaToggleMetronome() {
+            if (!PIMA_STATE.currentObj) {
+                showToastGlobal('Genera una secuencia primero', 'error');
+                return;
+            }
+
             if (!pimaAudioCtx) pimaAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            pimaIsMetronomeOn = !pimaIsMetronomeOn;
+            pimaIsPlaying = !pimaIsPlaying;
             
-            const btn = document.getElementById('pima-btn-metronome');
+            const btn = document.getElementById('pima-btn-metro');
             const icon = document.getElementById('pima-metro-icon');
-            const text = document.getElementById('pima-metro-text');
             
-            if (pimaIsMetronomeOn) {
+            if (pimaIsPlaying) {
                 if (pimaAudioCtx.state === 'suspended') pimaAudioCtx.resume();
-                pimaCurrentTick = 0; pimaBeatCount = 0; pimaNoteIndex = 0; pimaCycleCount = 0; pimaVisualQueue = [];
+                pimaSubTick = 0;
+                pimaCycleCounter = 0;
+                pimaNoteIndex = 0;
+                pimaVisualQueue = [];
                 pimaNextNoteTime = pimaAudioCtx.currentTime + 0.05;
                 
                 btn.classList.replace('bg-slate-700', 'bg-red-500/20');
-                btn.classList.replace('text-white', 'text-red-400');
                 btn.classList.replace('border-slate-600', 'border-red-500/50');
-                btn.classList.replace('hover:bg-slate-600', 'hover:bg-red-500/30');
+                btn.classList.replace('text-white', 'text-red-400');
+                btn.querySelector('span').innerText = 'Detener';
                 icon.setAttribute('data-lucide', 'square');
-                text.innerText = 'Detener Metrónomo';
                 
                 pimaScheduler();
                 pimaDrawLoop();
@@ -3124,18 +2672,22 @@
                 document.querySelectorAll('.pima-token-block').forEach(el => {
                     el.classList.remove('bg-rose-600', 'text-white', 'scale-110', 'bg-slate-700', 'ring-2', 'ring-rose-400', 'ring-amber-400', 'underline', 'underline-offset-[6px]', 'decoration-rose-500', 'decoration-2');
                 });
-                
-                btn.classList.replace('bg-red-500/20', 'bg-slate-700');
-                btn.classList.replace('text-red-400', 'text-white');
-                btn.classList.replace('border-red-500/50', 'border-slate-600');
-                btn.classList.replace('hover:bg-red-500/30', 'hover:bg-slate-600');
-                icon.setAttribute('data-lucide', 'play');
-                text.innerText = 'Iniciar Metrónomo';
-            }
-            lucide.createIcons();
-        }
+                let target = document.getElementById(`pima-token-0`);
+                if(target) target.classList.add('underline', 'underline-offset-[6px]', 'decoration-rose-500', 'decoration-2');
 
-        initPimaLab();
+                btn.classList.replace('bg-red-500/20', 'bg-slate-700');
+                btn.classList.replace('border-red-500/50', 'border-slate-600');
+                btn.classList.replace('text-red-400', 'text-white');
+                btn.querySelector('span').innerText = 'Práctica';
+                icon.setAttribute('data-lucide', 'play');
+            }
+            if (window.lucide) lucide.createIcons();
+        }
+        
+        window.addEventListener('DOMContentLoaded', () => {
+            initPimaLab();
+            if (window.lucide) lucide.createIcons();
+        });
     </script>
 </body>
 </html>
