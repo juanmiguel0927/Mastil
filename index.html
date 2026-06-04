@@ -2528,40 +2528,56 @@
         function generatePima() {
             let sequence = [];
             let prevFingers = [];
+            let isValid = false;
 
-            for (let i = 0; i < PIMA_STATE.length; i++) {
-                let available = PIMA_DEDOS.filter(d => d === 'p' || !prevFingers.includes(d));
-                let isChord = PIMA_STATE.polyOn && (Math.random() < 0.20 && available.length > 1);
-                let currentFingers = [];
-                
-                if (isChord) {
-                    if (available.includes('p') && Math.random() < 0.8) {
-                        currentFingers.push('p');
+            while (!isValid) {
+                sequence = [];
+                prevFingers = [];
+
+                for (let i = 0; i < PIMA_STATE.length; i++) {
+                    let available = PIMA_DEDOS.filter(d => d === 'p' || !prevFingers.includes(d));
+                    let isChord = PIMA_STATE.polyOn && (Math.random() < 0.20 && available.length > 1);
+                    let currentFingers = [];
+                    
+                    if (isChord) {
+                        if (available.includes('p') && Math.random() < 0.8) {
+                            currentFingers.push('p');
+                        }
+                        let others = available.filter(d => d !== 'p');
+                        if (others.length > 0) {
+                            others.sort(() => 0.5 - Math.random());
+                            let picks = others.slice(0, Math.min(2, BIO_LIMIT - currentFingers.length));
+                            currentFingers.push(...picks);
+                        }
+                        if (currentFingers.length === 0) currentFingers.push(available[0]); 
+                    } else {
+                        currentFingers.push(available[Math.floor(Math.random() * available.length)]);
                     }
-                    let others = available.filter(d => d !== 'p');
-                    if (others.length > 0) {
-                        others.sort(() => 0.5 - Math.random());
-                        let picks = others.slice(0, Math.min(2, BIO_LIMIT - currentFingers.length));
-                        currentFingers.push(...picks);
+                    
+                    const weight = { 'a':1, 'm':2, 'i':3, 'p':4 };
+                    currentFingers.sort((a,b) => weight[a] - weight[b]);
+
+                    let currentStrings = {};
+                    if (PIMA_STATE.stringsOn) {
+                        currentFingers.forEach(f => {
+                            if (f === 'p') currentStrings[f] = [4, 5, 6][Math.floor(Math.random() * 3)];
+                            else currentStrings[f] = [1, 2, 3, 4][Math.floor(Math.random() * 4)];
+                        });
                     }
-                    if (currentFingers.length === 0) currentFingers.push(available[0]); 
-                } else {
-                    currentFingers.push(available[Math.floor(Math.random() * available.length)]);
-                }
-                
-                const weight = { 'a':1, 'm':2, 'i':3, 'p':4 };
-                currentFingers.sort((a,b) => weight[a] - weight[b]);
 
-                let currentStrings = {};
-                if (PIMA_STATE.stringsOn) {
-                    currentFingers.forEach(f => {
-                        if (f === 'p') currentStrings[f] = [4, 5, 6][Math.floor(Math.random() * 3)];
-                        else currentStrings[f] = [1, 2, 3, 4][Math.floor(Math.random() * 4)];
-                    });
+                    sequence.push({ fingers: currentFingers, strings: currentStrings });
+                    prevFingers = currentFingers;
                 }
 
-                sequence.push({ fingers: currentFingers, strings: currentStrings });
-                prevFingers = currentFingers;
+                isValid = true;
+                if (PIMA_STATE.length > 1) {
+                    let firstStepNonP = sequence[0].fingers.filter(f => f !== 'p');
+                    let lastStepNonP = sequence[sequence.length - 1].fingers.filter(f => f !== 'p');
+                    
+                    if (firstStepNonP.some(f => lastStepNonP.includes(f))) {
+                        isValid = false;
+                    }
+                }
             }
 
             const analysis = analyzePimaVectorial(sequence, PIMA_STATE.stringsOn, PIMA_STATE.rhythmOn);
