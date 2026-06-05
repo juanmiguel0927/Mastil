@@ -134,6 +134,9 @@
                 <span class="font-bold text-xs hidden sm:inline">Suite Principal</span>
             </button>
             <div class="flex-1 text-center font-bold text-purple-400 text-lg sm:text-xl mr-10 sm:mr-32">LabChord Guitar</div>
+            <div class="absolute right-4 text-[10px] text-slate-500 font-bold hidden md:block">
+                (Contenido cargado en Iframe - Atajos y Ayuda gestionados internamente)
+            </div>
         </div>
         <iframe src="https://juanmiguel0927.github.io/LabChordGuitar/" class="w-full flex-1 border-0 bg-slate-950"></iframe>
     </div>
@@ -152,7 +155,7 @@
                     <p class="text-slate-400 text-xs sm:text-sm">Analizador Biomecánico de la Mano Derecha</p>
                 </div>
                 <div class="flex gap-2 mt-4 sm:mt-0">
-                    <button id="pima-btn-help" class="p-2.5 bg-slate-800 hover:bg-slate-700 rounded-xl transition-colors border border-slate-700 text-slate-400 hover:text-white" title="Información y Lógica">
+                    <button id="pima-btn-help" onclick="togglePimaHelp()" class="p-2.5 bg-slate-800 hover:bg-slate-700 rounded-xl transition-colors border border-slate-700 text-slate-400 hover:text-white" title="Información y Lógica (Atajo: H)">
                         <i data-lucide="help-circle" class="w-5 h-5"></i>
                     </button>
                 </div>
@@ -197,7 +200,7 @@
                                 </label>
                             </div>
 
-                            <button id="pima-btn-generate" class="w-full py-3 mt-1 bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white font-bold rounded-xl shadow-lg transition-transform active:scale-95 flex items-center justify-center gap-2 text-sm">
+                            <button id="pima-btn-generate" class="w-full py-3 mt-1 bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white font-bold rounded-xl shadow-lg transition-transform active:scale-95 flex items-center justify-center gap-2 text-sm" title="Atajo: G">
                                 <i data-lucide="zap" class="w-4 h-4"></i> Generar y Analizar
                             </button>
 
@@ -206,7 +209,7 @@
                                 <h3 class="text-sm font-semibold text-slate-300 flex items-center gap-2"><i data-lucide="metronome" class="w-4 h-4 text-slate-500"></i> Metrónomo Rítmico</h3>
                                 <div class="flex justify-between items-center">
                                     <span class="text-[10px] text-slate-300 flex items-center gap-1"><i data-lucide="activity" class="w-3 h-3 text-rose-500"></i> BPM: <span id="pima-bpm-display" class="font-bold text-rose-400">60</span></span>
-                                    <button id="pima-btn-metro" class="py-1.5 px-3 bg-slate-700 hover:bg-slate-600 text-white text-[10px] font-bold rounded-lg transition-colors border border-slate-600 flex items-center gap-1 shadow-md"><i id="pima-metro-icon" data-lucide="play" class="w-3 h-3"></i> <span>Práctica</span></button>
+                                    <button id="pima-btn-metro" class="py-1.5 px-3 bg-slate-700 hover:bg-slate-600 text-white text-[10px] font-bold rounded-lg transition-colors border border-slate-600 flex items-center gap-1 shadow-md" title="Atajo: Barra Espaciadora"><i id="pima-metro-icon" data-lucide="play" class="w-3 h-3"></i> <span>Práctica</span></button>
                                 </div>
                                 <input type="range" id="pima-bpm-slider" min="40" max="200" value="60" oninput="pimaUpdateBpm(this.value)" class="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-rose-500">
                                 
@@ -321,7 +324,7 @@
     <!-- Modal Help PimaLab -->
     <div id="pima-help-modal" class="hidden fixed inset-0 z-[2000] bg-slate-950/90 backdrop-blur-sm items-center justify-center p-4">
         <div class="bg-slate-900 rounded-2xl border border-slate-700 p-6 sm:p-8 max-w-2xl w-full shadow-2xl relative max-h-[90vh] flex flex-col">
-            <button id="pima-close-help" class="absolute top-4 right-4 text-slate-400 hover:text-rose-500 transition-colors z-10 bg-slate-800 rounded-full p-1.5 border border-slate-700">
+            <button onclick="togglePimaHelp()" class="absolute top-4 right-4 text-slate-400 hover:text-rose-500 transition-colors z-10 bg-slate-800 rounded-full p-1.5 border border-slate-700">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
             <div class="flex items-center gap-3 mb-6 text-rose-500 shrink-0 border-b border-slate-800 pb-4">
@@ -331,6 +334,16 @@
             
             <div class="overflow-y-auto pr-2 space-y-6 text-sm text-slate-300 custom-scrollbar flex-1">
                 <p>PimaLab evalúa topográficamente secuencias complejas basándose en vectores reales de la anatomía de la mano derecha. Ahora incluye evaluación rítmica modular.</p>
+
+                <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
+                    <h3 class="text-sky-400 font-bold mb-3 flex items-center gap-2 uppercase tracking-wider text-xs"><i data-lucide="keyboard" class="w-4 h-4"></i> Atajos de Teclado Globales</h3>
+                    <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                        <li class="bg-slate-900/50 p-2 rounded border border-slate-700/50"><span class="text-white font-bold inline-block w-20">[ Espacio ]</span> Iniciar/Detener Práctica</li>
+                        <li class="bg-slate-900/50 p-2 rounded border border-slate-700/50"><span class="text-white font-bold inline-block w-20">[ G ] / [ Enter ]</span> Generar y Analizar</li>
+                        <li class="bg-slate-900/50 p-2 rounded border border-slate-700/50"><span class="text-white font-bold inline-block w-20">[ H ]</span> Alternar Menú de Ayuda</li>
+                        <li class="bg-slate-900/50 p-2 rounded border border-slate-700/50"><span class="text-white font-bold inline-block w-20">[ Esc ]</span> Volver al Hub Central</li>
+                    </ul>
+                </div>
                 
                 <div class="space-y-4">
                     <div><h3 class="text-emerald-400 font-bold mb-1">1. Polifonía y Recurrencia</h3><p class="text-xs text-slate-400">El motor permite eventos simultáneos limitados a un techo biomecánico de 3 dedos para mantener la viabilidad técnica.</p></div>
@@ -370,7 +383,7 @@
         <div class="max-w-md w-full bg-slate-800 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-slate-700 overflow-hidden relative">
             <div class="bg-amber-600 p-6 text-center shadow-md relative">
                 <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none" style="background-image: repeating-linear-gradient(90deg, transparent, transparent 20px, rgba(0,0,0,0.5) 20px, rgba(0,0,0,0.5) 22px)"></div>
-                <button onclick="toggleHelp()" class="absolute top-4 right-4 text-amber-100 hover:text-white transition-colors p-2 rounded-full hover:bg-amber-700/50" title="Ver manual y herramientas">
+                <button onclick="toggleHelp()" class="absolute top-4 right-4 text-amber-100 hover:text-white transition-colors p-2 rounded-full hover:bg-amber-700/50" title="Ver manual y atajos (H)">
                     <i data-lucide="info" class="w-6 h-6"></i>
                 </button>
                 <i data-lucide="guitar" class="w-10 h-10 mx-auto mb-2 text-amber-100"></i>
@@ -472,13 +485,13 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 border-t border-slate-700/50 pt-6">
-                    <button onclick="manualGenerate()" class="w-full bg-amber-500 hover:bg-amber-400 active:bg-amber-600 text-slate-900 font-bold py-3 px-2 rounded-xl flex items-center justify-center gap-1.5 transition-all shadow-lg hover:shadow-amber-500/30 active:scale-95 text-xs sm:text-sm">
+                    <button onclick="manualGenerate()" class="w-full bg-amber-500 hover:bg-amber-400 active:bg-amber-600 text-slate-900 font-bold py-3 px-2 rounded-xl flex items-center justify-center gap-1.5 transition-all shadow-lg hover:shadow-amber-500/30 active:scale-95 text-xs sm:text-sm" title="Atajo: G">
                         <i id="generate-icon" data-lucide="refresh-cw" class="w-4 h-4"></i> Secuencia
                     </button>
                     <button onclick="saveFavorite()" class="w-full bg-sky-500/20 hover:bg-sky-500/30 active:bg-sky-500/40 text-sky-400 font-bold py-3 px-2 rounded-xl flex items-center justify-center gap-1.5 transition-all border border-sky-500/50 shadow-lg text-xs sm:text-sm">
                         <i data-lucide="star" class="w-4 h-4"></i> Favorito
                     </button>
-                    <button id="btn-metronome" onclick="toggleMetronome()" class="w-full md:col-span-1 bg-slate-700 hover:bg-slate-600 active:bg-slate-500 text-white font-bold py-3 px-2 rounded-xl flex items-center justify-center gap-1.5 transition-all border border-slate-600 shadow-lg shadow-slate-900/50 text-xs sm:text-sm">
+                    <button id="btn-metronome" onclick="toggleMetronome()" class="w-full md:col-span-1 bg-slate-700 hover:bg-slate-600 active:bg-slate-500 text-white font-bold py-3 px-2 rounded-xl flex items-center justify-center gap-1.5 transition-all border border-slate-600 shadow-lg shadow-slate-900/50 text-xs sm:text-sm" title="Atajo: Barra Espaciadora">
                         <i id="metro-icon" data-lucide="play" class="w-4 h-4"></i> <span id="metro-text">Práctica</span>
                     </button>
                 </div>
@@ -630,6 +643,9 @@
                     <i data-lucide="arrow-left" class="w-5 h-5 group-hover:-translate-x-1 transition-transform"></i> 
                     <span class="font-bold text-xs hidden sm:inline">Suite Principal</span>
                 </button>
+                <button onclick="toggleFmHelp()" class="absolute top-4 right-4 p-3 bg-slate-800 hover:bg-slate-700 rounded-full transition-colors text-slate-300 border border-slate-700 flex items-center shadow-lg z-50" title="Atajos y Ayuda (H)">
+                    <i data-lucide="help-circle" class="w-5 h-5"></i>
+                </button>
 
                 <div class="text-center space-y-2 mt-10 sm:mt-4">
                     <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight bg-gradient-to-r from-emerald-400 to-cyan-500 bg-clip-text text-transparent">
@@ -770,12 +786,12 @@
                     <div class="bg-slate-800/95 backdrop-blur border border-blue-500/30 p-6 rounded-2xl shadow-2xl w-full pointer-events-auto animate-in fade-in zoom-in duration-300 text-center">
                         <h3 class="text-xl font-bold text-blue-400 mb-3 flex items-center justify-center gap-2"><i data-lucide="book-open" class="w-6 h-6"></i> Fase de Estudio</h3>
                         <div class="text-base text-slate-300 mb-4 space-y-2"><p id="study-panel-hint" class="leading-relaxed">Observa el mástil.</p></div>
-                        <button onclick="endStudyMode()" class="w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl shadow-lg transition-all transform active:scale-95 text-lg">¡Estoy listo!</button>
+                        <button onclick="endStudyMode()" class="w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl shadow-lg transition-all transform active:scale-95 text-lg" title="Atajo: Espacio / Enter">¡Estoy listo!</button>
                     </div>
                 </div>
 
                 <div class="bg-slate-800 p-4 flex justify-between items-center shadow-md z-30 relative">
-                    <button onclick="exitGame()" class="p-2 hover:bg-slate-700 rounded-full transition-colors text-slate-300"><i data-lucide="x" class="w-6 h-6"></i></button>
+                    <button onclick="exitGame()" class="p-2 hover:bg-slate-700 rounded-full transition-colors text-slate-300" title="Cerrar (Esc)"><i data-lucide="x" class="w-6 h-6"></i></button>
                     <div id="game-center-info" class="flex-1 px-4 text-center">
                         <div id="timer-display" class="hidden inline-flex items-center font-mono font-bold text-lg px-4 py-1 rounded-full text-emerald-400 bg-slate-700">
                             <i data-lucide="timer" class="w-4 h-4 mr-2"></i><span id="time-text">00:00</span>
@@ -870,6 +886,55 @@
         </div>
     </div>
 
+    <!-- Modal Ayuda Fretmind -->
+    <div id="fm-help-modal" class="hidden fixed inset-0 z-[200] bg-slate-950/90 items-center justify-center p-4 backdrop-blur-md">
+        <div class="bg-slate-800 rounded-2xl border border-slate-600 p-6 max-w-2xl w-full shadow-2xl modal-enter relative max-h-[90vh] flex flex-col">
+            <button onclick="toggleFmHelp()" class="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors z-10 bg-slate-800 rounded-full p-1 border border-slate-600">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div class="flex items-center gap-3 mb-4 text-emerald-400 shrink-0 border-b border-slate-700 pb-3">
+                <i data-lucide="brain-circuit" class="w-6 h-6"></i>
+                <h2 class="text-xl font-bold text-slate-100">Manual de Fretmind</h2>
+            </div>
+            
+            <div class="overflow-y-auto pr-2 space-y-6 text-xs text-slate-300 custom-scrollbar">
+                
+                <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
+                    <h3 class="text-cyan-400 font-bold mb-3 flex items-center gap-2 uppercase tracking-wider text-xs"><i data-lucide="keyboard" class="w-4 h-4"></i> Atajos de Teclado Globales</h3>
+                    <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                        <li class="bg-slate-900/50 p-2 rounded border border-slate-700/50"><span class="text-white font-bold inline-block w-24">[ Espacio / Enter ]</span> Saltar panel de estudio</li>
+                        <li class="bg-slate-900/50 p-2 rounded border border-slate-700/50"><span class="text-white font-bold inline-block w-24">[ H ]</span> Alternar Menú de Ayuda</li>
+                        <li class="bg-slate-900/50 p-2 rounded border border-slate-700/50"><span class="text-white font-bold inline-block w-24">[ Esc ]</span> Volver al menú / Cerrar</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="font-bold text-emerald-500 mb-2 uppercase tracking-wider text-sm flex items-center gap-2"><i data-lucide="target" class="w-4 h-4"></i> Objetivos del Entrenamiento</h3>
+                    <ul class="space-y-2">
+                        <li><span class="text-white font-bold">Modo Identificar:</span> Fretmind iluminará un punto ciego en el mástil y tendrás que decir su nombre (teoría estática).</li>
+                        <li><span class="text-white font-bold">Modo Encontrar:</span> Se te da el nombre de una nota y debes tocar TODAS sus ubicaciones posibles a lo largo del mástil delimitado (geometría global).</li>
+                        <li><span class="text-cyan-400 font-bold">Modo Intervalos:</span> Se te pide encontrar una distancia (ej. "Tritono") partiendo de una nota base. Requiere visualización geométrica estricta.</li>
+                    </ul>
+                </div>
+
+                <div class="bg-slate-900/50 p-3 rounded-xl border border-slate-700">
+                    <h3 class="font-bold text-emerald-500 mb-2 uppercase tracking-wider flex items-center gap-2"><i data-lucide="map" class="w-4 h-4"></i> Rutas de Práctica</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <p><span class="text-emerald-400 font-bold">La Academia (Guiado):</span> Es un modo de progresión lineal. Estarás obligado a dominar primero secciones pequeñas del mástil y adquirir "vidas" antes de avanzar.</p>
+                        <p><span class="text-cyan-400 font-bold">Modo Libre:</span> El laboratorio puro. Selecciona rango de trastes, tiempo de estrés y tipo de pregunta a voluntad.</p>
+                    </div>
+                </div>
+
+                <div class="border-t border-slate-700 pt-4">
+                    <h3 class="font-bold text-amber-500 mb-2 uppercase tracking-wider flex items-center gap-2"><i data-lucide="bar-chart-3" class="w-4 h-4"></i> Estadísticas Analíticas</h3>
+                    <p class="mb-3 text-[10px] text-slate-400">Cada clic que realizas queda registrado en el motor de almacenamiento de tu navegador. El <strong class="text-amber-400">Mapa de Calor</strong> en la sección "Mi Progreso Global" revelará las áreas exactas del diapasón donde tienes puntos ciegos o debilidad cognitiva.</p>
+                </div>
+            </div>
+            
+            <button onclick="toggleFmHelp()" class="w-full bg-slate-700 hover:bg-slate-600 text-white font-medium py-3 px-4 rounded-xl transition-colors shrink-0 mt-4 shadow-lg border border-slate-600">Cerrar Manual</button>
+        </div>
+    </div>
+
     <!-- Modal Ayuda JMR -->
     <div id="help-modal" class="hidden fixed inset-0 z-[200] bg-slate-950/90 items-center justify-center p-4 backdrop-blur-md">
         <div class="bg-slate-800 rounded-2xl border border-slate-600 p-6 max-w-2xl w-full shadow-2xl modal-enter relative max-h-[90vh] flex flex-col">
@@ -882,6 +947,17 @@
             </div>
             
             <div class="overflow-y-auto pr-2 space-y-6 text-xs text-slate-300 custom-scrollbar">
+                
+                <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
+                    <h3 class="text-sky-400 font-bold mb-3 flex items-center gap-2 uppercase tracking-wider text-xs"><i data-lucide="keyboard" class="w-4 h-4"></i> Atajos de Teclado Globales</h3>
+                    <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                        <li class="bg-slate-900/50 p-2 rounded border border-slate-700/50"><span class="text-white font-bold inline-block w-20">[ Espacio ]</span> Iniciar/Detener Práctica</li>
+                        <li class="bg-slate-900/50 p-2 rounded border border-slate-700/50"><span class="text-white font-bold inline-block w-20">[ G ] / [ Enter ]</span> Generar Secuencia</li>
+                        <li class="bg-slate-900/50 p-2 rounded border border-slate-700/50"><span class="text-white font-bold inline-block w-20">[ H ]</span> Alternar Menú de Ayuda</li>
+                        <li class="bg-slate-900/50 p-2 rounded border border-slate-700/50"><span class="text-white font-bold inline-block w-20">[ Esc ]</span> Volver al Hub Central</li>
+                    </ul>
+                </div>
+
                 <div>
                     <h3 class="font-bold text-amber-500 mb-2 uppercase tracking-wider text-sm flex items-center gap-2"><i data-lucide="dumbbell" class="w-4 h-4"></i> Flujo de Entrenamiento</h3>
                     <ul class="space-y-2">
@@ -1018,6 +1094,71 @@
             document.getElementById('pimalab-wrapper').classList.remove('hidden'); document.getElementById('pimalab-wrapper').classList.add('flex');
             if (window.lucide) lucide.createIcons();
         }
+
+        window.toggleFmHelp = () => {
+            const modal = document.getElementById('fm-help-modal');
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden'); modal.classList.add('flex');
+            } else {
+                modal.classList.add('hidden'); modal.classList.remove('flex');
+            }
+        };
+
+        window.togglePimaHelp = function() {
+            const modal = document.getElementById('pima-help-modal');
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden'); modal.classList.add('flex');
+            } else {
+                modal.classList.add('hidden'); modal.classList.remove('flex');
+            }
+        };
+
+        // MANEJADOR DE ATAJOS DE TECLADO (GLOBAL Y AISLADO POR CONTEXTO)
+        window.addEventListener('keydown', function(e) {
+            // Regla mecánica: Ignorar si el usuario está tipeando en un input
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA') return;
+
+            const isHub = !document.getElementById('main-hub').classList.contains('hidden');
+            const isJMR = !document.getElementById('jmr-wrapper').classList.contains('hidden');
+            const isFretmind = !document.getElementById('fm-wrapper').classList.contains('hidden');
+            const isPimaLab = !document.getElementById('pimalab-wrapper').classList.contains('hidden');
+
+            if (e.key === 'Escape') {
+                const jmrHelp = document.getElementById('help-modal');
+                const pimaHelp = document.getElementById('pima-help-modal');
+                const fmHelp = document.getElementById('fm-help-modal');
+                const jmrStats = document.getElementById('stats-modal');
+                
+                let modalClosed = false;
+                if (jmrHelp && !jmrHelp.classList.contains('hidden')) { toggleHelp(); modalClosed = true; }
+                else if (pimaHelp && !pimaHelp.classList.contains('hidden')) { togglePimaHelp(); modalClosed = true; }
+                else if (fmHelp && !fmHelp.classList.contains('hidden')) { toggleFmHelp(); modalClosed = true; }
+                else if (jmrStats && !jmrStats.classList.contains('hidden')) { toggleStatsModal(); modalClosed = true; }
+
+                if (!modalClosed && !isHub) {
+                    returnToHub();
+                }
+            }
+
+            if (isJMR) {
+                if (e.code === 'Space') { e.preventDefault(); toggleMetronome(); }
+                if (e.key.toLowerCase() === 'g' || e.key === 'Enter') { manualGenerate(); }
+                if (e.key.toLowerCase() === 'h') { toggleHelp(); }
+            } else if (isPimaLab) {
+                if (e.code === 'Space') { e.preventDefault(); pimaToggleMetronome(); }
+                if (e.key.toLowerCase() === 'g' || e.key === 'Enter') { generatePima(); }
+                if (e.key.toLowerCase() === 'h') { togglePimaHelp(); }
+            } else if (isFretmind) {
+                if (e.code === 'Space' || e.key === 'Enter') {
+                    if (!document.getElementById('study-panel').classList.contains('hidden')) {
+                        e.preventDefault();
+                        endStudyMode();
+                    }
+                }
+                if (e.key.toLowerCase() === 'h') { toggleFmHelp(); }
+            }
+        });
+
     </script>
 
     <!-- APP 1: JMR GUITAR TRAINER (SCRIPT) -->
@@ -2197,12 +2338,6 @@
 
             const btnExportPDF = document.getElementById('pima-btn-export-pdf');
             if (btnExportPDF) btnExportPDF.addEventListener('click', exportPimaToPDF);
-            
-            const btnHelp = document.getElementById('pima-btn-help');
-            const helpModal = document.getElementById('pima-help-modal');
-            const closeHelp = document.getElementById('pima-close-help');
-            if (btnHelp) btnHelp.addEventListener('click', () => { helpModal.classList.remove('hidden'); helpModal.classList.add('flex'); });
-            if (closeHelp) closeHelp.addEventListener('click', () => { helpModal.classList.add('hidden'); helpModal.classList.remove('flex'); });
             
             const btnMetro = document.getElementById('pima-btn-metro');
             if (btnMetro) btnMetro.addEventListener('click', pimaToggleMetronome);
