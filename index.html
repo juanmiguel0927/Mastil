@@ -59,6 +59,8 @@
             animation: pimaPopIn 0.3s ease-out forwards;
         }
         @keyframes pimaPopIn { to { opacity: 1; transform: translateY(0); } }
+        @keyframes pimaQueuedPulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        .pima-queued { animation: pimaQueuedPulse 1s infinite; }
     </style>
 </head>
 <body>
@@ -118,7 +120,7 @@
             </button>
         </div>
 
-        <div class="mt-auto text-center text-slate-500 text-[10px] sm:text-xs tracking-wider opacity-80 z-10 pt-10">
+        <div class="mt-auto text-center text-slate-500 text-[10px] sm:text-xs tracking-wider opacity-80 z-10 pt-10 pb-4">
             Diseño metodológico y lógico por<br>
             <span class="font-bold text-slate-400 text-sm">Juan Miguel Rios Redondo</span>
         </div>
@@ -201,7 +203,7 @@
 
                             <!-- METRÓNOMO PIMALAB -->
                             <div class="border-t border-slate-800 pt-4 flex flex-col gap-3">
-                                <h3 class="text-sm font-semibold text-slate-300 flex items-center gap-2"><i data-lucide="metronome" class="w-4 h-4 text-slate-500"></i> Metrónomo</h3>
+                                <h3 class="text-sm font-semibold text-slate-300 flex items-center gap-2"><i data-lucide="metronome" class="w-4 h-4 text-slate-500"></i> Metrónomo Rítmico</h3>
                                 <div class="flex justify-between items-center">
                                     <span class="text-[10px] text-slate-300 flex items-center gap-1"><i data-lucide="activity" class="w-3 h-3 text-rose-500"></i> BPM: <span id="pima-bpm-display" class="font-bold text-rose-400">60</span></span>
                                     <button id="pima-btn-metro" class="py-1.5 px-3 bg-slate-700 hover:bg-slate-600 text-white text-[10px] font-bold rounded-lg transition-colors border border-slate-600 flex items-center gap-1 shadow-md"><i id="pima-metro-icon" data-lucide="play" class="w-3 h-3"></i> <span>Práctica</span></button>
@@ -210,7 +212,7 @@
                                 
                                 <div class="flex flex-col gap-2 mt-1">
                                     <div class="flex justify-between items-center">
-                                        <label class="text-[9px] text-slate-400 font-bold tracking-wider uppercase">Subdivisión (1-8):</label>
+                                        <label class="text-[9px] text-slate-400 font-bold tracking-wider uppercase">Subdivisión Rítmica:</label>
                                     </div>
                                     <div class="grid grid-cols-4 gap-1" id="pima-subdiv-container">
                                         <button class="pima-sub-btn py-1 rounded text-[10px] font-bold bg-rose-500 text-white border border-rose-400 shadow-md scale-105" onclick="setPimaSubdivision(1)">1</button>
@@ -224,7 +226,7 @@
                                     </div>
                                     
                                     <div class="flex justify-between items-center mt-2 bg-slate-900/50 p-2 rounded-lg border border-slate-700/50">
-                                        <label class="text-[9px] text-slate-400 font-bold uppercase">Ciclo Automático:</label>
+                                        <label class="text-[9px] text-slate-400 font-bold uppercase">Ciclo Auto (Rítmica):</label>
                                         <select id="pima-auto-cycle" class="bg-slate-800 text-rose-400 text-[10px] font-bold rounded border border-slate-600 focus:outline-none p-1 shadow-inner cursor-pointer" onchange="pimaUpdateAutoCycle()">
                                             <option value="none">Libre (Manual)</option>
                                             <option value="1-4">Ciclo 1 a 4</option>
@@ -234,12 +236,21 @@
                                     </div>
 
                                     <div class="flex justify-between items-center bg-slate-900/50 p-2 rounded-lg border border-slate-700/50" id="pima-cycle-config-container">
-                                        <label class="text-[9px] text-slate-400 font-bold uppercase">Cambiar cada:</label>
+                                        <label class="text-[9px] text-slate-400 font-bold uppercase">Progresar cada:</label>
                                         <div class="flex items-center gap-1.5">
                                             <input type="number" id="pima-cycle-count" min="1" value="1" onchange="pimaUpdateCycleCount()" class="w-10 bg-slate-800 text-white text-center text-[10px] font-bold rounded border border-slate-600 p-1 focus:outline-none focus:border-rose-500 shadow-inner">
-                                            <span class="text-[9px] text-slate-500 font-bold">ciclos</span>
+                                            <span class="text-[9px] text-slate-500 font-bold">compases</span>
                                         </div>
                                     </div>
+
+                                    <div class="flex justify-between items-center bg-slate-900/50 p-2 rounded-lg border border-slate-700/50 mt-1">
+                                        <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider" title="Genera nueva secuencia al finalizar el ciclo rítmico">Auto-Mutar Secuencia</span>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" id="pima-opt-auto-gen" class="sr-only peer" onchange="pimaUpdateAutoGen()">
+                                            <div class="w-8 h-4 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-300 after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-rose-500"></div>
+                                        </label>
+                                    </div>
+
                                 </div>
                             </div>
 
@@ -1032,7 +1043,6 @@
         let sessionSeconds = 0, totalMeasuresSession = 0, maxBpmSession = 40, statsIntervalID = null, currentNoteIndex = 0, routineTimeRemaining = null; 
 
         function saveFavorite() {
-            // Modificado para evitar prompt y confirm. Se usará un nombre automático para el favorito.
             const name = `Favorito - ${new Date().toLocaleTimeString()}`;
             const favs = JSON.parse(localStorage.getItem('jmr_favorites') || '[]');
             favs.push({ name: name, combo: [...currentComboArr], frets: [...currentFretsArr], strings: [...currentStringsArr], globalString: currentStringGlobal, baseFret: currentBaseFret, rightHandTech: rightHandTech });
@@ -1070,7 +1080,6 @@
             const idx = parseInt(selector.value.split('_')[1]);
             const favs = JSON.parse(localStorage.getItem('jmr_favorites') || '[]');
             
-            // Eliminación directa sin confirmación para evitar alert()
             if (favs[idx]) {
                 favs.splice(idx, 1);
                 localStorage.setItem('jmr_favorites', JSON.stringify(favs));
@@ -1149,7 +1158,6 @@
                     isValid = isHardMode ? !isSequential(newCombo) : true;
                 }
                 
-                // Nueva regla JMR: el primer y último dedo no pueden ser el mismo
                 if (isValid && comboLength > 1) {
                     if (newCombo[0] === newCombo[newCombo.length - 1]) {
                         isValid = false;
@@ -1493,7 +1501,7 @@
             }
             if(delBtn) delBtn.classList.remove('hidden');
             
-            document.getElementById('workout-selector').value = ""; // Deselecciona la rutina rápida
+            document.getElementById('workout-selector').value = ""; 
             
             const timerContainer = document.getElementById('routine-timer-container');
             const idx = parseInt(type.split('_')[1]);
@@ -1511,7 +1519,6 @@
                 document.getElementById('right-hand-tech').value = fav.rightHandTech || 'normal'; comboLength = fav.combo.length;
                 document.getElementById('base-fret-input').value = currentBaseFret;
                 
-                // Desactivar el generador automático para no perder el favorito
                 document.getElementById('auto-play').checked = false; isAutoMode = false;
                 document.getElementById('auto-measures-container').classList.add('opacity-40', 'pointer-events-none');
                 document.getElementById('next-combo-preview').classList.add('hidden'); document.getElementById('next-combo-preview').classList.remove('flex');
@@ -1525,7 +1532,7 @@
         function loadWorkout(type) {
             const favSelector = document.getElementById('favorites-selector');
             const delBtn = document.getElementById('btn-delete-fav');
-            if (favSelector) favSelector.value = ""; // Deselecciona el favorito
+            if (favSelector) favSelector.value = "";
             if (delBtn) delBtn.classList.add('hidden');
             
             const timerContainer = document.getElementById('routine-timer-container');
@@ -2127,18 +2134,20 @@
         const PIMA_DEDOS = ['p', 'i', 'm', 'a'];
         const BIO_LIMIT = 3;
 
-        // --- PimaLab Metrónomo Logic ---
         let pimaAudioCtx;
         let pimaIsPlaying = false;
         let pimaBpm = 60;
         let pimaSubdivision = 1;
-        let pimaAutoMode = 'none'; // 'none', '1-4', '5-8', '1-8'
+        let pimaQueuedSubdivision = null; 
+        
+        let pimaAutoMode = 'none';
         let pimaCycleCounter = 0; 
         let pimaTargetCycles = 1;
+        let pimaAutoGenerate = false;
         
         let pimaNextNoteTime = 0.0;
-        let pimaSubTick = 0; // Current tick within the subdivision (0 to subdiv-1)
-        let pimaNoteIndex = 0; // Current note in the sequence array
+        let pimaSubTick = 0;
+        let pimaNoteIndex = 0;
         let pimaTimerID;
         let pimaVisualQueue = [];
         let pimaAnimFrameId;
@@ -2195,7 +2204,6 @@
             if (btnHelp) btnHelp.addEventListener('click', () => { helpModal.classList.remove('hidden'); helpModal.classList.add('flex'); });
             if (closeHelp) closeHelp.addEventListener('click', () => { helpModal.classList.add('hidden'); helpModal.classList.remove('flex'); });
             
-            // Pima Metronome Event Listeners
             const btnMetro = document.getElementById('pima-btn-metro');
             if (btnMetro) btnMetro.addEventListener('click', pimaToggleMetronome);
         }
@@ -2255,7 +2263,6 @@
                     prevFingers = currentFingers;
                 }
 
-                // REGLA: Bucle Perfecto. La 1ra y última agrupación no pueden compartir dedos (ignorando 'p').
                 isValid = true;
                 if (PIMA_STATE.length > 1) {
                     let firstStepNonP = sequence[0].fingers.filter(f => f !== 'p');
@@ -2281,7 +2288,6 @@
             addPimaToHistory(PIMA_STATE.currentObj);
             displayPimaResult();
             
-            // Sincronizar el metrónomo si está corriendo
             if (pimaNoteIndex >= sequence.length) pimaNoteIndex = 0;
         }
 
@@ -2389,7 +2395,6 @@
                         span.className = animate ? 'pima-char-anim inline-flex items-center' : 'inline-flex items-center';
                     }
                     
-                    // Asignar IDs para manipulación en el bucle del metrónomo
                     span.id = `pima-token-${blockIndex}`;
                     span.classList.add('pima-token-block', 'transition-all', 'duration-100', 'rounded', 'px-1');
                     blockIndex++;
@@ -2534,24 +2539,48 @@
         }
 
         function setPimaSubdivision(val) {
-            pimaSubdivision = val;
-            pimaSubTick = 0; 
-            pimaCycleCounter = 0; 
-            updatePimaSubUI();
+            if (pimaIsPlaying) {
+                pimaQueuedSubdivision = val;
+                updatePimaSubUI(val, true);
+            } else {
+                pimaSubdivision = val;
+                pimaSubTick = 0; 
+                pimaCycleCounter = 0; 
+                updatePimaSubUI(val, false);
+            }
         }
 
-        function updatePimaSubUI() {
+        function updatePimaSubUI(val, isQueued = false) {
             const container = document.getElementById('pima-subdiv-container');
             if(!container) return;
             const buttons = container.querySelectorAll('.pima-sub-btn');
             buttons.forEach(b => {
                 const v = parseInt(b.textContent);
-                if (v === pimaSubdivision) {
+                if (v === val) {
+                    if (isQueued) {
+                        b.className = 'pima-sub-btn py-1 rounded text-[10px] font-bold bg-rose-500/50 text-white border border-rose-300 border-dashed shadow-md scale-105 pima-queued transition-all';
+                    } else {
+                        b.className = 'pima-sub-btn py-1 rounded text-[10px] font-bold bg-rose-500 text-white border border-rose-400 shadow-md scale-105 transition-all';
+                    }
+                } else if (v === pimaSubdivision && isQueued) {
                     b.className = 'pima-sub-btn py-1 rounded text-[10px] font-bold bg-rose-500 text-white border border-rose-400 shadow-md scale-105 transition-all';
                 } else {
                     b.className = 'pima-sub-btn py-1 rounded text-[10px] font-bold bg-slate-800 text-slate-400 border border-slate-700 hover:bg-slate-700 hover:text-slate-200 transition-all';
                 }
             });
+            if (!isQueued) renderPimaTickTracker(val);
+        }
+
+        function renderPimaTickTracker(subdiv) {
+            const container = document.getElementById('pima-tick-tracker');
+            if (!container) return;
+            container.innerHTML = '';
+            for(let i=0; i<subdiv; i++){
+                const dot = document.createElement('div');
+                dot.className = 'flex-1 max-w-[24px] rounded-full bg-slate-700 transition-all duration-75 pima-tick-dot';
+                dot.id = `pima-tick-${i}`;
+                container.appendChild(dot);
+            }
         }
 
         function pimaUpdateAutoCycle() {
@@ -2563,6 +2592,10 @@
             const val = parseInt(document.getElementById('pima-cycle-count').value);
             if (val > 0) pimaTargetCycles = val;
             pimaCycleCounter = 0;
+        }
+
+        function pimaUpdateAutoGen() {
+            pimaAutoGenerate = document.getElementById('pima-opt-auto-gen').checked;
         }
 
         function pimaPlayClick(time, isAccent) {
@@ -2578,7 +2611,7 @@
 
         function pimaScheduleNote(tick, time) {
             const isAccent = (tick === 0);
-            pimaVisualQueue.push({ time: time, index: pimaNoteIndex, isAccent: isAccent });
+            pimaVisualQueue.push({ type: 'note', time: time, index: pimaNoteIndex, isAccent: isAccent, tick: tick });
             pimaPlayClick(time, isAccent);
             pimaNoteIndex = (pimaNoteIndex + 1) % PIMA_STATE.length;
         }
@@ -2586,21 +2619,35 @@
         function pimaNextTick() {
             pimaNextNoteTime += (60.0 / pimaBpm) / pimaSubdivision;
             pimaSubTick++;
+            
             if (pimaSubTick >= pimaSubdivision) {
-                pimaSubTick = 0;
+                pimaSubTick = 0; 
                 
-                if (pimaAutoMode !== 'none') {
+                if (pimaQueuedSubdivision !== null) {
+                    pimaSubdivision = pimaQueuedSubdivision;
+                    pimaQueuedSubdivision = null;
+                    pimaCycleCounter = 0;
+                    pimaVisualQueue.push({ type: 'subdiv_update', val: pimaSubdivision, time: pimaNextNoteTime });
+                } 
+                else if (pimaAutoMode !== 'none') {
                     pimaCycleCounter++;
                     if (pimaCycleCounter >= pimaTargetCycles) {
                         pimaCycleCounter = 0;
-                        if (pimaAutoMode === '1-4') {
-                            setPimaLength(Math.floor(Math.random() * 4) + 1, null);
-                        } else if (pimaAutoMode === '5-8') {
-                            setPimaLength(Math.floor(Math.random() * 4) + 5, null);
-                        } else if (pimaAutoMode === '1-8') {
-                            setPimaLength(Math.floor(Math.random() * 8) + 1, null);
+                        
+                        let nextSub = pimaSubdivision + 1;
+                        let limits = pimaAutoMode.split('-');
+                        let min = parseInt(limits[0]);
+                        let max = parseInt(limits[1]);
+                        
+                        if (nextSub > max || nextSub < min) {
+                            nextSub = min;
+                            if (pimaAutoGenerate) {
+                                pimaVisualQueue.push({ type: 'auto_generate', time: pimaNextNoteTime });
+                            }
                         }
-                        generatePima();
+                        
+                        pimaSubdivision = nextSub;
+                        pimaVisualQueue.push({ type: 'subdiv_update', val: pimaSubdivision, time: pimaNextNoteTime });
                     }
                 }
             }
@@ -2621,16 +2668,34 @@
             while (pimaVisualQueue.length && pimaVisualQueue[0].time <= currentTime) {
                 let event = pimaVisualQueue.splice(0, 1)[0];
                 
-                document.querySelectorAll('.pima-token-block').forEach(el => {
-                    el.classList.remove('bg-rose-600', 'text-white', 'scale-110', 'bg-slate-700', 'ring-2', 'ring-rose-400', 'ring-amber-400', 'underline', 'underline-offset-[6px]', 'decoration-rose-500', 'decoration-2');
-                });
-                
-                let target = document.getElementById(`pima-token-${event.index}`);
-                if (target) {
-                    if (event.isAccent) {
-                        target.classList.add('bg-rose-600', 'text-white', 'scale-110', 'ring-2', 'ring-rose-400', 'underline', 'underline-offset-[6px]', 'decoration-rose-500', 'decoration-2');
-                    } else {
-                        target.classList.add('bg-slate-700', 'text-white', 'scale-110', 'ring-2', 'ring-amber-400');
+                if (event.type === 'subdiv_update') {
+                    updatePimaSubUI(event.val, false);
+                } 
+                else if (event.type === 'auto_generate') {
+                    generatePima();
+                }
+                else if (event.type === 'note') {
+                    document.querySelectorAll('.pima-tick-dot').forEach((dot, idx) => {
+                        if (idx === event.tick) {
+                            dot.classList.replace('bg-slate-700', 'bg-rose-500');
+                            dot.classList.add('shadow-[0_0_8px_rgba(244,63,94,0.8)]', 'scale-110');
+                        } else {
+                            dot.classList.replace('bg-rose-500', 'bg-slate-700');
+                            dot.classList.remove('shadow-[0_0_8px_rgba(244,63,94,0.8)]', 'scale-110');
+                        }
+                    });
+
+                    document.querySelectorAll('.pima-token-block').forEach(el => {
+                        el.classList.remove('bg-rose-600', 'text-white', 'scale-110', 'bg-slate-700', 'ring-2', 'ring-rose-400', 'ring-amber-400', 'underline', 'underline-offset-[6px]', 'decoration-rose-500', 'decoration-2');
+                    });
+                    
+                    let target = document.getElementById(`pima-token-${event.index}`);
+                    if (target) {
+                        if (event.isAccent) {
+                            target.classList.add('bg-rose-600', 'text-white', 'scale-110', 'ring-2', 'ring-rose-400', 'underline', 'underline-offset-[6px]', 'decoration-rose-500', 'decoration-2');
+                        } else {
+                            target.classList.add('bg-slate-700', 'text-white', 'scale-110', 'ring-2', 'ring-amber-400');
+                        }
                     }
                 }
             }
@@ -2647,21 +2712,20 @@
             pimaIsPlaying = !pimaIsPlaying;
             
             const btn = document.getElementById('pima-btn-metro');
-            const icon = document.getElementById('pima-metro-icon');
             
             if (pimaIsPlaying) {
                 if (pimaAudioCtx.state === 'suspended') pimaAudioCtx.resume();
                 pimaSubTick = 0;
                 pimaCycleCounter = 0;
                 pimaNoteIndex = 0;
+                pimaQueuedSubdivision = null;
                 pimaVisualQueue = [];
                 pimaNextNoteTime = pimaAudioCtx.currentTime + 0.05;
                 
-                btn.classList.replace('bg-slate-700', 'bg-red-500/20');
-                btn.classList.replace('border-slate-600', 'border-red-500/50');
-                btn.classList.replace('text-white', 'text-red-400');
-                btn.querySelector('span').innerText = 'Detener';
-                icon.setAttribute('data-lucide', 'square');
+                updatePimaSubUI(pimaSubdivision, false);
+
+                btn.className = 'py-1.5 px-3 bg-red-500/20 hover:bg-red-500/30 text-red-400 text-[10px] font-bold rounded-lg transition-colors border border-red-500/50 flex items-center gap-1 shadow-md';
+                btn.innerHTML = `<i data-lucide="square" class="w-3 h-3"></i> <span>Detener</span>`;
                 
                 pimaScheduler();
                 pimaDrawLoop();
@@ -2669,21 +2733,30 @@
                 clearTimeout(pimaTimerID);
                 cancelAnimationFrame(pimaAnimFrameId);
                 
+                document.querySelectorAll('.pima-tick-dot').forEach(dot => {
+                    dot.classList.replace('bg-rose-500', 'bg-slate-700');
+                    dot.classList.remove('shadow-[0_0_8px_rgba(244,63,94,0.8)]', 'scale-110');
+                });
+
                 document.querySelectorAll('.pima-token-block').forEach(el => {
                     el.classList.remove('bg-rose-600', 'text-white', 'scale-110', 'bg-slate-700', 'ring-2', 'ring-rose-400', 'ring-amber-400', 'underline', 'underline-offset-[6px]', 'decoration-rose-500', 'decoration-2');
                 });
                 let target = document.getElementById(`pima-token-0`);
                 if(target) target.classList.add('underline', 'underline-offset-[6px]', 'decoration-rose-500', 'decoration-2');
 
-                btn.classList.replace('bg-red-500/20', 'bg-slate-700');
-                btn.classList.replace('border-red-500/50', 'border-slate-600');
-                btn.classList.replace('text-red-400', 'text-white');
-                btn.querySelector('span').innerText = 'Práctica';
-                icon.setAttribute('data-lucide', 'play');
+                if (pimaQueuedSubdivision !== null) {
+                    pimaSubdivision = pimaQueuedSubdivision;
+                    pimaQueuedSubdivision = null;
+                }
+                
+                updatePimaSubUI(pimaSubdivision, false);
+
+                btn.className = 'py-1.5 px-3 bg-slate-700 hover:bg-slate-600 text-white text-[10px] font-bold rounded-lg transition-colors border border-slate-600 flex items-center gap-1 shadow-md';
+                btn.innerHTML = `<i data-lucide="play" class="w-3 h-3"></i> <span>Práctica</span>`;
             }
             if (window.lucide) lucide.createIcons();
         }
-        
+
         window.addEventListener('DOMContentLoaded', () => {
             initPimaLab();
             if (window.lucide) lucide.createIcons();
