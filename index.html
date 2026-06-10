@@ -1321,10 +1321,37 @@
 
         function generatePickingSymbols(stringsArr, comboArr) {
             let symbols = []; let fingerAlt = 0;
+            
+            if (rightHandTech === 'pima' || rightHandTech === 'ima') {
+                let pool = rightHandTech === 'pima' ? ['p', 'i', 'm', 'a'] : ['i', 'm', 'a'];
+                let notes = stringsArr.map((str, chron) => ({ str, chron }));
+                
+                // Orden topológico: cuerdas más graves primero (mayor índice de cuerda)
+                notes.sort((a, b) => {
+                    if (b.str !== a.str) return b.str - a.str;
+                    return a.chron - b.chron;
+                });
+                
+                notes.forEach((n, idx) => {
+                    n.finger = pool[idx % pool.length];
+                });
+                
+                // Restaurar el orden de ejecución cronológico
+                notes.sort((a, b) => a.chron - b.chron);
+                
+                // Mecanismo de seguridad: Prevenir repeticiones de dedo consecutivas
+                for(let i = 1; i < notes.length; i++) {
+                    if (notes[i].finger === notes[i-1].finger) {
+                        let fIdx = pool.indexOf(notes[i].finger);
+                        notes[i].finger = pool[(fIdx + 1) % pool.length];
+                    }
+                }
+                
+                return notes.map(n => n.finger);
+            }
+
             for(let i=0; i<stringsArr.length; i++) {
                 if (rightHandTech === 'normal') symbols.push(i % 2 === 0 ? 'i' : 'm');
-                else if (rightHandTech === 'ima') { const imaArr = ['i', 'm', 'a']; symbols.push(imaArr[i % 3]); }
-                else if (rightHandTech === 'pima') { const pimaArr = ['p', 'i', 'm', 'a']; symbols.push(pimaArr[i % 4]); }
                 else if (rightHandTech === 'alternate') symbols.push(i % 2 === 0 ? '↓' : '↑');
                 else if (rightHandTech === 'legato' || rightHandTech === 'legato_finger') {
                     if (i === 0) { symbols.push(rightHandTech === 'legato' ? '↓' : 'i'); fingerAlt = 1; }
