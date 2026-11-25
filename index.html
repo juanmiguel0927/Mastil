@@ -2,19 +2,117 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JMR Music Suite</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Librerías PimaLab -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#020617" id="meta-theme-color">
+    <title>JMR Suite</title>
+    <!-- Tailwind CSS (Offline) -->
+    <script src="vendor/tailwindcss.js"></script>
+    <!-- Lucide Icons (Offline) -->
+    <script src="vendor/lucide.min.js"></script>
+    <!-- Librerías PimaLab (Offline) -->
+    <script src="vendor/html2canvas.min.js"></script>
+    <script src="vendor/html2pdf.bundle.min.js"></script>
     
     <style>
         /* ESTILOS COMPARTIDOS Y JMR */
-        body { background-color: #020617; color: white; user-select: none; -webkit-tap-highlight-color: transparent; font-family: system-ui, -apple-system, sans-serif; overflow-x: hidden; }
+        :root {
+            --safe-top: env(safe-area-inset-top, 0px);
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+        }
+        html, body {
+            overscroll-behavior-y: contain;
+            -webkit-overflow-scrolling: touch;
+        }
+        body {
+            background-color: #020617;
+            color: white;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            font-family: system-ui, -apple-system, sans-serif;
+            overflow-x: hidden;
+            padding-top: var(--safe-top);
+            padding-bottom: var(--safe-bottom);
+            transition: background-color 0.25s ease, color 0.25s ease;
+        }
+
+        /* MODO CLARO (LIGHT MODE) OVERRIDES */
+        html[data-theme="light"] body {
+            background-color: #f1f5f9;
+            color: #0f172a;
+        }
+        html[data-theme="light"] .bg-slate-950 { background-color: #f1f5f9 !important; }
+        html[data-theme="light"] .bg-slate-950\/50 { background-color: rgba(241, 245, 249, 0.85) !important; }
+        html[data-theme="light"] .bg-slate-900 { background-color: #ffffff !important; }
+        html[data-theme="light"] .bg-slate-900\/80 { background-color: rgba(255, 255, 255, 0.92) !important; }
+        html[data-theme="light"] .bg-slate-900\/90 { background-color: rgba(255, 255, 255, 0.96) !important; }
+        html[data-theme="light"] .bg-slate-800 { background-color: #ffffff !important; }
+        html[data-theme="light"] .bg-slate-800\/50 { background-color: rgba(248, 250, 252, 0.9) !important; }
+        html[data-theme="light"] .bg-slate-800\/80 { background-color: rgba(255, 255, 255, 0.92) !important; }
+        html[data-theme="light"] .bg-slate-700 { background-color: #e2e8f0 !important; }
+        html[data-theme="light"] .bg-slate-700\/50 { background-color: rgba(226, 232, 240, 0.7) !important; }
+        html[data-theme="light"] .hover\:bg-slate-700:hover { background-color: #f8fafc !important; }
+        html[data-theme="light"] .hover\:bg-slate-600:hover { background-color: #cbd5e1 !important; }
+
+        html[data-theme="light"] .border-slate-800 { border-color: #e2e8f0 !important; }
+        html[data-theme="light"] .border-slate-700 { border-color: #cbd5e1 !important; }
+        html[data-theme="light"] .border-slate-700\/50 { border-color: rgba(203, 213, 225, 0.7) !important; }
+        html[data-theme="light"] .border-slate-600 { border-color: #cbd5e1 !important; }
+
+        html[data-theme="light"] .text-white { color: #0f172a !important; }
+        /* Preservar texto blanco en botones y cabeceras con fondos de color */
+        html[data-theme="light"] .bg-amber-600 .text-white,
+        html[data-theme="light"] .bg-amber-600.text-white,
+        html[data-theme="light"] .bg-amber-500.text-white,
+        html[data-theme="light"] .bg-emerald-600 .text-white,
+        html[data-theme="light"] .bg-emerald-600.text-white,
+        html[data-theme="light"] .bg-emerald-500.text-white,
+        html[data-theme="light"] .bg-rose-600.text-white,
+        html[data-theme="light"] .bg-rose-500.text-white,
+        html[data-theme="light"] .bg-red-600.text-white,
+        html[data-theme="light"] .bg-purple-600.text-white,
+        html[data-theme="light"] .bg-sky-600.text-white,
+        html[data-theme="light"] .bg-cyan-600.text-white,
+        html[data-theme="light"] .bg-indigo-600.text-white,
+        html[data-theme="light"] .from-amber-500.text-white,
+        html[data-theme="light"] .from-purple-500.text-white,
+        html[data-theme="light"] .from-rose-500.text-white,
+        html[data-theme="light"] .from-emerald-600 .text-white,
+        html[data-theme="light"] #toast-container .text-white {
+            color: #ffffff !important;
+        }
+        html[data-theme="light"] .text-slate-100 { color: #1e293b !important; }
+        html[data-theme="light"] .text-slate-200 { color: #1e293b !important; }
+        html[data-theme="light"] .text-slate-300 { color: #334155 !important; }
+        html[data-theme="light"] .text-slate-400 { color: #475569 !important; }
+        html[data-theme="light"] .text-slate-500 { color: #64748b !important; }
+        html[data-theme="light"] select,
+        html[data-theme="light"] input[type="text"],
+        html[data-theme="light"] input[type="number"] {
+            background-color: #f8fafc !important;
+            color: #0f172a !important;
+            border-color: #cbd5e1 !important;
+        }
+        html[data-theme="light"] select option {
+            background-color: #ffffff !important;
+            color: #0f172a !important;
+        }
+        html[data-theme="light"] .custom-scrollbar::-webkit-scrollbar-track { background: #e2e8f0; }
+        html[data-theme="light"] .custom-scrollbar::-webkit-scrollbar-thumb { background: #94a3b8; }
+        html[data-theme="light"] .shadow-xl,
+        html[data-theme="light"] .shadow-lg {
+            box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 4px 10px -6px rgba(15, 23, 42, 0.06) !important;
+        }
+        html[data-theme="light"] .theme-toggle-btn {
+            background-color: #ffffff !important;
+            border-color: #cbd5e1 !important;
+            color: #0f172a !important;
+        }
+        .theme-toggle-btn {
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+        .theme-toggle-btn:active {
+            transform: scale(0.92);
+        }
         
         .modal-enter { animation: modalFadeIn 0.3s ease-out forwards; }
         @keyframes modalFadeIn {
@@ -61,84 +159,174 @@
         @keyframes pimaPopIn { to { opacity: 1; transform: translateY(0); } }
         @keyframes pimaQueuedPulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
         .pima-queued { animation: pimaQueuedPulse 1s infinite; }
+
+        /* SPLASH SCREEN DE ENTRADA */
+        @keyframes splashLogoIn {
+            0% { opacity: 0; transform: scale(0.86) translateY(12px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        @keyframes splashProgress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+        .splash-animate { animation: splashLogoIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .splash-bar { animation: splashProgress 2.8s linear forwards; }
+        #splash-screen.splash-hide {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.65s ease;
+        }
     </style>
 </head>
 <body>
 
+    <!-- ================= SPLASH SCREEN DE ENTRADA ================= -->
+    <div id="splash-screen" onclick="hideSplashScreen()" class="fixed inset-0 z-[300] bg-slate-950 flex flex-col items-center justify-center p-6 select-none cursor-pointer">
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-72 h-72 bg-amber-500/15 rounded-full blur-[90px] pointer-events-none"></div>
+        <div class="absolute bottom-1/4 left-1/2 -translate-x-1/2 w-72 h-72 bg-emerald-500/15 rounded-full blur-[90px] pointer-events-none"></div>
+
+        <div class="splash-animate flex flex-col items-center text-center space-y-5 z-10 max-w-sm">
+            <div class="relative p-1.5 rounded-[2rem] bg-gradient-to-br from-amber-400 via-orange-500 to-emerald-400 shadow-[0_0_45px_rgba(245,158,11,0.35)]">
+                <img src="icon.jpg" alt="JMR Suite" class="w-32 h-32 sm:w-40 sm:h-40 rounded-[1.7rem] object-cover bg-slate-900">
+            </div>
+
+            <div class="space-y-2">
+                <h1 class="text-4xl sm:text-5xl font-extrabold text-white tracking-tight">
+                    JMR <span class="bg-gradient-to-r from-amber-400 to-emerald-400 bg-clip-text text-transparent">Suite</span>
+                </h1>
+                <p class="text-slate-300 text-xs sm:text-sm font-medium leading-relaxed">
+                    Entrenamiento Técnico, Mental y Armónico para Guitarra
+                </p>
+            </div>
+
+            <div class="w-44 h-1.5 bg-slate-800 rounded-full overflow-hidden border border-slate-700/60 mt-2">
+                <div class="splash-bar h-full bg-gradient-to-r from-amber-400 to-emerald-400 rounded-full"></div>
+            </div>
+
+            <p class="text-slate-500 text-[11px] tracking-wider uppercase font-semibold pt-2">
+                Por Juan Miguel Rios Redondo
+            </p>
+        </div>
+    </div>
+
     <div id="toast-container"></div>
 
     <!-- ================= MENÚ PRINCIPAL (HUB) ================= -->
-    <div id="main-hub" class="min-h-screen flex flex-col items-center justify-center p-6 space-y-10 fade-in bg-slate-950 relative overflow-hidden">
+    <div id="main-hub" class="min-h-[100dvh] flex flex-col items-center justify-center p-3 sm:p-6 space-y-5 sm:space-y-10 fade-in bg-slate-950 relative overflow-hidden">
         <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-amber-600/10 rounded-full blur-[100px] pointer-events-none"></div>
         <div class="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-emerald-600/10 rounded-full blur-[100px] pointer-events-none"></div>
 
-        <div class="text-center space-y-3 z-10">
-            <div class="inline-flex items-center justify-center p-3 bg-slate-800 rounded-2xl mb-2 shadow-lg border border-slate-700">
-                <i data-lucide="music-4" class="w-8 h-8 text-white"></i>
+        <!-- Botón de Modo Claro / Oscuro -->
+        <button onclick="toggleTheme()" class="theme-toggle-btn absolute top-3 right-3 sm:top-6 sm:right-6 z-20 px-3 py-2 bg-slate-800 hover:bg-slate-700 rounded-full border border-slate-700 shadow-lg flex items-center gap-2 text-xs font-bold text-slate-200" title="Cambiar modo claro/oscuro" aria-label="Cambiar modo claro/oscuro">
+            <i data-lucide="sun" class="w-4 h-4 text-amber-400 theme-icon-sun hidden"></i>
+            <i data-lucide="moon" class="w-4 h-4 text-indigo-400 theme-icon-moon"></i>
+            <span class="theme-label hidden sm:inline">Modo Claro</span>
+        </button>
+
+        <div class="text-center space-y-2 sm:space-y-3 z-10 pt-10 sm:pt-0">
+            <div class="inline-flex items-center justify-center p-2.5 sm:p-3 bg-slate-800 rounded-2xl mb-1 sm:mb-2 shadow-lg border border-slate-700">
+                <i data-lucide="music-4" class="w-7 h-7 sm:w-8 sm:h-8 text-amber-400"></i>
             </div>
-            <h1 class="text-4xl sm:text-6xl font-extrabold text-white tracking-tight">
+            <h1 class="text-3xl sm:text-6xl font-extrabold text-white tracking-tight">
                 JMR <span class="bg-gradient-to-r from-amber-400 to-emerald-400 bg-clip-text text-transparent">Suite</span>
             </h1>
-            <p class="text-slate-400 font-medium text-sm sm:text-base max-w-md mx-auto">Selecciona tu entorno de entrenamiento. Práctica mecánica o dominio mental del diapasón.</p>
+            <p class="text-slate-400 font-medium text-xs sm:text-base max-w-md mx-auto px-2">Selecciona tu entorno de entrenamiento. Práctica mecánica o dominio mental del diapasón.</p>
         </div>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl z-10">
-            <button onclick="launchJMR()" class="group relative flex flex-col items-center p-8 bg-slate-800 hover:bg-slate-700 rounded-3xl transition-all border border-slate-700 hover:border-amber-500/50 shadow-xl overflow-hidden text-center transform hover:-translate-y-1">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-6 w-full max-w-4xl z-10">
+            <button onclick="launchJMR()" class="group relative flex flex-col items-center p-4 sm:p-8 bg-slate-800 hover:bg-slate-700 rounded-2xl sm:rounded-3xl transition-all border border-slate-700 hover:border-amber-500/50 shadow-xl overflow-hidden text-center transform hover:-translate-y-1">
                 <div class="absolute inset-0 bg-gradient-to-br from-amber-600/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <div class="bg-gradient-to-br from-amber-500 to-orange-600 p-4 rounded-full mb-4 text-white shadow-[0_0_20px_rgba(245,158,11,0.4)] group-hover:scale-110 transition-transform">
-                    <i data-lucide="guitar" class="w-10 h-10"></i>
+                <div class="bg-gradient-to-br from-amber-500 to-orange-600 p-3 sm:p-4 rounded-full mb-2 sm:mb-4 text-white shadow-[0_0_20px_rgba(245,158,11,0.4)] group-hover:scale-110 transition-transform">
+                    <i data-lucide="guitar" class="w-7 h-7 sm:w-10 sm:h-10"></i>
                 </div>
-                <h3 class="font-bold text-xl sm:text-2xl text-white mb-2">JMR Guitar Trainer</h3>
-                <p class="text-slate-400 text-xs sm:text-sm">La ciencia de la mecánica. Entrena técnica pura: dedos, ligados, púa alternada y velocidad.</p>
+                <h3 class="font-bold text-base sm:text-2xl text-white mb-1 sm:mb-2">JMR Guitar Trainer</h3>
+                <p class="text-slate-400 text-[11px] sm:text-sm">La ciencia de la mecánica. Entrena técnica pura: dedos, ligados, púa alternada y velocidad.</p>
             </button>
 
-            <button onclick="launchFretmind()" class="group relative flex flex-col items-center p-8 bg-slate-800 hover:bg-slate-700 rounded-3xl transition-all border border-slate-700 hover:border-emerald-500/50 shadow-xl overflow-hidden text-center transform hover:-translate-y-1">
+            <button onclick="launchFretmind()" class="group relative flex flex-col items-center p-4 sm:p-8 bg-slate-800 hover:bg-slate-700 rounded-2xl sm:rounded-3xl transition-all border border-slate-700 hover:border-emerald-500/50 shadow-xl overflow-hidden text-center transform hover:-translate-y-1">
                 <div class="absolute inset-0 bg-gradient-to-br from-emerald-600/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <div class="bg-gradient-to-br from-emerald-400 to-cyan-500 p-4 rounded-full mb-4 text-slate-900 shadow-[0_0_20px_rgba(52,211,153,0.4)] group-hover:scale-110 transition-transform">
-                    <i data-lucide="brain-circuit" class="w-10 h-10"></i>
+                <div class="bg-gradient-to-br from-emerald-400 to-cyan-500 p-3 sm:p-4 rounded-full mb-2 sm:mb-4 text-slate-900 shadow-[0_0_20px_rgba(52,211,153,0.4)] group-hover:scale-110 transition-transform">
+                    <i data-lucide="brain-circuit" class="w-7 h-7 sm:w-10 sm:h-10"></i>
                 </div>
-                <h3 class="font-bold text-xl sm:text-2xl text-white mb-2">Fretmind</h3>
-                <p class="text-slate-400 text-xs sm:text-sm">Entrena tu mente. Memoriza el diapasón, domina los intervalos y ubica notas al instante.</p>
+                <h3 class="font-bold text-base sm:text-2xl text-white mb-1 sm:mb-2">Fretmind</h3>
+                <p class="text-slate-400 text-[11px] sm:text-sm">Entrena tu mente. Memoriza el diapasón, domina los intervalos y ubica notas al instante.</p>
             </button>
 
-            <button onclick="launchLabChord()" class="group relative flex flex-col items-center p-8 bg-slate-800 hover:bg-slate-700 rounded-3xl transition-all border border-slate-700 hover:border-purple-500/50 shadow-xl overflow-hidden text-center transform hover:-translate-y-1">
+            <button onclick="launchLabChord()" class="group relative flex flex-col items-center p-4 sm:p-8 bg-slate-800 hover:bg-slate-700 rounded-2xl sm:rounded-3xl transition-all border border-slate-700 hover:border-purple-500/50 shadow-xl overflow-hidden text-center transform hover:-translate-y-1">
                 <div class="absolute inset-0 bg-gradient-to-br from-purple-600/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <div class="bg-gradient-to-br from-purple-500 to-fuchsia-600 p-4 rounded-full mb-4 text-white shadow-[0_0_20px_rgba(168,85,247,0.4)] group-hover:scale-110 transition-transform">
-                    <i data-lucide="flask-conical" class="w-10 h-10"></i>
+                <div class="bg-gradient-to-br from-purple-500 to-fuchsia-600 p-3 sm:p-4 rounded-full mb-2 sm:mb-4 text-white shadow-[0_0_20px_rgba(168,85,247,0.4)] group-hover:scale-110 transition-transform">
+                    <i data-lucide="flask-conical" class="w-7 h-7 sm:w-10 sm:h-10"></i>
                 </div>
-                <h3 class="font-bold text-xl sm:text-2xl text-white mb-2">LabChord Guitar</h3>
-                <p class="text-slate-400 text-xs sm:text-sm">El laboratorio definitivo. Explora, construye y visualiza cualquier acorde y su estructura.</p>
+                <h3 class="font-bold text-base sm:text-2xl text-white mb-1 sm:mb-2">LabChord Guitar</h3>
+                <p class="text-slate-400 text-[11px] sm:text-sm">El laboratorio definitivo. Explora, construye y visualiza cualquier acorde y su estructura.</p>
             </button>
 
-            <button onclick="launchPimaLab()" class="group relative flex flex-col items-center p-8 bg-slate-800 hover:bg-slate-700 rounded-3xl transition-all border border-slate-700 hover:border-rose-500/50 shadow-xl overflow-hidden text-center transform hover:-translate-y-1">
+            <button onclick="launchPimaLab()" class="group relative flex flex-col items-center p-4 sm:p-8 bg-slate-800 hover:bg-slate-700 rounded-2xl sm:rounded-3xl transition-all border border-slate-700 hover:border-rose-500/50 shadow-xl overflow-hidden text-center transform hover:-translate-y-1">
                 <div class="absolute inset-0 bg-gradient-to-br from-rose-600/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <div class="bg-gradient-to-br from-rose-500 to-red-600 p-4 rounded-full mb-4 text-white shadow-[0_0_20px_rgba(244,63,94,0.4)] group-hover:scale-110 transition-transform">
-                    <i data-lucide="activity" class="w-10 h-10"></i>
+                <div class="bg-gradient-to-br from-rose-500 to-red-600 p-3 sm:p-4 rounded-full mb-2 sm:mb-4 text-white shadow-[0_0_20px_rgba(244,63,94,0.4)] group-hover:scale-110 transition-transform">
+                    <i data-lucide="activity" class="w-7 h-7 sm:w-10 sm:h-10"></i>
                 </div>
-                <h3 class="font-bold text-xl sm:text-2xl text-white mb-2">PimaLab Analizador</h3>
-                <p class="text-slate-400 text-xs sm:text-sm">Analizador biomecánico. Topografía del movimiento eficiente y polirritmias.</p>
+                <h3 class="font-bold text-base sm:text-2xl text-white mb-1 sm:mb-2">PimaLab Analizador</h3>
+                <p class="text-slate-400 text-[11px] sm:text-sm">Analizador biomecánico. Topografía del movimiento eficiente y polirritmias.</p>
             </button>
         </div>
 
-        <div class="mt-auto text-center text-slate-500 text-[10px] sm:text-xs tracking-wider opacity-80 z-10 pt-10 pb-4">
-            Diseño metodológico y lógico por<br>
-            <span class="font-bold text-slate-400 text-sm">Juan Miguel Rios Redondo</span>
+        <div class="mt-auto text-center text-slate-500 text-[10px] sm:text-xs tracking-wider opacity-90 z-10 pt-2 sm:pt-8 pb-3 space-y-2">
+            <div class="flex flex-wrap items-center justify-center gap-2">
+                <button onclick="exportProgressBackup()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg border border-slate-700 text-[11px] font-bold flex items-center gap-1.5 transition-colors">
+                    <i data-lucide="download" class="w-3.5 h-3.5 text-emerald-400"></i> Exportar Progreso
+                </button>
+                <label class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg border border-slate-700 text-[11px] font-bold flex items-center gap-1.5 transition-colors cursor-pointer">
+                    <i data-lucide="upload" class="w-3.5 h-3.5 text-sky-400"></i> Importar Progreso
+                    <input type="file" accept=".json,application/json" onchange="importProgressBackup(event)" class="hidden">
+                </label>
+                <button onclick="togglePrivacyModal()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg border border-slate-700 text-[11px] font-bold flex items-center gap-1.5 transition-colors">
+                    <i data-lucide="shield-check" class="w-3.5 h-3.5 text-amber-400"></i> Privacidad
+                </button>
+            </div>
+            <div>
+                Diseño metodológico y lógico por<br>
+                <span class="font-bold text-slate-400 text-xs sm:text-sm">Juan Miguel Rios Redondo</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE PRIVACIDAD -->
+    <div id="privacy-modal" class="hidden fixed inset-0 z-[150] bg-black/75 backdrop-blur-sm items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="shield-check" class="w-5 h-5 text-amber-400"></i>
+                    <h3 class="font-bold text-lg text-white">Política de Privacidad</h3>
+                </div>
+                <button onclick="togglePrivacyModal()" class="p-1.5 text-slate-400 hover:text-white rounded-lg bg-slate-800">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <div class="text-xs sm:text-sm text-slate-300 space-y-2 leading-relaxed">
+                <p><strong>JMR Suite</strong> funciona de forma 100% local en tu dispositivo.</p>
+                <p>• <strong>Sin recolección de datos:</strong> No recopilamos, almacenamos ni compartimos información personal, ubicación, micrófono ni analíticas en servidores externos.</p>
+                <p>• <strong>Almacenamiento local:</strong> Tus rutinas favoritas, estadísticas de práctica, progreso de Fretmind y preferencia de tema (claro/oscuro) se guardan únicamente en tu dispositivo.</p>
+                <p>• <strong>Copia de seguridad:</strong> Puedes exportar e importar tu progreso en cualquier momento desde el menú principal.</p>
+            </div>
+            <button onclick="togglePrivacyModal()" class="w-full py-2.5 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-xl text-sm transition-colors">Entendido</button>
         </div>
     </div>
 
     <!-- ================= APP 3: LABCHORD GUITAR ================= -->
-    <div id="labchord-wrapper" class="hidden h-screen bg-slate-950 flex-col w-full relative">
+    <div id="labchord-wrapper" class="hidden h-[100dvh] bg-slate-950 flex-col w-full relative overflow-hidden">
         <div class="h-16 bg-slate-900 flex items-center px-4 border-b border-slate-800 shrink-0 shadow-md relative z-10">
             <button onclick="returnToHub()" class="p-2 bg-slate-800 hover:bg-slate-700 rounded-full transition-colors text-slate-300 border border-slate-700 flex items-center gap-2 shadow-lg group">
                 <i data-lucide="arrow-left" class="w-5 h-5 group-hover:-translate-x-1 transition-transform"></i> 
                 <span class="font-bold text-xs hidden sm:inline">Suite Principal</span>
             </button>
-            <div class="flex-1 text-center font-bold text-purple-400 text-lg sm:text-xl mr-10 sm:mr-32">LabChord Guitar</div>
-            <div class="absolute right-4 text-[10px] text-slate-500 font-bold hidden md:block">
-                (Contenido cargado en Iframe - Atajos y Ayuda gestionados internamente)
-            </div>
+            <div class="flex-1 text-center font-bold text-purple-400 text-lg sm:text-xl">LabChord Guitar</div>
+            <button onclick="toggleTheme()" class="theme-toggle-btn p-2 bg-slate-800 hover:bg-slate-700 rounded-full border border-slate-700 shadow-lg text-slate-300" title="Cambiar modo claro/oscuro">
+                <i data-lucide="sun" class="w-4 h-4 text-amber-400 theme-icon-sun hidden"></i>
+                <i data-lucide="moon" class="w-4 h-4 text-indigo-400 theme-icon-moon"></i>
+            </button>
         </div>
-        <iframe src="https://juanmiguel0927.github.io/LabChordGuitar/" class="w-full flex-1 border-0 bg-slate-950"></iframe>
+        <iframe id="labchord-iframe" src="labchord.html" class="w-full flex-1 border-0 bg-slate-950"></iframe>
     </div>
 
     <!-- ================= APP 4: PIMALAB ================= -->
@@ -155,6 +343,10 @@
                     <p class="text-slate-400 text-xs sm:text-sm">Analizador Biomecánico de la Mano Derecha</p>
                 </div>
                 <div class="flex gap-2 mt-4 sm:mt-0">
+                    <button onclick="toggleTheme()" class="theme-toggle-btn p-2.5 bg-slate-800 hover:bg-slate-700 rounded-xl transition-colors border border-slate-700 text-slate-400 hover:text-white" title="Cambiar modo claro/oscuro">
+                        <i data-lucide="sun" class="w-5 h-5 text-amber-400 theme-icon-sun hidden"></i>
+                        <i data-lucide="moon" class="w-5 h-5 text-indigo-400 theme-icon-moon"></i>
+                    </button>
                     <button id="pima-btn-help" onclick="togglePimaHelp()" class="p-2.5 bg-slate-800 hover:bg-slate-700 rounded-xl transition-colors border border-slate-700 text-slate-400 hover:text-white" title="Información y Lógica (Atajo: H)">
                         <i data-lucide="help-circle" class="w-5 h-5"></i>
                     </button>
@@ -374,10 +566,14 @@
 
 
     <!-- ================= APP 1: JMR GUITAR TRAINER ================= -->
-    <div id="jmr-wrapper" class="hidden min-h-screen bg-slate-950 flex-col items-center justify-center p-4 py-12 relative">
+    <div id="jmr-wrapper" class="hidden min-h-[100dvh] bg-slate-950 flex-col items-center justify-center px-3 pt-16 pb-6 sm:p-6 sm:py-12 relative">
         <button onclick="returnToHub()" class="absolute top-4 left-4 sm:top-6 sm:left-6 p-3 bg-slate-800 hover:bg-slate-700 rounded-full transition-colors text-slate-300 border border-slate-700 flex items-center gap-2 shadow-lg z-50 group">
             <i data-lucide="arrow-left" class="w-5 h-5 group-hover:-translate-x-1 transition-transform"></i> 
             <span class="font-bold text-xs hidden sm:inline">Suite Principal</span>
+        </button>
+        <button onclick="toggleTheme()" class="theme-toggle-btn absolute top-4 right-4 sm:top-6 sm:right-6 p-3 bg-slate-800 hover:bg-slate-700 rounded-full transition-colors text-slate-300 border border-slate-700 flex items-center shadow-lg z-50" title="Cambiar modo claro/oscuro">
+            <i data-lucide="sun" class="w-5 h-5 text-amber-400 theme-icon-sun hidden"></i>
+            <i data-lucide="moon" class="w-5 h-5 text-indigo-400 theme-icon-moon"></i>
         </button>
 
         <div class="max-w-md w-full bg-slate-800 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-slate-700 overflow-hidden relative">
@@ -643,9 +839,15 @@
                     <i data-lucide="arrow-left" class="w-5 h-5 group-hover:-translate-x-1 transition-transform"></i> 
                     <span class="font-bold text-xs hidden sm:inline">Suite Principal</span>
                 </button>
-                <button onclick="toggleFmHelp()" class="absolute top-4 right-4 p-3 bg-slate-800 hover:bg-slate-700 rounded-full transition-colors text-slate-300 border border-slate-700 flex items-center shadow-lg z-50" title="Atajos y Ayuda (H)">
-                    <i data-lucide="help-circle" class="w-5 h-5"></i>
-                </button>
+                <div class="absolute top-4 right-4 flex items-center gap-2 z-50">
+                    <button onclick="toggleTheme()" class="theme-toggle-btn p-3 bg-slate-800 hover:bg-slate-700 rounded-full transition-colors text-slate-300 border border-slate-700 flex items-center shadow-lg" title="Cambiar modo claro/oscuro">
+                        <i data-lucide="sun" class="w-5 h-5 text-amber-400 theme-icon-sun hidden"></i>
+                        <i data-lucide="moon" class="w-5 h-5 text-indigo-400 theme-icon-moon"></i>
+                    </button>
+                    <button onclick="toggleFmHelp()" class="p-3 bg-slate-800 hover:bg-slate-700 rounded-full transition-colors text-slate-300 border border-slate-700 flex items-center shadow-lg" title="Atajos y Ayuda (H)">
+                        <i data-lucide="help-circle" class="w-5 h-5"></i>
+                    </button>
+                </div>
 
                 <div class="text-center space-y-2 mt-10 sm:mt-4">
                     <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight bg-gradient-to-r from-emerald-400 to-cyan-500 bg-clip-text text-transparent">
@@ -816,7 +1018,7 @@
                         <div id="fretboard-scroll-wrapper" class="w-full overflow-x-auto custom-scrollbar pb-4 h-full">
                             <div id="fretboard-container" class="wood-rosewood relative flex w-max min-w-full select-none rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.5)] border-y-4 pb-2 sm:pb-4 pt-2 overflow-hidden transition-colors duration-300 h-full min-h-[250px]">
                                 <div id="string-numbers" class="flex flex-col pr-1 sm:pr-2 pl-1 sm:pl-2 min-w-[20px] sm:min-w-[30px] bg-slate-900/70 z-20 justify-around py-4"></div>
-                                <div id="fretboard" class="flex flex-1 py-4 min-w-[800px]"></div>
+                                <div id="fretboard" class="flex flex-1 py-4 min-w-[640px] sm:min-w-[800px]"></div>
                             </div>
                         </div>
                     </div>
@@ -1044,6 +1246,131 @@
 
     <!-- SCRIPTS CORE Y NAVEGACIÓN -->
     <script>
+        function applyTheme(theme) {
+            const isLight = theme === 'light';
+            document.documentElement.setAttribute('data-theme', isLight ? 'light' : 'dark');
+            localStorage.setItem('jmrSuiteTheme', isLight ? 'light' : 'dark');
+
+            const metaTheme = document.getElementById('meta-theme-color');
+            if (metaTheme) metaTheme.setAttribute('content', isLight ? '#f1f5f9' : '#020617');
+
+            document.querySelectorAll('.theme-icon-sun').forEach(el => el.classList.toggle('hidden', !isLight));
+            document.querySelectorAll('.theme-icon-moon').forEach(el => el.classList.toggle('hidden', isLight));
+            document.querySelectorAll('.theme-label').forEach(el => {
+                el.textContent = isLight ? 'Modo Oscuro' : 'Modo Claro';
+            });
+
+            if (window.AndroidBridge && typeof window.AndroidBridge.onThemeChanged === 'function') {
+                window.AndroidBridge.onThemeChanged(isLight ? 'light' : 'dark');
+            }
+            const lcFrame = document.getElementById('labchord-iframe');
+            if (lcFrame) {
+                const t = isLight ? 'light' : 'dark';
+                try {
+                    if (lcFrame.contentWindow) lcFrame.contentWindow.postMessage({ type: 'jmr-theme', theme: t }, '*');
+                    if (lcFrame.contentDocument && lcFrame.contentDocument.documentElement) {
+                        lcFrame.contentDocument.documentElement.setAttribute('data-theme', t);
+                    }
+                } catch (err) {}
+            }
+        }
+
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+            applyTheme(current === 'light' ? 'dark' : 'light');
+        }
+
+        window.handleAndroidBack = function() {
+            const jmrHelp = document.getElementById('help-modal');
+            const pimaHelp = document.getElementById('pima-help-modal');
+            const fmHelp = document.getElementById('fm-help-modal');
+            const jmrStats = document.getElementById('stats-modal');
+            const privacyModal = document.getElementById('privacy-modal');
+
+            if (privacyModal && !privacyModal.classList.contains('hidden')) { togglePrivacyModal(); return true; }
+            if (jmrHelp && !jmrHelp.classList.contains('hidden')) { toggleHelp(); return true; }
+            if (pimaHelp && !pimaHelp.classList.contains('hidden')) { togglePimaHelp(); return true; }
+            if (fmHelp && !fmHelp.classList.contains('hidden')) { toggleFmHelp(); return true; }
+            if (jmrStats && !jmrStats.classList.contains('hidden')) { toggleStatsModal(); return true; }
+
+            const isHub = !document.getElementById('main-hub').classList.contains('hidden');
+            if (!isHub) {
+                returnToHub();
+                return true;
+            }
+            return false;
+        };
+
+        window.togglePrivacyModal = function() {
+            const modal = document.getElementById('privacy-modal');
+            if (!modal) return;
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden'); modal.classList.add('flex');
+                if (window.lucide) lucide.createIcons();
+            } else {
+                modal.classList.add('hidden'); modal.classList.remove('flex');
+            }
+        };
+
+        window.exportProgressBackup = function() {
+            try {
+                const data = {};
+                for (let i = 0; i < localStorage.length; i++) {
+                    const k = localStorage.key(i);
+                    data[k] = localStorage.getItem(k);
+                }
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'jmr-suite-backup-' + new Date().toISOString().slice(0, 10) + '.json';
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                URL.revokeObjectURL(url);
+                showToastGlobal('Copia de seguridad exportada');
+            } catch (err) {
+                showToastGlobal('Error al exportar progreso', 'error');
+            }
+        };
+
+        window.importProgressBackup = function(event) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const parsed = JSON.parse(e.target.result);
+                    if (parsed && typeof parsed === 'object') {
+                        Object.keys(parsed).forEach(k => localStorage.setItem(k, parsed[k]));
+                        applyTheme(localStorage.getItem('jmrSuiteTheme') || 'dark');
+                        showToastGlobal('Progreso restaurado correctamente');
+                    }
+                } catch (err) {
+                    showToastGlobal('Archivo de respaldo inválido', 'error');
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        };
+
+        (function initThemeEarly() {
+            const saved = localStorage.getItem('jmrSuiteTheme');
+            const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+            applyTheme(saved || (prefersLight ? 'light' : 'dark'));
+        })();
+
+        window.hideSplashScreen = function() {
+            const splash = document.getElementById('splash-screen');
+            if (!splash || splash.classList.contains('splash-hide')) return;
+            splash.classList.add('splash-hide');
+            setTimeout(() => { splash.style.display = 'none'; }, 700);
+        };
+
+        setTimeout(() => {
+            window.hideSplashScreen();
+        }, 2800);
+
         const showToastGlobal = function(msg, type = 'success') {
             const container = document.getElementById('toast-container');
             const color = type === 'success' ? 'bg-emerald-600' : 'bg-red-600';
@@ -1086,6 +1413,11 @@
         function launchLabChord() {
             document.getElementById('main-hub').classList.add('hidden'); document.getElementById('main-hub').classList.remove('flex');
             document.getElementById('labchord-wrapper').classList.remove('hidden'); document.getElementById('labchord-wrapper').classList.add('flex');
+            const lcFrame = document.getElementById('labchord-iframe');
+            const currentTheme = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+            if (lcFrame && lcFrame.contentWindow) {
+                lcFrame.contentWindow.postMessage({ type: 'jmr-theme', theme: currentTheme }, '*');
+            }
             if (window.lucide) lucide.createIcons();
         }
 
