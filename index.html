@@ -6,12 +6,12 @@
     <meta name="theme-color" content="#020617" id="meta-theme-color">
     <title>JMR Suite</title>
     <!-- Tailwind CSS (Offline) -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="vendor/tailwindcss.js"></script>
     <!-- Lucide Icons (Offline) -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="vendor/lucide.min.js"></script>
     <!-- Librerías PimaLab (Offline) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="vendor/html2canvas.min.js"></script>
+    <script src="vendor/html2pdf.bundle.min.js"></script>
     
     <style>
         /* ESTILOS COMPARTIDOS Y JMR */
@@ -1312,6 +1312,14 @@
             }
         };
 
+        window.addEventListener('message', function(e) {
+            if (e && e.data && e.data.type === 'jmr-save-file') {
+                if (window.AndroidBridge && typeof window.AndroidBridge.saveFile === 'function') {
+                    window.AndroidBridge.saveFile(e.data.dataUrl, e.data.filename, e.data.mimeType);
+                }
+            }
+        });
+
         window.exportProgressBackup = function() {
             try {
                 const data = {};
@@ -1319,11 +1327,19 @@
                     const k = localStorage.key(i);
                     data[k] = localStorage.getItem(k);
                 }
-                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const jsonStr = JSON.stringify(data, null, 2);
+                const fileName = 'jmr-suite-backup-' + new Date().toISOString().slice(0, 10) + '.json';
+                if (window.AndroidBridge && typeof window.AndroidBridge.saveFile === 'function') {
+                    const b64 = btoa(unescape(encodeURIComponent(jsonStr)));
+                    window.AndroidBridge.saveFile(b64, fileName, 'application/json');
+                    showToastGlobal('Copia de seguridad guardada en Descargas');
+                    return;
+                }
+                const blob = new Blob([jsonStr], { type: 'application/json' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = 'jmr-suite-backup-' + new Date().toISOString().slice(0, 10) + '.json';
+                a.download = fileName;
                 document.body.appendChild(a);
                 a.click();
                 a.remove();
