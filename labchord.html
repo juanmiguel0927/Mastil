@@ -5,16 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laboratorio de Acordes - Conservatorio Master</title>
     <!-- React & Babel (Offline) -->
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="vendor/react.production.min.js"></script>
+    <script src="vendor/react-dom.production.min.js"></script>
+    <script src="vendor/babel.min.js"></script>
     <!-- Tailwind (Offline) -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="vendor/tailwindcss.js"></script>
     <!-- HTML2Canvas & jsPDF (Offline) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="vendor/html2canvas.min.js"></script>
+    <script src="vendor/jspdf.umd.min.js"></script>
     <!-- ABCJS para Partituras (Offline) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/abcjs/6.2.2/abcjs-basic-min.js"></script>
+    <script src="vendor/abcjs-basic-min.js"></script>
     
     <style>
         html, body { overflow-x: hidden; max-width: 100vw; }
@@ -291,7 +291,14 @@
         const STUDY_PLAN_TRIADS = [ { id: 't1', title: 'Cerradas (Set 3-2-1)', drop: 'closed', bass: 3 }, { id: 't2', title: 'Cerradas (Set 4-3-2)', drop: 'closed', bass: 4 }, { id: 't3', title: 'Cerradas (Set 5-4-3)', drop: 'closed', bass: 5 }, { id: 't4', title: 'Cerradas (Set 6-5-4)', drop: 'closed', bass: 6 }, { id: 't5', title: 'Abiertas (Bajo 4ta)', drop: 'open', bass: 4 }, { id: 't6', title: 'Abiertas (Bajo 5ta)', drop: 'open', bass: 5 }, { id: 't7', title: 'Abiertas (Bajo 6ta)', drop: 'open', bass: 6 } ];
         const STUDY_PLAN_QUADS = [ { id: 'q1', title: 'Drop 2 (Bajo 6ta)', drop: 'drop2', bass: 6 }, { id: 'q2', title: 'Drop 2 (Bajo 5ta)', drop: 'drop2', bass: 5 }, { id: 'q3', title: 'Drop 2 (Bajo 4ta)', drop: 'drop2', bass: 4 }, { id: 'q4', title: 'Drop 3 (Bajo 6ta)', drop: 'drop3', bass: 6 }, { id: 'q5', title: 'Drop 3 (Bajo 5ta)', drop: 'drop3', bass: 5 }, { id: 'q6', title: 'Drop 2&4 (Bajo 6ta)', drop: 'drop24', bass: 6 }, { id: 'q7', title: 'Drop 2&4 (Bajo 5ta)', drop: 'drop24', bass: 5 }, { id: 'q8', title: 'Drop 2&3 (Bajo 6ta)', drop: 'drop23', bass: 6 }, { id: 'q9', title: 'Drop 2&3 (Bajo 5ta)', drop: 'drop23', bass: 5 }, { id: 'q10', title: 'Doble Drop 2 & Drop 3 (Bajo 6ta)', drop: 'doubleDrop2Drop3', bass: 6 }, { id: 'q11', title: 'Progresión Mixta (Personalizada)', mixed: true } ];
         const STUDY_PLAN_SHELLS = [ { id: 's1', title: 'Shell Voicings (Bajo 6ta)', drop: 'fixed', bass: 6 }, { id: 's2', title: 'Shell Voicings (Bajo 5ta)', drop: 'fixed', bass: 5 }, { id: 's3', title: 'Shell Voicings (Bajo 4ta)', drop: 'fixed', bass: 4 } ];
-        const STUDY_PLAN_TENSIONS = [ { id: 'tn1', title: 'Tensiones Estrictas (Bajo 6ta)', drop: 'fixed', bass: 6 }, { id: 'tn2', title: 'Tensiones Estrictas (Bajo 5ta)', drop: 'fixed', bass: 5 }, { id: 'tn3', title: 'Rootless (Bajo 5ta)', drop: 'fixed', bass: 5 }, { id: 'tn4', title: 'Rootless (Bajo 4ta)', drop: 'fixed', bass: 4 } ];
+        const STUDY_PLAN_TENSIONS = [
+            { id: 'tn1', title: 'Tensiones Estrictas (Bajo 6ta)', drop: 'fixed', bass: 6 },
+            { id: 'tn2', title: 'Tensiones Estrictas (Bajo 5ta)', drop: 'fixed', bass: 5 },
+            { id: 'rl1', title: 'Rootless Tipo 1 (3ª, 5ª y 7ª · Cdas 4-3-2)', rlType: 'tipo1', drop: 'fixed', bass: 4 },
+            { id: 'rl2', title: 'Rootless Tipo 2 (3/7 + Ext. 2ª Cda · 3 notas)', rlType: 'tipo2', drop: 'fixed', bass: 4 },
+            { id: 'rl3', title: 'Rootless Tipo 3 (3/5/7 + Ext. 1ª Cda · 4 notas)', rlType: 'tipo3', drop: 'fixed', bass: 4 },
+            { id: 'rl4', title: 'Rootless Tipo 4 (3/7 + Doble Ext. 2ª y 1ª)', rlType: 'tipo4', drop: 'fixed', bass: 4 }
+        ];
 
         const VALID_BASS_STRINGS = { 'drop2': [6, 5, 4], 'drop3': [6, 5], 'drop24': [6, 5], 'drop23': [6, 5], 'doubleDrop2Drop3': [6], 'closed': [6, 5, 4, 3], 'open': [6, 5, 4], 'fixed': [6, 5, 4] };
         const STUDY_PHASES = [ { id: 'maj_251', title: 'II-V-I Mayor' }, { id: 'min_251', title: 'II-V-I Menor' }, { id: 'maj_cycle', title: 'Círculo de 4tas Mayor' }, { id: 'min_cycle', title: 'Círculo de 4tas Menor' } ];
@@ -311,8 +318,14 @@
                 if (type === 'min_cycle') return [ { root: getNote(0), quality: 'm7_sh', label: 'Im' }, { root: getNote(5), quality: 'm7_sh', label: 'IVm' }, { root: getNote(10), quality: '7_sh', label: 'VII' }, { root: getNote(3), quality: 'maj7_sh', label: 'III' }, { root: getNote(8), quality: 'maj7_sh', label: 'VI' }, { root: getNote(2), quality: 'm7b5_sh', label: 'II°' }, { root: getNote(7), quality: '7_sh', label: 'V' } ];
             } else if (track === 'tensions') {
                 const rootNode = document.getElementById('root'); const isRootless = rootNode ? rootNode.getAttribute('data-rootless') === 'true' : false;
-                if (type === 'maj_251') { if (isRootless) return [ { root: getNote(2), quality: 'm9_rl', label: 'IIm9 RL' }, { root: getNote(7), quality: '9_rl', label: 'V9 RL' }, { root: getNote(0), quality: 'maj9_rl', label: 'Imaj9 RL', duration: 2 } ]; return [ { root: getNote(2), quality: 'm9', label: 'IIm9' }, { root: getNote(7), quality: '13', label: 'V13' }, { root: getNote(0), quality: 'maj9', label: 'Imaj9', duration: 2 } ]; }
-                if (type === 'maj_cycle') { if (isRootless) return [ { root: getNote(2), quality: 'm9_rl', label: 'IIm9 RL' }, { root: getNote(7), quality: '9_rl', label: 'V9 RL' }, { root: getNote(0), quality: 'maj9_rl', label: 'Imaj9 RL' } ]; return [ { root: getNote(2), quality: 'm9', label: 'IIm9' }, { root: getNote(7), quality: '13', label: 'V13' }, { root: getNote(0), quality: 'maj9', label: 'Imaj9' } ]; }
+                if (isRootless) {
+                    if (type === 'maj_251') return [ { root: getNote(2), quality: 'm7', label: 'IIm7' }, { root: getNote(7), quality: '7', label: 'V7' }, { root: getNote(0), quality: 'maj7', label: 'Imaj7', duration: 2 } ];
+                    if (type === 'min_251') return [ { root: getNote(2), quality: 'm7b5', label: 'IIm7(b5)' }, { root: getNote(7), quality: '7', label: 'V7' }, { root: getNote(0), quality: 'm7', label: 'Im7', duration: 2 } ];
+                    if (type === 'maj_cycle') return [ { root: getNote(0), quality: 'maj7', label: 'Imaj7' }, { root: getNote(5), quality: 'maj7', label: 'IVmaj7' }, { root: getNote(11), quality: 'm7b5', label: 'VIIm7(b5)' }, { root: getNote(4), quality: 'm7', label: 'IIIm7' }, { root: getNote(9), quality: 'm7', label: 'VIm7' }, { root: getNote(2), quality: 'm7', label: 'IIm7' }, { root: getNote(7), quality: '7', label: 'V7' } ];
+                    if (type === 'min_cycle') return [ { root: getNote(0), quality: 'm7', label: 'Im7' }, { root: getNote(5), quality: 'm7', label: 'IVm7' }, { root: getNote(10), quality: '7', label: 'bVII7' }, { root: getNote(3), quality: 'maj7', label: 'bIIImaj7' }, { root: getNote(8), quality: 'maj7', label: 'bVImaj7' }, { root: getNote(2), quality: 'm7b5', label: 'IIm7(b5)' }, { root: getNote(7), quality: '7', label: 'V7' } ];
+                }
+                if (type === 'maj_251') return [ { root: getNote(2), quality: 'm9', label: 'IIm9' }, { root: getNote(7), quality: '13', label: 'V13' }, { root: getNote(0), quality: 'maj9', label: 'Imaj9', duration: 2 } ];
+                if (type === 'maj_cycle') return [ { root: getNote(2), quality: 'm9', label: 'IIm9' }, { root: getNote(7), quality: '13', label: 'V13' }, { root: getNote(0), quality: 'maj9', label: 'Imaj9' } ];
                 if (type === 'min_251') return [ { root: getNote(2), quality: 'm11', label: 'IIm11' }, { root: getNote(7), quality: '7b9', label: 'V7(b9)' }, { root: getNote(0), quality: 'm9', label: 'Im9', duration: 2 } ];
                 if (type === 'min_cycle') return [ { root: getNote(2), quality: 'm11', label: 'IIm11' }, { root: getNote(7), quality: '7b9', label: 'V7(b9)' }, { root: getNote(0), quality: 'm9', label: 'Im9' } ];
             } else {
@@ -335,20 +348,25 @@
             // Ordenamos por traste (ascendente) y luego por cuerda (descendente, de grave a aguda)
             let sorted = [...result].sort((a, b) => { if (a.fret !== b.fret) return a.fret - b.fret; return b.string - a.string; });
             let availableFingers = ['1', '2', '3', '4'];
+
+            // Regla básica: dedo a dedo (cada cuerda con un dedo distinto) cuando hay 4 notas o menos
+            if (sorted.length <= 4) {
+                sorted.forEach(n => {
+                    n.finger = availableFingers.shift() || '4';
+                });
+                return result;
+            }
+
+            // Solo cuando hay más de 4 notas: el único dedo que puede hacer cejilla es el dedo 1 (en el traste más bajo)
             const minFret = sorted[0].fret;
             const minFretNotes = sorted.filter(n => n.fret === minFret);
-            
-            // Detectar posible cejilla o asignar dedo 1 a la(s) nota(s) más grave(s)
-            if (minFretNotes.length > 1) { 
-                minFretNotes.forEach(n => { n.finger = '1'; }); 
-                availableFingers.shift(); // Consumimos el dedo 1
+            if (minFretNotes.length > 1) {
+                minFretNotes.forEach(n => { n.finger = '1'; });
+                availableFingers.shift();
                 sorted = sorted.filter(n => n.fret !== minFret);
             }
-            
-            // Asignamos los dedos restantes secuencialmente a las notas que quedan
             sorted.forEach(n => {
-                if (availableFingers.length > 0) n.finger = availableFingers.shift();
-                else n.finger = '4'; // Si faltan dedos, reutilizamos el meñique
+                n.finger = availableFingers.length > 0 ? availableFingers.shift() : '4';
             });
             return result;
         };
@@ -391,7 +409,10 @@
         const getIntervalDegree = (noteMidi, rootMidi, quality, explicitEnharmonic) => {
             const diff = (noteMidi - rootMidi + 120) % 12;
             if (diff === 0) return '1'; if (diff === 1) return 'b9'; if (diff === 2) return '9';
-            if (diff === 3) return (quality && (quality.includes('alt') || quality.includes('#9'))) ? '#9' : 'b3';
+            if (diff === 3) {
+                const isMinorOrDim = quality && ((quality.startsWith('m') && !quality.startsWith('maj')) || quality.includes('dim') || quality === 'min');
+                return isMinorOrDim ? 'b3' : '#9';
+            }
             if (diff === 4) return '3'; if (diff === 5) return '11';
             if (diff === 6) { if (explicitEnharmonic === 'flats') return 'b5'; if (explicitEnharmonic === 'sharps') return '#11'; return (quality && (quality.includes('alt') || quality.includes('dim') || quality.includes('m7b5') || quality.includes('7b5') || quality.includes('9b5'))) ? 'b5' : '#11'; }
             if (diff === 7) return '5';
@@ -521,6 +542,15 @@
         const getQualsForTrack = t => t === 'triads' ? TRIAD_QUALITIES : t === 'shells' ? SHELL_QUALITIES : t === 'tensions' ? TENSION_QUALITIES : QUAD_QUALITIES;
         const getDropsForTrack = t => t === 'triads' ? TRIAD_VOICINGS : t === 'shells' ? SHELL_VOICINGS : t === 'tensions' ? TENSION_VOICINGS : QUAD_VOICINGS;
 
+        const resolveNoteEnharmonic = (noteData, rootMidi, quality, formattedChordName) => {
+            if (noteData && noteData.explicitEnharmonic) return noteData.explicitEnharmonic;
+            const deg = getIntervalDegree(noteData.note, rootMidi, quality, null);
+            if (deg && deg.indexOf('#') >= 0) return 'sharps';
+            if (deg && deg.indexOf('b') >= 0) return 'flats';
+            if (formattedChordName && (/^(F#|C#|G#|D#|A#|Fa#|Do#|Sol#|Re#|La#)/.test(formattedChordName))) return 'sharps';
+            return 'flats';
+        };
+
         const getAbcNote = (midi, enharmonic) => {
             const pc = midi % 12;
             const namesSharps = ['C', '^C', 'D', '^D', 'E', 'F', '^F', 'G', '^G', 'A', '^A', 'B'];
@@ -554,7 +584,7 @@
             useEffect(() => {
                 if (options.showStaff && fingering && fingering.length > 0 && window.ABCJS) {
                     const sortedFingering = [...fingering].sort((a,b) => a.note - b.note);
-                    const abcNotes = sortedFingering.map(f => getAbcNote(f.note, f.explicitEnharmonic)).join('');
+                    const abcNotes = sortedFingering.map(f => getAbcNote(f.note, resolveNoteEnharmonic(f, rootMidi, quality, formattedChordName))).join('');
                     const abcString = `X:1\nL:1/1\nK:none clef=treble-8\n[${abcNotes}]`;
                     
                     const elId = `abc-${props.id}`;
@@ -596,6 +626,34 @@
                 }
             };
 
+            const hasAndroidBridge = () => {
+                try {
+                    if (window.AndroidBridge && typeof window.AndroidBridge.saveFile === 'function') return true;
+                    if (window.parent && window.parent !== window && window.parent.AndroidBridge && typeof window.parent.AndroidBridge.saveFile === 'function') return true;
+                } catch (e) {}
+                return false;
+            };
+
+            const saveExportedFile = (dataUrl, filename, mimeType) => {
+                try {
+                    if (window.AndroidBridge && typeof window.AndroidBridge.saveFile === 'function') {
+                        window.AndroidBridge.saveFile(dataUrl, filename, mimeType);
+                        return true;
+                    }
+                    if (window.parent && window.parent !== window && window.parent.AndroidBridge && typeof window.parent.AndroidBridge.saveFile === 'function') {
+                        window.parent.AndroidBridge.saveFile(dataUrl, filename, mimeType);
+                        return true;
+                    }
+                } catch (e) {}
+                const link = document.createElement('a');
+                link.download = filename;
+                link.href = dataUrl;
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+                return false;
+            };
+
             const downloadSingle = (e) => {
                 if (e) e.stopPropagation(); const node = document.getElementById(props.id); if (!node) return;
                 const originalBg = node.style.backgroundColor; const originalBorder = node.style.border; const originalTransform = node.style.transform;
@@ -604,7 +662,8 @@
                 window.html2canvas(node, { scale: 3, backgroundColor: '#ffffff', logging: false }).then(canvas => {
                     node.style.backgroundColor = originalBg; node.style.border = originalBorder; node.style.transform = originalTransform; node.classList.remove('jpeg-is-exporting');
                     hideEls.forEach(el => { el.style.display = el.dataset.oldDisplay || ''; });
-                    const link = document.createElement('a'); link.download = `Acorde_${formattedChordName ? formattedChordName.replace(/\//g, '-') : 'Diagrama'}.jpg`; link.href = canvas.toDataURL('image/jpeg', 1.0); link.click();
+                    const fileName = `Acorde_${formattedChordName ? formattedChordName.replace(/[^a-zA-Z0-9_-]/g, '-') : 'Diagrama'}.jpg`;
+                    saveExportedFile(canvas.toDataURL('image/jpeg', 0.96), fileName, 'image/jpeg');
                 });
             };
 
@@ -629,6 +688,7 @@
                         <div className={"flex flex-col transition-all duration-300 " + (isBlind ? "opacity-20 blur-sm select-none" : "opacity-100")}>
                             <h3 className="text-slate-100 font-black text-xl sm:text-2xl tracking-tight leading-none pr-2"><ChordNameDisplay name={formattedChordName} /></h3>
                             <span className="text-amber-500 text-[11px] font-black tracking-widest mt-1">{name}</span>
+                            {props.modalLabel && <span className="inline-block w-fit mt-1 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-indigo-500/20 text-indigo-400 border border-indigo-500/40">{props.modalLabel}</span>}
                             <div className="flex items-center gap-2 mt-0.5"><span className="text-slate-500 text-[10px]">{dropLabel}</span><span className="text-slate-400 opacity-60 text-[9px] font-bold uppercase print:text-slate-400">({displayLabelTypeStr})</span></div>
                         </div>
                         {!hideInteractive && !isLocked && <button onClick={e => { e.stopPropagation(); onPlay(fingering, contextId); }} className={"bg-slate-800 hover:bg-amber-500 hover:text-slate-900 rounded-full transition-all text-slate-300 shadow-md shrink-0 ml-1 print:hidden group-hover:bg-slate-700 z-20 relative hide-on-pdf " + (options.isBuilder ? 'p-2' : 'p-2.5 ml-2')}><Icon name="Play" size={options.isBuilder ? 10 : 12} /></button>}
@@ -683,7 +743,11 @@
                                     let isTension = degree.includes('2') || degree.includes('4') || degree.includes('6') || degree.includes('9') || degree.includes('11') || degree.includes('13');
                                     if (options.tensionNotation && isTension) degree = degree.replace('2', '9').replace('4', '11').replace('6', '13');
                                     let displayLabel = '';
-                                    if (localLabelMode === 'fingers') { displayLabel = noteData.finger || ''; } else { displayLabel = localLabelMode === 'intervals' ? degree : (noteData.explicitEnharmonic ? (noteData.explicitEnharmonic === 'flats' ? MIDI_TO_NOTE_FLAT[noteData.note%12] : MIDI_TO_NOTE_SHARP[noteData.note%12]) : noteNames[noteData.note % 12]); }
+                                    if (localLabelMode === 'fingers') { displayLabel = noteData.finger || ''; } else if (localLabelMode === 'intervals') { displayLabel = degree; } else {
+                                        const enh = resolveNoteEnharmonic(noteData, rootMidi, quality, formattedChordName);
+                                        const baseName = enh === 'flats' ? MIDI_TO_NOTE_FLAT[noteData.note % 12] : MIDI_TO_NOTE_SHARP[noteData.note % 12];
+                                        displayLabel = options.notationMode === 'latin' ? translateNote(baseName, 'latin') : baseName;
+                                    }
                                     let colorClass = isRoot ? 'bg-amber-500 text-slate-950 border-amber-400 print:bg-amber-500 print:text-black print:border-amber-400' : isTension ? 'bg-slate-900 text-fuchsia-400 border-fuchsia-500 print:bg-white print:text-fuchsia-600 print:border-fuchsia-500' : 'bg-slate-900 text-slate-100 border-slate-600 print:bg-white print:text-slate-800 print:border-slate-500';
                                     
                                     const isNotePlaying = activePlayingNote && activePlayingNote.contextId === contextId && activePlayingNote.string === noteData.string && activePlayingNote.fret === noteData.fret;
@@ -770,6 +834,292 @@
             );
         };
 
+        const ROOTLESS_CHORD_SPECS = {
+            'maj7': {
+                label: 'maj7', suffix: 'Maj7', guide: [4, 11], fifth: 7,
+                exts: [
+                    { interval: 2, label: '9', mode: '' },
+                    { interval: 9, label: '13', mode: '' },
+                    { interval: 6, label: '#11', mode: 'Lidio' }
+                ],
+                doublePairs: [['9', '13'], ['9', '#11'], ['#11', '13']]
+            },
+            'm7': {
+                label: 'm7', suffix: 'm7', guide: [3, 10], fifth: 7,
+                exts: [
+                    { interval: 2, label: '9', mode: '' },
+                    { interval: 5, label: '11', mode: '' },
+                    { interval: 9, label: '13', mode: 'Dórico' },
+                    { interval: 8, label: 'b13', mode: 'Eólico' },
+                    { interval: 1, label: 'b9', mode: 'Frigio' }
+                ],
+                doublePairs: [['9', '11'], ['11', '13'], ['9', '13'], ['11', 'b13'], ['b9', '11']]
+            },
+            '7': {
+                label: '7', suffix: '7', guide: [4, 10], fifth: 7,
+                exts: [
+                    { interval: 2, label: '9', mode: '' },
+                    { interval: 9, label: '13', mode: '' },
+                    { interval: 6, label: '#11', mode: 'Lidio b7' },
+                    { interval: 1, label: 'b9', mode: 'Alt/Frigio' },
+                    { interval: 3, label: '#9', mode: 'Alt' },
+                    { interval: 8, label: 'b13', mode: 'Alt' }
+                ],
+                doublePairs: [['9', '13'], ['9', '#11'], ['b9', '#9'], ['b9', 'b13'], ['#9', 'b13']]
+            },
+            'm7b5': {
+                label: 'm7(b5)', suffix: 'm7(b5)', guide: [3, 10], fifth: 6,
+                exts: [
+                    { interval: 5, label: '11', mode: 'Locrio' },
+                    { interval: 8, label: 'b13', mode: 'Locrio' },
+                    { interval: 2, label: '9', mode: 'Jónico' }
+                ],
+                doublePairs: [['11', 'b13'], ['9', '11']]
+            },
+            'dim7': {
+                label: '°7', suffix: '°7', guide: [3, 9], fifth: 6,
+                exts: [
+                    { interval: 2, label: '9', mode: 'Diatónica' },
+                    { interval: 5, label: '11', mode: 'Diatónica' },
+                    { interval: 8, label: 'b13', mode: 'Diatónica' },
+                    { interval: 11, label: 'Maj7', mode: 'Diatónica' }
+                ],
+                doublePairs: [['9', '11'], ['11', 'b13'], ['9', 'b13']]
+            }
+        };
+
+        const ROOTLESS_VOICING_TYPES = [
+            { id: 'tipo1', short: 'Tipo 1', title: 'Tipo 1 (3ª, 5ª y 7ª · Cdas 4-3-2)', desc: '3 notas en cuerdas 4-3-2 sin fundamental (cualquier orden de 3, 5 y 7).' },
+            { id: 'tipo2', short: 'Tipo 2', title: 'Tipo 2 (3/7 + Ext. 2ª Cda · 3 notas)', desc: '3 notas en cuerdas 4-3-2: 3 y 7 (o 7 y 3) + extensión disponible en 2ª cuerda.' },
+            { id: 'tipo3', short: 'Tipo 3', title: 'Tipo 3 (3/5/7 + Ext. 1ª Cda · 4 notas)', desc: '4 notas en cuerdas 4-3-2-1: 3, 5 y 7 tocables + extensión en 1ª cuerda.' },
+            { id: 'tipo4', short: 'Tipo 4', title: 'Tipo 4 (3/7 + Doble Ext. 2ª y 1ª)', desc: '4 notas en cuerdas 4-3-2-1: 3 y 7 (o 7 y 3) + extensiones en 2ª y 1ª cuerda.' }
+        ];
+
+        const ROOTLESS_PROGRESSIONS = [
+            { id: 'single', label: 'Acorde Individual', desc: 'Explora todas las posiciones rootless disponibles para el acorde.' },
+            { id: 'prog_maj_4_7', label: 'Imaj7 - IVmaj7 - bVIImaj7 - III7 (ej. Cmaj7-Fmaj7-Bbmaj7-E7)', steps: [{ offset: 0, q: 'maj7', deg: 'Imaj7' }, { offset: 5, q: 'maj7', deg: 'IVmaj7' }, { offset: 10, q: 'maj7', deg: 'bVIImaj7' }, { offset: 4, q: '7', deg: 'III7' }] },
+            { id: 'prog_min_turn', label: 'VIm7 - VI7 - IIm7 (ej. Am7-A7-Dm7)', steps: [{ offset: 9, q: 'm7', deg: 'VIm7' }, { offset: 9, q: '7', deg: 'VI7' }, { offset: 2, q: 'm7', deg: 'IIm7' }] },
+            { id: 'prog_251_maj', label: 'II-V-I Mayor (ej. Dm7-G7-Cmaj7)', steps: [{ offset: 2, q: 'm7', deg: 'IIm7' }, { offset: 7, q: '7', deg: 'V7' }, { offset: 0, q: 'maj7', deg: 'Imaj7' }] },
+            { id: 'prog_251_min', label: 'II-V-I Menor (ej. Dm7(b5)-G7-Cm7)', steps: [{ offset: 2, q: 'm7b5', deg: 'IIm7(b5)' }, { offset: 7, q: '7', deg: 'V7' }, { offset: 0, q: 'm7', deg: 'Im7' }] }
+        ];
+
+        function generateRootlessVoicings(rootName, qualityId, voicingType, notationMode, extFilter = 'auto', degreeContext = '') {
+            const spec = ROOTLESS_CHORD_SPECS[qualityId] || ROOTLESS_CHORD_SPECS['maj7'];
+            const rootMidi = NOTE_TO_MIDI[rootName.replace('m', '')] || 0;
+            const useFlats = ['F', 'Bb', 'Eb', 'Ab', 'Db', 'Gb'].includes(rootName) || qualityId === 'm7b5' || qualityId === 'dim7';
+            const displayRoot = notationMode === 'latin' ? (LATIN_MAP[rootName] || rootName) : rootName;
+
+            const findFretsForInterval = (sNum, interval) => {
+                const targetPC = (rootMidi + interval) % 12;
+                const res = [];
+                for (let f = 1; f <= 14; f++) {
+                    if ((STRING_TUNINGS[sNum] + f) % 12 === targetPC) res.push(f);
+                }
+                return res;
+            };
+
+            const assignFingers = (notes) => calculateFingering(notes);
+
+            const isValidRootlessVoicing = (notes) => {
+                const pcs = new Set(notes.map(n => n.note % 12));
+                if (pcs.size !== notes.length) return false;
+                const frets = notes.map(n => n.fret);
+                const minF = Math.min(...frets);
+                const maxF = Math.max(...frets);
+                // Regla de comodidad física en guitarra: 4 trastes en zona grave (<5), hasta 5 trastes en zona media/aguda (>=5)
+                const maxAllowedSpan = minF >= 5 ? 4 : 3;
+                if (maxF - minF > maxAllowedSpan) return false;
+                // Verificar que sea tocable con 4 dedos (cejilla en minFret si hay varias notas ahí)
+                const minFretCount = frets.filter(f => f === minF).length;
+                const otherNotesCount = notes.length - minFretCount;
+                const fingersNeeded = (minFretCount > 1 ? 1 : minFretCount) + otherNotesCount;
+                if (fingersNeeded > 4) return false;
+                // Evitar saltos extremos entre cuerdas adyacentes que tuerzan la muñeca
+                const byStr = [...notes].sort((a, b) => b.string - a.string);
+                for (let s = 0; s < byStr.length - 1; s++) {
+                    if (Math.abs(byStr[s].fret - byStr[s + 1].fret) > maxAllowedSpan) return false;
+                }
+                const sortedNotes = [...notes].sort((a, b) => a.note - b.note);
+                // Evitar choques de 2ª menor (1 semitono) entre voces adyacentes o de 2ªm/9ªm entre extremos
+                for (let k = 0; k < sortedNotes.length - 1; k++) {
+                    if (sortedNotes[k + 1].note - sortedNotes[k].note === 1) return false;
+                }
+                if (sortedNotes.length >= 2) {
+                    const outerSpan = sortedNotes[sortedNotes.length - 1].note - sortedNotes[0].note;
+                    if (outerSpan === 1 || outerSpan === 13) return false;
+                }
+                // Evitar choque de medio tono con la 3ª del acorde (ej. 11 justa sobre 3ª mayor)
+                const thirdMidi = (rootMidi + spec.guide[0]) % 12;
+                const hasThirdClash = sortedNotes.some(n => {
+                    const iv = (n.note - rootMidi + 120) % 12;
+                    return iv !== spec.guide[0] && Math.abs((n.note % 12) - thirdMidi) === 1 && iv === 5 && spec.guide[0] === 4;
+                });
+                if (hasThirdClash) return false;
+                return true;
+            };
+
+            const results = [];
+            const seen = new Set();
+
+            const tryBuild = (stringSets, combos) => {
+                stringSets.forEach(ss => {
+                    combos.forEach(combo => {
+                        if (combo.intervals.length !== ss.length) return;
+                        const lists = ss.map((sNum, idx) => findFretsForInterval(sNum, combo.intervals[idx]));
+                        const walk = (depth, current) => {
+                            if (depth === lists.length) {
+                                const frets = current.map(c => c.fret);
+                                const minF = Math.min(...frets);
+                                if (!isValidRootlessVoicing(current)) return;
+                                const sig = current.map(c => `${c.string}:${c.fret}`).join('|');
+                                if (seen.has(sig)) return;
+                                seen.add(sig);
+                                const tensionStr = combo.extLabels.length > 0 ? `(${combo.extLabels.join(',')})` : '';
+                                results.push({
+                                    formattedChordName: `${displayRoot}${spec.suffix}${tensionStr}`,
+                                    name: combo.structureName,
+                                    modalLabel: combo.modalLabel || '',
+                                    rootMidi,
+                                    quality: qualityId,
+                                    dropLabel: combo.dropShort,
+                                    fingering: assignFingers(current),
+                                    minFret: minF,
+                                    extLabels: combo.extLabels
+                                });
+                                return;
+                            }
+                            const sNum = ss[depth];
+                            lists[depth].forEach(fret => {
+                                walk(depth + 1, [...current, { string: sNum, fret, note: STRING_TUNINGS[sNum] + fret }]);
+                            });
+                        };
+                        walk(0, []);
+                    });
+                });
+            };
+
+            const [third, seventh] = spec.guide;
+            const fifth = spec.fifth;
+            let contextExts = spec.exts;
+            // En m7: si NO es modal, solo 9 y 11; si es modal según grado (IIIm7=Frigio, VIm7/Im7/IVm7=Eólico, IIm7=Dórico), incluir tensión modal
+            if (qualityId === 'm7' && extFilter === 'auto') {
+                if (!degreeContext) {
+                    contextExts = spec.exts.filter(e => e.label === '9' || e.label === '11');
+                } else if (degreeContext.indexOf('III') === 0) {
+                    contextExts = spec.exts.filter(e => e.label === 'b9' || e.label === '11' || e.label === '9');
+                } else if (degreeContext.indexOf('VI') === 0 || degreeContext.indexOf('Im') === 0 || degreeContext.indexOf('IVm') === 0) {
+                    contextExts = spec.exts.filter(e => e.label === '9' || e.label === '11' || e.label === 'b13');
+                } else {
+                    contextExts = spec.exts.filter(e => e.label === '9' || e.label === '11' || e.label === '13');
+                }
+            }
+            const availExts = extFilter !== 'auto' ? spec.exts.filter(e => e.label === extFilter) : contextExts;
+            const extsToUse = availExts.length > 0 ? availExts : spec.exts;
+
+            if (voicingType === 'tipo1') {
+                // Tipo 1: 3 notas en cuerdas 4-3-2 ([3, 2, 1]), cualquier orden de 3, 5 y 7
+                const perms = [
+                    [third, fifth, seventh],
+                    [third, seventh, fifth],
+                    [fifth, third, seventh],
+                    [fifth, seventh, third],
+                    [seventh, third, fifth],
+                    [seventh, fifth, third]
+                ];
+                tryBuild(
+                    [[3, 2, 1]],
+                    perms.map(p => ({ intervals: p, extLabels: [], modalLabel: '', structureName: 'Cdas 4-3-2 (3ª, 5ª, 7ª)', dropShort: 'RL T1' }))
+                );
+            } else if (voicingType === 'tipo2') {
+                // Tipo 2: 3 notas en cuerdas 4-3-2 ([3, 2, 1]), 3 y 7 (o 7 y 3) + extensión en 2ª cuerda
+                const combos = [];
+                extsToUse.forEach(ext => {
+                    const modalLabel = ext.mode ? `Modo ${ext.mode}` : '';
+                    const modeTag = modalLabel ? ` · ${modalLabel}` : '';
+                    [[third, seventh], [seventh, third]].forEach(([g1, g2]) => {
+                        combos.push({ intervals: [g1, g2, ext.interval], extLabels: [ext.label], modalLabel, structureName: `Cdas 4-3-2 + ${ext.label} (2ª${modeTag})`, dropShort: 'RL T2' });
+                    });
+                });
+                tryBuild([[3, 2, 1]], combos);
+                // Fallback si no hay tensión disponible cerca: usar Fundamental (0) o 5ta
+                if (results.length === 0) {
+                    const fb = [];
+                    [[third, seventh], [seventh, third]].forEach(([g1, g2]) => {
+                        fb.push({ intervals: [g1, g2, fifth], extLabels: [], modalLabel: '', structureName: 'Cdas 4-3-2 + 5ª (Base)', dropShort: 'RL T2' });
+                        fb.push({ intervals: [g1, g2, 0], extLabels: [], modalLabel: '', structureName: 'Cdas 4-3-2 + Fund. (Base)', dropShort: 'RL T2' });
+                    });
+                    tryBuild([[3, 2, 1]], fb);
+                }
+            } else if (voicingType === 'tipo3') {
+                // Tipo 3: 4 notas en cuerdas 4-3-2-1 ([3, 2, 1, 0]), cualquier orden tocable de 3, 5, 7 + extensión en 1ª cuerda
+                const perms = [
+                    [third, fifth, seventh],
+                    [third, seventh, fifth],
+                    [fifth, third, seventh],
+                    [fifth, seventh, third],
+                    [seventh, third, fifth],
+                    [seventh, fifth, third]
+                ];
+                const combos = [];
+                extsToUse.forEach(ext => {
+                    const modalLabel = ext.mode ? `Modo ${ext.mode}` : '';
+                    const modeTag = modalLabel ? ` · ${modalLabel}` : '';
+                    perms.forEach(([a, b, c]) => {
+                        combos.push({ intervals: [a, b, c, ext.interval], extLabels: [ext.label], modalLabel, structureName: `Cdas 4-3-2-1 + ${ext.label} (1ª${modeTag})`, dropShort: 'RL T3' });
+                    });
+                });
+                tryBuild([[3, 2, 1, 0]], combos);
+                if (results.length === 0) {
+                    const fb = [];
+                    perms.forEach(([a, b, c]) => {
+                        fb.push({ intervals: [a, b, c, fifth], extLabels: [], modalLabel: '', structureName: 'Cdas 4-3-2-1 + 5ª (Base)', dropShort: 'RL T3' });
+                        fb.push({ intervals: [a, b, c, 0], extLabels: [], modalLabel: '', structureName: 'Cdas 4-3-2-1 + Fund. (Base)', dropShort: 'RL T3' });
+                    });
+                    tryBuild([[3, 2, 1, 0]], fb);
+                }
+            } else if (voicingType === 'tipo4') {
+                // Tipo 4: 4 notas en cuerdas 4-3-2-1 ([3, 2, 1, 0]), 3 y 7 (o 7 y 3) + doble extensión en 2ª y 1ª cuerda
+                const combos = [];
+                let pairs = spec.doublePairs || [];
+                if (qualityId === 'm7' && extFilter === 'auto' && !degreeContext) {
+                    pairs = [['9', '11']];
+                }
+                pairs.forEach(([lA, lB]) => {
+                    const eA = spec.exts.find(e => e.label === lA);
+                    const eB = spec.exts.find(e => e.label === lB);
+                    if (!eA || !eB) return;
+                    if (extFilter !== 'auto' && eA.label !== extFilter && eB.label !== extFilter) return;
+                    const modeName = eA.mode || eB.mode || '';
+                    const modalLabel = modeName ? `Modo ${modeName}` : '';
+                    [[eA, eB], [eB, eA]].forEach(([e2, e1]) => {
+                        [[third, seventh], [seventh, third]].forEach(([g1, g2]) => {
+                            combos.push({ intervals: [g1, g2, e2.interval, e1.interval], extLabels: [e2.label, e1.label], modalLabel, structureName: `Cdas 4-3-2-1: ${e2.label} (2ª) + ${e1.label} (1ª)`, dropShort: 'RL T4' });
+                        });
+                    });
+                });
+                tryBuild([[3, 2, 1, 0]], combos);
+                // Fallback si no hay doble tensión disponible cerca: usar 5ª o Fundamental en 2ª/1ª
+                if (results.length === 0) {
+                    const fb = [];
+                    extsToUse.forEach(ext => {
+                        const modalLabel = ext.mode ? `Modo ${ext.mode}` : '';
+                        [[third, seventh], [seventh, third]].forEach(([g1, g2]) => {
+                            fb.push({ intervals: [g1, g2, fifth, ext.interval], extLabels: [ext.label], modalLabel, structureName: `Cdas 4-3-2-1: 5ª (2ª) + ${ext.label} (1ª)`, dropShort: 'RL T4' });
+                            fb.push({ intervals: [g1, g2, 0, ext.interval], extLabels: [ext.label], modalLabel, structureName: `Cdas 4-3-2-1: Fund. (2ª) + ${ext.label} (1ª)`, dropShort: 'RL T4' });
+                        });
+                    });
+                    tryBuild([[3, 2, 1, 0]], fb);
+                }
+            }
+
+            results.sort((a, b) => {
+                const scoreA = Math.abs(a.minFret - 5);
+                const scoreB = Math.abs(b.minFret - 5);
+                return scoreA - scoreB || a.minFret - b.minFret;
+            });
+            return results.slice(0, 24);
+        }
+
         const App = function() {
             const [appTrack, setAppTrack] = useState(null); const [activeTab, setActiveTab] = useState('study'); const [showHelp, setShowHelp] = useState(false);
             const [modalConfig, setModalConfig] = useState({ isOpen: false, type: 'alert', message: '', onConfirm: null, defaultValue: '' });
@@ -778,7 +1128,7 @@
             const showPrompt = (msg, onConfirm, defaultValue = '') => setModalConfig({ isOpen: true, type: 'prompt', message: msg, onConfirm: onConfirm, defaultValue });
             const closeModal = () => setModalConfig(Object.assign({}, modalConfig, { isOpen: false }));
 
-            const [completedQuads, setCompletedQuads] = useLocalStorage('dm_comp_quads_v24', []); const [completedTriads, setCompletedTriads] = useLocalStorage('dm_comp_triads_v24', []); const [completedShells, setCompletedShells] = useLocalStorage('dm_comp_shells_v24', []); const [completedTensions, setCompletedTensions] = useLocalStorage('dm_comp_tensions_v24', []); const [streak, setStreak] = useLocalStorage('dm_streak_v24', 0); const [savedProgressions, setSavedProgressions] = useLocalStorage('dm_saved_progs_v26', []);
+            const [completedQuads, setCompletedQuads] = useLocalStorage('dm_comp_quads_v24', []); const [completedTriads, setCompletedTriads] = useLocalStorage('dm_comp_triads_v24', []); const [completedShells, setCompletedShells] = useLocalStorage('dm_comp_shells_v24', []); const [completedTensions, setCompletedTensions] = useLocalStorage('dm_comp_tensions_v24', []); const [completedRootless, setCompletedRootless] = useLocalStorage('dm_comp_rootless_v24', []); const [streak, setStreak] = useLocalStorage('dm_streak_v24', 0); const [savedProgressions, setSavedProgressions] = useLocalStorage('dm_saved_progs_v26', []);
 
             const [labelMode, setLabelMode] = useState('intervals'); const [notationMode, setNotationMode] = useState('anglo'); const [leftHanded, setLeftHanded] = useState(false); const [audioMode, setAudioMode] = useState('strum'); const [isMuted, setIsMuted] = useState(false); const [blindMode, setBlindMode] = useState(false); const [showGhostNotes, setShowGhostNotes] = useState(true); const [showScales, setShowScales] = useState(false); const [showRootOverlay, setShowRootOverlay] = useState(false); const [tensionNotation, setTensionNotation] = useState(false);
             
@@ -788,6 +1138,14 @@
             const [currentModuleIdx, setCurrentModuleIdx] = useState(0); const [sessionActive, setSessionActive] = useState(false); const [studyPhaseIdx, setStudyPhaseIdx] = useState(0); const [studyKeyIdx, setStudyKeyIdx] = useState(0); const [studyInvIdx, setStudyInvIdx] = useState(0); const [studyProgressionStep, setStudyProgressionStep] = useState(0); const [linkStrategy, setLinkStrategy] = useState('optimal'); const [mixDrop1, setMixDrop1] = useState('drop2'); const [mixBass1, setMixBass1] = useState(5); const [mixDrop2, setMixDrop2] = useState('drop3'); const [mixBass2, setMixBass2] = useState(6);
 
             const [freeTrack, setFreeTrack] = useState('quads'); const [freeModeTab, setFreeModeTab] = useState('single'); const [freeRoot, setFreeRoot] = useState('C'); const [freeQuality, setFreeQuality] = useState('maj7'); const [freeDrop, setFreeDrop] = useState('drop2'); const [freeBassString, setFreeBassString] = useState(6);
+
+            // Estados para Rootless Voicings
+            const [rlRoot, setRlRoot] = useState('C');
+            const [rlMode, setRlMode] = useState('single');
+            const [rlChordQuality, setRlChordQuality] = useState('maj7');
+            const [rlVoicingType, setRlVoicingType] = useState('tipo1');
+            const [rlExtFilter, setRlExtFilter] = useState('auto');
+            const [rlSelectedIdx, setRlSelectedIdx] = useState(0);
             
             // Estados para el Constructor y Drag & Drop
             const [builderSeq, setBuilderSeq] = useState([]); const [editingIndex, setEditingIndex] = useState(null); const [pendingOptions, setPendingOptions] = useState([]); const [draggedIdx, setDraggedIdx] = useState(null);
@@ -806,13 +1164,13 @@
                 });
             };
             
-            const metroState = useRef({ beatInMeasure: 0, beatInChord: 0, chordIdx: 0, rep: 0 }); const audioCtxRef = useRef(null);
+            const metroState = useRef({ beatInMeasure: 0, beatInChord: 0, chordIdx: 0, rep: 0 }); const audioCtxRef = useRef(null); const metroIntervalRef = useRef(null);
             
             // Estado para la animación visual del arpegio (Fase 1)
             const [activePlayingNote, setActivePlayingNote] = useState(null);
             const currentPlaybackRef = useRef(0);
 
-            const trackNames = { 'triads': 'Tríadas', 'quads': 'Cuatríadas/Tétradas', 'shells': 'Shell Voicing', 'tensions': 'Tensiones' }; const displayTrackName = appTrack ? trackNames[appTrack] : ''; const formatNoteKey = k => { const base = k.replace('m', ''); return (LATIN_MAP[base] || base) + (k.includes('m') ? 'm' : ''); };
+            const trackNames = { 'triads': 'Tríadas', 'quads': 'Cuatríadas/Drops', 'shells': 'Shell Voicing', 'tensions': 'Tensiones y Rootless' }; const displayTrackName = appTrack ? trackNames[appTrack] : ''; const formatNoteKey = k => { const base = k.replace('m', ''); return (LATIN_MAP[base] || base) + (k.includes('m') ? 'm' : ''); };
 
             const [volume, setVolume] = useState(() => { try { const v = localStorage.getItem('labchordVolume'); return v !== null ? Number(v) : 80; } catch(e) { return 80; } });
             const updateVolume = (val) => {
@@ -916,7 +1274,20 @@
                         headers.forEach(h => h.style.display = 'none'); footers.forEach(f => f.style.display = 'none'); hideEls.forEach(n => n.style.display = n.dataset.originalDisplay || ''); targetEl.style.backgroundColor = originalBg; targetEl.classList.remove('jpeg-is-exporting');
                         const imgData = canvas.toDataURL('image/jpeg', 0.95); const { jsPDF } = window.jspdf; const imgProps = new jsPDF('p', 'pt', 'a4').getImageProperties(imgData);
                         const pdf = new jsPDF({ orientation: imgProps.width > imgProps.height ? 'l' : 'p', unit: 'pt', format: [imgProps.width, imgProps.height] });
-                        pdf.addImage(imgData, 'JPEG', 0, 0, imgProps.width, imgProps.height); pdf.save('Laboratorio_de_Acordes.pdf');
+                        pdf.addImage(imgData, 'JPEG', 0, 0, imgProps.width, imgProps.height);
+                        let savedNatively = false;
+                        try {
+                            if (window.AndroidBridge && typeof window.AndroidBridge.saveFile === 'function') {
+                                window.AndroidBridge.saveFile(pdf.output('datauristring'), 'Laboratorio_de_Acordes.pdf', 'application/pdf');
+                                savedNatively = true;
+                            } else if (window.parent && window.parent !== window && window.parent.AndroidBridge && typeof window.parent.AndroidBridge.saveFile === 'function') {
+                                window.parent.AndroidBridge.saveFile(pdf.output('datauristring'), 'Laboratorio_de_Acordes.pdf', 'application/pdf');
+                                savedNatively = true;
+                            }
+                        } catch (errBridge) {}
+                        if (!savedNatively) {
+                            pdf.save('Laboratorio_de_Acordes.pdf');
+                        }
                     }).catch(err => {
                         headers.forEach(h => h.style.display = 'none'); footers.forEach(f => f.style.display = 'none'); hideEls.forEach(n => n.style.display = n.dataset.originalDisplay || ''); targetEl.style.backgroundColor = originalBg; targetEl.classList.remove('jpeg-is-exporting'); showAlert("Error al compilar el PDF: " + err.message);
                     });
@@ -946,15 +1317,48 @@
             const completedList = appTrack === 'triads' ? completedTriads : appTrack === 'shells' ? completedShells : appTrack === 'tensions' ? completedTensions : completedQuads;
             const setCompletedList = appTrack === 'triads' ? setCompletedTriads : appTrack === 'shells' ? setCompletedShells : appTrack === 'tensions' ? setCompletedTensions : setCompletedQuads;
 
+            const rootlessSequence = useMemo(() => {
+                if (rlMode === 'single') {
+                    return generateRootlessVoicings(rlRoot, rlChordQuality, rlVoicingType, notationMode, rlExtFilter);
+                }
+                const prog = ROOTLESS_PROGRESSIONS.find(p => p.id === rlMode);
+                if (!prog || !prog.steps) return [];
+                const rootMidi = NOTE_TO_MIDI[rlRoot] || 0;
+                const useFlats = ['F', 'Bb', 'Eb', 'Ab', 'Db', 'Gb'].includes(rlRoot);
+                let prevFingering = null;
+                return prog.steps.map(step => {
+                    const stepMidi = (rootMidi + step.offset) % 12;
+                    const stepRoot = useFlats ? MIDI_TO_NOTE_FLAT[stepMidi] : MIDI_TO_NOTE_SHARP[stepMidi];
+                    const candidates = generateRootlessVoicings(stepRoot, step.q, rlVoicingType, notationMode, 'auto', step.deg || '');
+                    if (candidates.length === 0) return null;
+                    let chosen = candidates[0];
+                    let dist = 0;
+                    let vlRank = 1;
+                    if (prevFingering) {
+                        let bestD = Infinity;
+                        candidates.forEach(c => {
+                            const d = getVoiceLeadingDistance(prevFingering, c.fingering);
+                            if (d < bestD) { bestD = d; chosen = c; }
+                        });
+                        dist = bestD;
+                        vlRank = dist <= 4 ? 1 : dist <= 8 ? 2 : 3;
+                    }
+                    prevFingering = chosen.fingering;
+                    return Object.assign({}, chosen, { degreeLabel: step.deg, dist, vlRank });
+                }).filter(Boolean);
+            }, [rlRoot, rlMode, rlChordQuality, rlVoicingType, rlExtFilter, notationMode]);
+
             useEffect(() => {
-                const idx = isPlaying ? activeChordIdx : studyProgressionStep;
-                if (idx >= 0 && activeTab === 'study' && sessionActive) {
+                const idx = isPlaying ? activeChordIdx : (activeTab === 'rootless' ? rlSelectedIdx : studyProgressionStep);
+                if (idx >= 0 && ((activeTab === 'study' && sessionActive) || activeTab === 'rootless')) {
                     const stepEl = document.getElementById("chord-step-" + idx);
                     if (stepEl) stepEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
                     const fbEl = document.getElementById("fretboard-wrap-" + idx);
                     if (fbEl) fbEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                    const rlEl = document.getElementById("rl-wrap-" + idx);
+                    if (rlEl) rlEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
                 }
-            }, [studyProgressionStep, activeChordIdx, isPlaying, activeTab, sessionActive]);
+            }, [studyProgressionStep, activeChordIdx, rlSelectedIdx, isPlaying, activeTab, sessionActive]);
 
             useEffect(() => { if (!sessionActive) { setStudyProgressionStep(0); setIsPlaying(false); } else { setStudyProgressionStep(0); } }, [studyKeyIdx, studyInvIdx, studyPhaseIdx, currentModuleIdx, linkStrategy, mixDrop1, mixDrop2, mixBass1, mixBass2, appTrack, sessionActive]);
             useEffect(() => { setIsPlaying(false); setBuilderSeq([]); setPendingOptions([]); setCurrentModuleIdx(0); setSessionActive(false); setStudyPhaseIdx(0); setStudyKeyIdx(0); setStudyInvIdx(0); setLinkStrategy('optimal'); setEditingIndex(null); }, [appTrack]);
@@ -967,24 +1371,45 @@
                 if (!currentModule || !STUDY_PHASES) return null;
                 const currentPhaseObj = STUDY_PHASES[studyPhaseIdx]; if (!currentPhaseObj) return null;
                 const isMajPhase = currentPhaseObj.id.includes('maj'); const keysList = isMajPhase ? STUDY_KEYS : STUDY_KEYS_MIN; const activeKey = keysList[studyKeyIdx];
-                const isRootless = currentModule.title.includes('Rootless'); const rootNode = document.getElementById('root'); if (rootNode) rootNode.setAttribute('data-rootless', isRootless ? 'true' : 'false');
+                const isRootless = Boolean(currentModule.rlType) || currentModule.title.includes('Rootless'); const rootNode = document.getElementById('root'); if (rootNode) rootNode.setAttribute('data-rootless', isRootless ? 'true' : 'false');
                 const progChords = getProgressionChords(activeKey, currentPhaseObj.id, appTrack); if (!progChords || progChords.length === 0) return null; 
                 const firstChordProg = progChords[0]; let qualObj = activeQuals.find(q => q.id === firstChordProg.quality) || activeQuals[0];
-                const invNamesList = (appTrack === 'shells' || appTrack === 'tensions') && qualObj.names ? qualObj.names : (appTrack === 'triads' ? INVERSION_NAMES_TRIADS : INVERSION_NAMES_QUADS);
+                const isRootlessModule = Boolean(currentModule.rlType);
+                const invNamesList = isRootlessModule
+                    ? ((currentModule.rlType === 'tipo1' || currentModule.rlType === 'tipo3')
+                        ? ['Auto (Mejor enlace)', '3ª en 4ª cuerda', '7ª en 4ª cuerda', '5ª en 4ª cuerda']
+                        : ['Auto (Mejor enlace)', '3ª en 4ª cuerda', '7ª en 4ª cuerda'])
+                    : ((appTrack === 'shells' || appTrack === 'tensions') && qualObj.names ? qualObj.names : (appTrack === 'triads' ? INVERSION_NAMES_TRIADS : INVERSION_NAMES_QUADS));
                 const maxInversionsAllowed = invNamesList.length; let validInvIdx = studyInvIdx; if (validInvIdx >= maxInversionsAllowed) validInvIdx = 0;
                 let targetInvName = invNamesList[validInvIdx]; const len = progChords.length; let drops = []; let basses = [];
                 if (currentModule.mixed) { for (let i = 0; i < len; i++) { drops.push(i % 2 === 0 ? mixDrop1 : mixDrop2); basses.push(i % 2 === 0 ? mixBass1 : mixBass2); } } 
                 else { drops = Array(len).fill(currentModule.drop); if (appTrack === 'shells' || (appTrack === 'tensions' && !isRootless)) { for (let i = 0; i < len; i++) { if (i % 2 === 0) basses.push(currentModule.bass); else basses.push(currentModule.bass === 6 ? 5 : 6); } } else { basses = Array(len).fill(currentModule.bass); } }
-                return { key: activeKey, type: currentPhaseObj.id, phaseTitle: currentPhaseObj.title, drops: drops, basses: basses, expectedName: targetInvName, maxInvs: maxInversionsAllowed, invNames: invNamesList };
+                return { key: activeKey, type: currentPhaseObj.id, phaseTitle: currentPhaseObj.title, drops: drops, basses: basses, expectedName: targetInvName, maxInvs: maxInversionsAllowed, invNames: invNamesList, isRootlessModule: isRootlessModule };
             }, [studyPhaseIdx, currentModule, studyKeyIdx, studyInvIdx, activeQuals, appTrack, mixDrop1, mixDrop2, mixBass1, mixBass2]);
 
             const studyChords = useMemo(() => { if (!activeExerciseConfig) return []; return getProgressionChords(activeExerciseConfig.key, activeExerciseConfig.type, appTrack); }, [activeExerciseConfig, appTrack]);
-            const studyData = useMemo(() => { if (!sessionActive || !activeExerciseConfig || studyChords.length === 0) return []; return studyChords.map((c, stepIdx) => generateChordData(c.root, c.quality, activeExerciseConfig.drops[stepIdx], activeExerciseConfig.basses[stepIdx], activeQuals, activeExerciseConfig.key, appTrack, notationMode)); }, [sessionActive, activeExerciseConfig, studyChords, activeQuals, appTrack, notationMode]);
+            const studyData = useMemo(() => {
+                if (!sessionActive || !activeExerciseConfig || studyChords.length === 0) return [];
+                if (appTrack === 'tensions' && currentModule && currentModule.rlType) {
+                    return studyChords.map(c => generateRootlessVoicings(c.root, c.quality, currentModule.rlType, notationMode, 'auto', c.label || ''));
+                }
+                return studyChords.map((c, stepIdx) => generateChordData(c.root, c.quality, activeExerciseConfig.drops[stepIdx], activeExerciseConfig.basses[stepIdx], activeQuals, activeExerciseConfig.key, appTrack, notationMode));
+            }, [sessionActive, activeExerciseConfig, studyChords, activeQuals, appTrack, notationMode, currentModule]);
 
             const optimalPathData = useMemo(() => {
                 if (!sessionActive || !activeExerciseConfig || studyData.length === 0) return [];
                 let path = []; let currentOpts = studyData[0]; if (!currentOpts || currentOpts.length === 0) return [];
-                let firstChord = currentOpts.find(o => o.name === activeExerciseConfig.expectedName) || currentOpts[0];
+                let firstChord = currentOpts[0];
+                if (activeExerciseConfig.isRootlessModule && studyInvIdx > 0) {
+                    const firstSpec = ROOTLESS_CHORD_SPECS[studyChords[0] ? studyChords[0].quality : 'm7'] || ROOTLESS_CHORD_SPECS['m7'];
+                    const targetIv = studyInvIdx === 1 ? firstSpec.guide[0] : studyInvIdx === 2 ? firstSpec.guide[1] : firstSpec.fifth;
+                    firstChord = currentOpts.find(o => {
+                        const s4 = o.fingering.find(f => f.string === 3);
+                        return s4 && ((s4.note - o.rootMidi + 120) % 12) === targetIv;
+                    }) || currentOpts[0];
+                } else {
+                    firstChord = currentOpts.find(o => o.name === activeExerciseConfig.expectedName) || currentOpts[0];
+                }
                 path.push(Object.assign({}, firstChord, { vlRank: 1, prevFingering: null }));
                 for (let i = 1; i < studyData.length; i++) {
                     let nextOptsArray = studyData[i]; if (!nextOptsArray || nextOptsArray.length === 0) continue;
@@ -1019,35 +1444,41 @@
                 if (!isPlaying) {
                     if (!audioCtxRef.current) audioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)();
                     if (audioCtxRef.current.state === 'suspended') audioCtxRef.current.resume();
+                    if (metroIntervalRef.current) { clearInterval(metroIntervalRef.current); metroIntervalRef.current = null; }
                     metroState.current = { beatInMeasure: 0, beatInChord: 0, chordIdx: 0, rep: 0 };
                     setActiveChordIdx(0); setCurrentRep(0); setStudyProgressionStep(0); setIsPlaying(true);
-                } else { setIsPlaying(false); }
+                } else {
+                    if (metroIntervalRef.current) { clearInterval(metroIntervalRef.current); metroIntervalRef.current = null; }
+                    currentPlaybackRef.current = 0;
+                    setActivePlayingNote(null);
+                    setIsPlaying(false);
+                }
             }
 
             useEffect(() => {
-                let interval = null;
+                if (metroIntervalRef.current) { clearInterval(metroIntervalRef.current); metroIntervalRef.current = null; }
                 if (isPlaying) {
-                    const sourceSequence = activeTab === 'study' ? optimalPathData : builderSeq;
-                    interval = setInterval(() => {
+                    const sourceSequence = activeTab === 'study' ? optimalPathData : activeTab === 'rootless' ? rootlessSequence : builderSeq;
+                    metroIntervalRef.current = setInterval(() => {
                         const s = metroState.current; let currentDurationMultiplier = 1;
                         if (activeTab === 'study' && studyChords[s.chordIdx] && studyChords[s.chordIdx].duration) { currentDurationMultiplier = studyChords[s.chordIdx].duration; }
                         const targetBeats = beatsPerChord * currentDurationMultiplier;
                         if (s.beatInChord >= targetBeats) {
                             s.beatInChord = 0; s.chordIdx++;
-                            if (s.chordIdx >= sourceSequence.length) { s.chordIdx = 0; s.rep++; if (activeTab === 'study' && s.rep >= repetitions) { setIsPlaying(false); handleNext(); return; } }
+                            if (s.chordIdx >= sourceSequence.length) { s.chordIdx = 0; s.rep++; if (activeTab === 'study' && s.rep >= repetitions) { clearInterval(metroIntervalRef.current); metroIntervalRef.current = null; setIsPlaying(false); handleNext(); return; } }
                         }
                         const isAccent = s.beatInMeasure === 0; playClick(isAccent);
                         if (s.beatInChord % beatsPerMeasure === 0) { 
                             if (sourceSequence[s.chordIdx]) {
-                                const contextToPlay = (activeTab === 'study' ? "study-" : "build-") + s.chordIdx;
+                                const contextToPlay = (activeTab === 'study' ? "study-" : activeTab === 'rootless' ? "rl-" : "build-") + s.chordIdx;
                                 playVoicing(sourceSequence[s.chordIdx].fingering, contextToPlay); 
                             }
                         }
-                        setActiveChordIdx(s.chordIdx); if (activeTab === 'study') setStudyProgressionStep(s.chordIdx);
+                        setActiveChordIdx(s.chordIdx); if (activeTab === 'study') setStudyProgressionStep(s.chordIdx); if (activeTab === 'rootless') setRlSelectedIdx(s.chordIdx);
                         setCurrentRep(s.rep); s.beatInMeasure = (s.beatInMeasure + 1) % beatsPerMeasure; s.beatInChord++;
                     }, 60000 / bpm);
-                } return () => { if (interval) clearInterval(interval); };
-            }, [isPlaying, bpm, beatsPerMeasure, beatsPerChord, repetitions, optimalPathData, builderSeq, activeTab, studyChords]);
+                } return () => { if (metroIntervalRef.current) { clearInterval(metroIntervalRef.current); metroIntervalRef.current = null; } };
+            }, [isPlaying, bpm, beatsPerMeasure, beatsPerChord, repetitions, optimalPathData, builderSeq, rootlessSequence, activeTab, studyChords]);
 
             const freeAvailableBassStrings = VALID_BASS_STRINGS[freeDrop] || [6,5,4];
             const freeData = useMemo(() => generateChordData(freeRoot, freeQuality, freeDrop, freeBassString, freeQuals, null, freeTrack, notationMode), [freeRoot, freeQuality, freeDrop, freeBassString, freeQuals, freeTrack, notationMode]);
@@ -1078,7 +1509,12 @@
                     opts.forEach(o => { o.dist = getVoiceLeadingDistance(prevFingering, o.fingering); o.prevFingering = prevFingering; });
                     opts.forEach(o => { if (o.dist <= 2) o.vlRank = 1; else if (o.dist <= 5) o.vlRank = 2; else if (o.dist <= 9) o.vlRank = 3; else o.vlRank = 4; });
                     opts.sort((a,b) => { if (a.vlRank !== b.vlRank) return a.vlRank - b.vlRank; return a.dist - b.dist; });
-                } else { opts.forEach(o => { o.dist = 0; o.vlRank = 0; o.prevFingering = null; }); } setPendingOptions(opts);
+                } else if (track === 'rootless') {
+                if (type === 'maj_251') return [ { root: getNote(2), quality: 'm7', label: 'IIm7' }, { root: getNote(7), quality: '7', label: 'V7' }, { root: getNote(0), quality: 'maj7', label: 'Imaj7', duration: 2 } ];
+                if (type === 'min_251') return [ { root: getNote(2), quality: 'm7b5', label: 'IIm7(b5)' }, { root: getNote(7), quality: '7', label: 'V7' }, { root: getNote(0), quality: 'm7', label: 'Im7', duration: 2 } ];
+                if (type === 'maj_cycle') return [ { root: getNote(0), quality: 'maj7', label: 'Imaj7' }, { root: getNote(5), quality: 'maj7', label: 'IVmaj7' }, { root: getNote(11), quality: 'm7b5', label: 'VIIm7(b5)' }, { root: getNote(4), quality: 'm7', label: 'IIIm7' }, { root: getNote(9), quality: 'm7', label: 'VIm7' }, { root: getNote(2), quality: 'm7', label: 'IIm7' }, { root: getNote(7), quality: '7', label: 'V7' } ];
+                if (type === 'min_cycle') return [ { root: getNote(0), quality: 'm7', label: 'Im7' }, { root: getNote(5), quality: 'm7', label: 'IVm7' }, { root: getNote(10), quality: '7', label: 'bVII7' }, { root: getNote(3), quality: 'maj7', label: 'bIIImaj7' }, { root: getNote(8), quality: 'maj7', label: 'bVImaj7' }, { root: getNote(2), quality: 'm7b5', label: 'IIm7(b5)' }, { root: getNote(7), quality: '7', label: 'V7' } ];
+            } else { opts.forEach(o => { o.dist = 0; o.vlRank = 0; o.prevFingering = null; }); } setPendingOptions(opts);
             }, [freeTrack, freeRoot, freeQuality, freeDrop, freeBassString, notationMode, builderSeq, editingIndex]);
 
             const updateVoiceLeadingLabelsOnly = (seq, startIndex) => {
@@ -1132,7 +1568,12 @@
                 if (editingIndex !== null) {
                     if (editingIndex > 0) { const prevFingering = newSeq[editingIndex - 1].fingering; newChord.prevFingering = prevFingering; newChord.dist = getVoiceLeadingDistance(prevFingering, newChord.fingering); } else { newChord.prevFingering = null; newChord.dist = 0; }
                     newSeq[editingIndex] = newChord; newSeq = updateVoiceLeadingLabelsOnly(newSeq, editingIndex + 1); setEditingIndex(null);
-                } else {
+                } else if (track === 'rootless') {
+                if (type === 'maj_251') return [ { root: getNote(2), quality: 'm7', label: 'IIm7' }, { root: getNote(7), quality: '7', label: 'V7' }, { root: getNote(0), quality: 'maj7', label: 'Imaj7', duration: 2 } ];
+                if (type === 'min_251') return [ { root: getNote(2), quality: 'm7b5', label: 'IIm7(b5)' }, { root: getNote(7), quality: '7', label: 'V7' }, { root: getNote(0), quality: 'm7', label: 'Im7', duration: 2 } ];
+                if (type === 'maj_cycle') return [ { root: getNote(0), quality: 'maj7', label: 'Imaj7' }, { root: getNote(5), quality: 'maj7', label: 'IVmaj7' }, { root: getNote(11), quality: 'm7b5', label: 'VIIm7(b5)' }, { root: getNote(4), quality: 'm7', label: 'IIIm7' }, { root: getNote(9), quality: 'm7', label: 'VIm7' }, { root: getNote(2), quality: 'm7', label: 'IIm7' }, { root: getNote(7), quality: '7', label: 'V7' } ];
+                if (type === 'min_cycle') return [ { root: getNote(0), quality: 'm7', label: 'Im7' }, { root: getNote(5), quality: 'm7', label: 'IVm7' }, { root: getNote(10), quality: '7', label: 'bVII7' }, { root: getNote(3), quality: 'maj7', label: 'bIIImaj7' }, { root: getNote(8), quality: 'maj7', label: 'bVImaj7' }, { root: getNote(2), quality: 'm7b5', label: 'IIm7(b5)' }, { root: getNote(7), quality: '7', label: 'V7' } ];
+            } else {
                     if (newSeq.length > 0) { const prevFingering = newSeq[newSeq.length - 1].fingering; newChord.prevFingering = prevFingering; newChord.dist = getVoiceLeadingDistance(prevFingering, newChord.fingering); }
                     newSeq.push(newChord);
                 }
@@ -1186,8 +1627,8 @@
                             <p className="text-slate-400 mb-10 text-sm md:text-base leading-relaxed max-w-3xl mx-auto">Tu lienzo para explorar la armonía. Comienza entendiendo las Tríadas, avanza a las Cuatríadas (Drops), extrae el Esqueleto (Shells) y añade Color (Tensiones).</p>
                             {streak > 0 && <div className="mb-8 inline-flex items-center gap-2 bg-amber-500/10 text-amber-500 px-5 py-2 rounded-full border border-amber-500/20 font-bold shadow-lg"><Icon name="Flame" size={18}/> Racha de Estudio: {streak} sesiones completadas</div>}
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                                {[{id:'triads', label:'Tríadas', desc:'Abiertas y Cerradas', color:'bg-slate-900 border-slate-800 hover:border-amber-500', tooltip: 'Acordes de 3 notas. Son la base de toda la armonía occidental.'}, {id:'quads', label:'Cuatríadas/Drops', desc:'Drops, Dobles y Mixtos', color:'bg-slate-900 border-slate-800 hover:border-amber-500', tooltip: 'Acordes de 4 notas con 7ma. Aprenderemos cómo "soltar" voces (Drop) para hacerlos tocables.'}, {id:'shells', label:'Shell Voicing', desc:'Esqueleto 1-3-7 / 1-7-3', color:'bg-slate-900 border-slate-800 hover:border-amber-500', tooltip: 'El esqueleto del Jazz. Omite la 5ta para dejar espacio y definir la calidad del acorde.'}, {id:'tensions', label:'Tensiones', desc:'Shell Voicing + Tensión', color:'bg-slate-900 border-slate-800 hover:border-amber-500', tooltip: 'Agregamos colores (9nas, 11nas, 13nas) al esqueleto.'}].map(t => (
-                                    <Tooltip key={t.id} text={t.tooltip}><button onClick={() => setAppTrack(t.id)} className={`p-6 rounded-2xl font-bold transition-all duration-300 hover:-translate-y-1 shadow-xl border flex flex-col items-center justify-center w-full group ${t.color}`}><div className="text-xl mb-2 transition-colors text-slate-200 group-hover:text-amber-400">{t.label}</div><div className="text-xs font-normal text-slate-400 mb-4">{t.desc}</div><div className="text-[10px] bg-slate-950/50 px-3 py-1 rounded-full text-amber-500">{getCompletedCount(t.id)} / {getTotalCount(t.id)} Comp.</div></button></Tooltip>
+                                {[{id:'triads', label:'Tríadas', desc:'Abiertas y Cerradas', color:'bg-slate-900 border-slate-800 hover:border-amber-500', tooltip: 'Acordes de 3 notas. Son la base de toda la armonía occidental.'}, {id:'quads', label:'Cuatríadas/Drops', desc:'Drops, Dobles y Mixtos', color:'bg-slate-900 border-slate-800 hover:border-amber-500', tooltip: 'Acordes de 4 notas con 7ma. Aprenderemos cómo "soltar" voces (Drop) para hacerlos tocables.'}, {id:'shells', label:'Shell Voicing', desc:'Esqueleto 1-3-7 / 1-7-3', color:'bg-slate-900 border-slate-800 hover:border-amber-500', tooltip: 'El esqueleto del Jazz. Omite la 5ta para dejar espacio y definir la calidad del acorde.'}, {id:'tensions', label:'Tensiones y Rootless', desc:'Tensiones + Rootless (Tipos 1-4)', color:'bg-slate-900 border-slate-800 hover:border-amber-500', tooltip: 'Tensiones estrictas y Rootless Voicings (sin fundamental) con extensiones en 1ª y 2ª cuerda.'}].map(t => (
+                                    <Tooltip key={t.id} text={t.tooltip}><button onClick={() => { setAppTrack(t.id); setActiveTab('study'); }} className={`p-6 rounded-2xl font-bold transition-all duration-300 hover:-translate-y-1 shadow-xl border flex flex-col items-center justify-center w-full group ${t.color}`}><div className="text-xl mb-2 transition-colors text-slate-200 group-hover:text-amber-400">{t.label}</div><div className="text-xs font-normal text-slate-400 mb-4">{t.desc}</div><div className="text-[10px] bg-slate-950/50 px-3 py-1 rounded-full text-amber-500">{getCompletedCount(t.id)} / {getTotalCount(t.id)} Comp.</div></button></Tooltip>
                                 ))}
                             </div>
                         </div>
@@ -1221,10 +1662,11 @@
                                 <div className="flex items-baseline gap-2 md:block"><h1 className={`${sessionActive && activeTab === 'study' ? 'text-base sm:text-xl' : 'text-xl md:text-2xl'} font-black uppercase tracking-tighter text-slate-100`}>Laboratorio</h1><div className="text-[10px] md:text-xs text-amber-500 font-bold tracking-widest uppercase">{displayTrackName}</div></div>
                             </div>
                             <div className="flex flex-wrap sm:flex-nowrap bg-slate-900 p-1 rounded-xl border border-slate-800 shadow-inner w-full md:w-auto gap-1">
-                                <button onClick={() => { setActiveTab('study'); setIsPlaying(false); setEditingIndex(null); }} className={`flex-1 whitespace-nowrap px-2 sm:px-5 py-1.5 sm:py-2 rounded-lg text-[11px] sm:text-sm font-bold transition-all ${activeTab==='study'?'bg-amber-500 text-slate-950 shadow-md':'text-slate-400 hover:text-white'}`}>Estudio Guiado</button>
-                                <button onClick={() => { setActiveTab('free'); setIsPlaying(false); setFreeModeTab('builder'); }} className={`flex-1 whitespace-nowrap px-2 sm:px-5 py-1.5 sm:py-2 rounded-lg text-[11px] sm:text-sm font-bold transition-all ${activeTab==='free'?'bg-amber-500 text-slate-950 shadow-md':'text-slate-400 hover:text-white'}`}>Lab Libre</button>
-                                <button onClick={() => { setActiveTab('reverse'); setIsPlaying(false); setEditingIndex(null); }} className={`flex-1 whitespace-nowrap px-2 sm:px-5 py-1.5 sm:py-2 rounded-lg text-[11px] sm:text-sm font-bold transition-all ${activeTab==='reverse'?'bg-amber-500 text-slate-950 shadow-md':'text-slate-400 hover:text-white'}`}>Reconocedor</button>
-                                <button onClick={() => setShowHelp(true)} className="whitespace-nowrap px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg text-[11px] sm:text-sm font-bold text-slate-400 hover:text-amber-500 transition-colors flex justify-center items-center gap-1 sm:border-l border-slate-800 sm:ml-1"><Icon name="Info" size={13}/> Ayuda</button>
+                                <button onClick={() => { setActiveTab('study'); setIsPlaying(false); setEditingIndex(null); }} className={`flex-1 whitespace-nowrap px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg text-[11px] sm:text-sm font-bold transition-all ${activeTab==='study'?'bg-amber-500 text-slate-950 shadow-md':'text-slate-400 hover:text-white'}`}>Estudio Guiado</button>
+                                <button onClick={() => { setActiveTab('rootless'); setIsPlaying(false); setEditingIndex(null); }} className={`flex-1 whitespace-nowrap px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg text-[11px] sm:text-sm font-bold transition-all ${activeTab==='rootless'?'bg-amber-500 text-slate-950 shadow-md':'text-slate-400 hover:text-white'}`}>Rootless Voicings</button>
+                                <button onClick={() => { setActiveTab('free'); setIsPlaying(false); setFreeModeTab('builder'); }} className={`flex-1 whitespace-nowrap px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg text-[11px] sm:text-sm font-bold transition-all ${activeTab==='free'?'bg-amber-500 text-slate-950 shadow-md':'text-slate-400 hover:text-white'}`}>Lab Libre</button>
+                                <button onClick={() => { setActiveTab('reverse'); setIsPlaying(false); setEditingIndex(null); }} className={`flex-1 whitespace-nowrap px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg text-[11px] sm:text-sm font-bold transition-all ${activeTab==='reverse'?'bg-amber-500 text-slate-950 shadow-md':'text-slate-400 hover:text-white'}`}>Reconocedor</button>
+                                <button onClick={() => setShowHelp(true)} className="whitespace-nowrap px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg text-[11px] sm:text-sm font-bold text-slate-400 hover:text-amber-500 transition-colors flex justify-center items-center gap-1 sm:border-l border-slate-800 sm:ml-1"><Icon name="Info" size={13}/> Ayuda</button>
                             </div>
                         </header>
 
@@ -1270,7 +1712,7 @@
                                                             </select>
                                                         </div>
                                                         <div className="space-y-1.5">
-                                                            <label className="text-[10px] uppercase font-bold text-slate-500 px-1 tracking-widest flex items-center gap-1">Inversión Inicial</label>
+                                                            <label className="text-[10px] uppercase font-bold text-slate-500 px-1 tracking-widest flex items-center gap-1">{activeExerciseConfig && activeExerciseConfig.isRootlessModule ? 'Disposición Inicial (4ª Cda)' : 'Inversión Inicial'}</label>
                                                             <select value={studyInvIdx} onChange={e => setStudyInvIdx(Number(e.target.value))} className="w-full bg-[#0f172a] border border-slate-700 p-3 rounded-xl text-white font-bold focus:ring-2 ring-amber-500 outline-none transition-all">
                                                                 {activeExerciseConfig ? activeExerciseConfig.invNames.map((inv, i) => <option key={i} value={i}>{inv}</option>) : null}
                                                             </select>
@@ -1716,6 +2158,136 @@
                                         ) : <div className="flex flex-col items-center justify-center h-full text-slate-500 mt-10"><Icon name="AlertCircle" size={48} className="mb-4 opacity-50" /><p className="text-center font-bold text-sm">Patrón no reconocido en BD de jazz.</p></div>}
                                     </div>
                                 </div>
+                            </div>
+                        )}
+
+                        {activeTab === 'rootless' && (
+                            <div className="animate-in fade-in duration-300 pdf-export-zone w-full relative pb-24">
+                                <PdfHeader title={`Rootless Voicings — ${(ROOTLESS_VOICING_TYPES.find(t => t.id === rlVoicingType) || {}).title || ''}`} />
+
+                                <div className="flex flex-col gap-4">
+                                    {/* Barra rápida Play + Volumen + Pasos justo encima de los shapes */}
+                                    <div className="flex flex-wrap items-center justify-between gap-2 print:hidden hide-on-pdf">
+                                        <button type="button" onClick={toggleMetronome} disabled={rootlessSequence.length === 0} className={`flex-1 sm:flex-none px-4 py-2 rounded-xl text-xs sm:text-sm font-black flex justify-center items-center gap-2 transition-all shadow-lg ${isPlaying ? 'bg-rose-600 text-white hover:bg-rose-500' : 'bg-emerald-500 text-slate-950 hover:bg-emerald-400 disabled:opacity-40'}`}>
+                                            {isPlaying ? <React.Fragment><Icon name="Play" size={14}/> Detener</React.Fragment> : <React.Fragment><Icon name="Play" size={14}/> Play ({bpm} BPM)</React.Fragment>}
+                                        </button>
+                                        <div className="flex items-center gap-1.5 bg-slate-900 border border-slate-800 px-2.5 py-1.5 rounded-xl">
+                                            <Icon name={volume > 0 && !isMuted ? "Volume2" : "VolumeX"} size={14} className="text-amber-500 shrink-0"/>
+                                            <input type="range" min="0" max="100" value={volume} onChange={e => updateVolume(e.target.value)} className="w-16 sm:w-24 accent-amber-500 cursor-pointer" title="Volumen"/>
+                                            <span className="text-[10px] font-bold text-slate-400 w-7 text-right">{volume}%</span>
+                                        </div>
+                                        <div className="flex items-center gap-1">
+                                            {rlSelectedIdx > 0 && !isPlaying && (
+                                                <button type="button" onClick={() => { const next = rlSelectedIdx - 1; setRlSelectedIdx(next); if (rootlessSequence[next]) playVoicing(rootlessSequence[next].fingering, "rl-" + next); }} className="bg-slate-800 text-slate-300 px-2.5 py-2 rounded-xl font-bold hover:bg-slate-700 transition-all flex items-center shadow-md border border-slate-700"><Icon name="ArrowLeft" size={14}/></button>
+                                            )}
+                                            {rlSelectedIdx < rootlessSequence.length - 1 && !isPlaying && (
+                                                <button type="button" onClick={() => { const next = rlSelectedIdx + 1; setRlSelectedIdx(next); if (rootlessSequence[next]) playVoicing(rootlessSequence[next].fingering, "rl-" + next); }} className="bg-slate-800 text-slate-300 px-2.5 py-2 rounded-xl font-bold hover:bg-slate-700 transition-all flex items-center shadow-md border border-slate-700"><Icon name="ArrowRight" size={14}/></button>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {/* Chips horizontales de acordes / posiciones */}
+                                    {rootlessSequence.length > 0 && (
+                                        <div className="flex flex-nowrap overflow-x-auto no-scrollbar snap-x gap-2 pb-1 print:hidden hide-on-pdf">
+                                            {rootlessSequence.map((item, i) => {
+                                                const isAct = isPlaying ? activeChordIdx === i : rlSelectedIdx === i;
+                                                return (
+                                                    <button id={"chord-step-" + i} key={i} type="button" onClick={() => { if (!isPlaying) { setRlSelectedIdx(i); playVoicing(item.fingering, "rl-" + i); } }} className={`shrink-0 snap-center min-w-[96px] px-3 py-2 rounded-2xl border text-center transition-all ${isAct ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-lg scale-[1.02]' : 'border-slate-800 bg-slate-900/60 text-slate-400 hover:border-amber-500/40'}`}>
+                                                        <div className={`text-[9px] font-black uppercase tracking-widest ${isAct ? 'text-slate-900' : 'opacity-65'}`}>{item.degreeLabel || `Pos. ${i + 1}`}</div>
+                                                        <div className="text-sm sm:text-base font-black"><ChordNameDisplay name={item.formattedChordName} /></div>
+                                                    </button>
+                                                );
+                                            })}
+                                        </div>
+                                    )}
+
+                                    {/* Shapes horizontales */}
+                                    <div className="flex flex-nowrap overflow-x-auto snap-x justify-start px-1 pb-3 gap-4 items-stretch print-grid-wrap">
+                                        {rootlessSequence.length > 0 ? rootlessSequence.map((o, i) => {
+                                            const isSel = isPlaying ? activeChordIdx === i : rlSelectedIdx === i;
+                                            return (
+                                                <div key={i} id={"rl-wrap-" + i} className={`w-full max-w-[260px] sm:max-w-[290px] shrink-0 snap-center print:w-auto print:max-w-none print:break-inside-avoid transition-all duration-300 ${isSel ? 'opacity-100 scale-100' : 'opacity-45 scale-95'}`}>
+                                                    <Fretboard {...o} id={"fb-rl-" + i} contextId={"rl-" + i} activePlayingNote={activePlayingNote} dropLabel={o.dropLabel} degreeLabel={o.degreeLabel || ''} options={{labelMode, leftHanded: false, blindMode, showGhostNotes, showScales, showRootOverlay, tensionNotation, notationMode, showStaff, onPlayNote: playSingleNote}} vlRank={rlMode === 'single' ? 0 : o.vlRank} distance={o.dist} isSelected={isSel} onSelect={() => { if (!isPlaying) { setRlSelectedIdx(i); playVoicing(o.fingering, "rl-" + i); } }} onPlay={playVoicing} />
+                                                </div>
+                                            );
+                                        }) : (
+                                            <div className="w-full bg-slate-900 border border-slate-800 rounded-2xl p-8 text-center text-slate-400 text-sm">No hay disposiciones ergonómicas disponibles para esta combinación. Prueba otra cualidad o extensión.</div>
+                                        )}
+                                    </div>
+
+                                    {/* Panel de Configuración y Filtros Rootless (Abajo) */}
+                                    <div className="bg-slate-900 border border-slate-800 p-4 sm:p-5 rounded-2xl flex flex-col gap-4 print:hidden hide-on-pdf shadow-xl">
+                                        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                                            <div>
+                                                <h3 className="text-sm sm:text-base font-black text-amber-500 uppercase tracking-wider flex items-center gap-2"><Icon name="Layers" size={16}/> Configuración Rootless Voicings</h3>
+                                                <p className="text-[11px] text-slate-400 mt-0.5">{(ROOTLESS_VOICING_TYPES.find(t => t.id === rlVoicingType) || {}).desc || ''}</p>
+                                            </div>
+                                            <button type="button" onClick={downloadPDF} className="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-emerald-400 rounded-lg border border-slate-700 text-xs font-bold flex items-center gap-1.5 transition-colors"><Icon name="Image" size={14}/> PDF</button>
+                                        </div>
+
+                                        {/* Selector de 4 Categorías Obligatorias */}
+                                        <div>
+                                            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-2">Tipo de Voicing Rootless</label>
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+                                                {ROOTLESS_VOICING_TYPES.map(vt => (
+                                                    <button key={vt.id} type="button" onClick={() => { setRlVoicingType(vt.id); setRlExtFilter('auto'); setRlSelectedIdx(0); setIsPlaying(false); }} className={`p-3 rounded-xl border text-left transition-all ${rlVoicingType === vt.id ? 'bg-amber-500/15 border-amber-500 text-amber-400 shadow-md' : 'bg-slate-800/60 border-slate-700 text-slate-300 hover:border-amber-500/40'}`}>
+                                                        <div className="font-black text-xs">{vt.title}</div>
+                                                        <div className="text-[10px] text-slate-400 mt-1 leading-snug">{vt.desc}</div>
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        {/* Selectores: Raíz/Tonalidad, Progresión o Acorde, Extensión, BPM */}
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                                            <div>
+                                                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1.5">Raíz / Tonalidad</label>
+                                                <select value={rlRoot} onChange={e => { setRlRoot(e.target.value); setRlSelectedIdx(0); setIsPlaying(false); }} className="w-full bg-slate-800 border border-slate-700 text-amber-400 font-bold rounded-xl p-2.5 text-sm outline-none">
+                                                    {DISPLAY_NOTES.map(n => <option key={n} value={n}>{notationMode === 'latin' ? (LATIN_MAP[n] || n) : n}</option>)}
+                                                </select>
+                                            </div>
+
+                                            <div>
+                                                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1.5">Modo / Progresión</label>
+                                                <select value={rlMode} onChange={e => { setRlMode(e.target.value); setRlSelectedIdx(0); setIsPlaying(false); }} className="w-full bg-slate-800 border border-slate-700 text-white font-bold rounded-xl p-2.5 text-sm outline-none">
+                                                    {ROOTLESS_PROGRESSIONS.map(p => <option key={p.id} value={p.id}>{p.label}</option>)}
+                                                </select>
+                                            </div>
+
+                                            {rlMode === 'single' ? (
+                                                <div>
+                                                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1.5">Tipo de Acorde</label>
+                                                    <select value={rlChordQuality} onChange={e => { setRlChordQuality(e.target.value); setRlExtFilter('auto'); setRlSelectedIdx(0); setIsPlaying(false); }} className="w-full bg-slate-800 border border-slate-700 text-white font-bold rounded-xl p-2.5 text-sm outline-none">
+                                                        {Object.keys(ROOTLESS_CHORD_SPECS).map(k => <option key={k} value={k}>{ROOTLESS_CHORD_SPECS[k].label}</option>)}
+                                                    </select>
+                                                </div>
+                                            ) : (
+                                                <div>
+                                                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1.5">Tiempos / Acorde</label>
+                                                    <input type="number" value={beatsPerChord} onChange={e => setBeatsPerChord(Math.max(1, Number(e.target.value)))} className="w-full bg-slate-800 border border-slate-700 text-white font-bold rounded-xl p-2.5 text-sm outline-none" disabled={isPlaying} />
+                                                </div>
+                                            )}
+
+                                            {rlMode === 'single' && rlVoicingType !== 'tipo1' ? (
+                                                <div>
+                                                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1.5">Extensión</label>
+                                                    <select value={rlExtFilter} onChange={e => { setRlExtFilter(e.target.value); setRlSelectedIdx(0); setIsPlaying(false); }} className="w-full bg-slate-800 border border-slate-700 text-fuchsia-400 font-bold rounded-xl p-2.5 text-sm outline-none">
+                                                        <option value="auto">Todas las disponibles</option>
+                                                        {((ROOTLESS_CHORD_SPECS[rlChordQuality] && ROOTLESS_CHORD_SPECS[rlChordQuality].exts) || []).map(ext => (
+                                                            <option key={ext.label} value={ext.label}>{ext.label}ª disponible</option>
+                                                        ))}
+                                                    </select>
+                                                </div>
+                                            ) : (
+                                                <div>
+                                                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1.5">BPM Metrónomo</label>
+                                                    <input type="number" value={bpm} onChange={e => setBpm(Math.max(30, Math.min(240, Number(e.target.value))))} className="w-full bg-slate-800 border border-slate-700 text-white font-bold rounded-xl p-2.5 text-sm outline-none" disabled={isPlaying} />
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                                <PdfFooter />
                             </div>
                         )}
                     </div>
